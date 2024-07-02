@@ -29,6 +29,10 @@ import DashboardTicketsList from "@/views/pages/dashboard/tickets/list";
 import DashboardTicketsNew from "@/views/pages/dashboard/tickets/new";
 import DashboardTicketsManage from "@/views/pages/dashboard/tickets/manage";
 
+import DashboardOrdersList from "@/views/pages/dashboard/orders/list";
+import DashboardOrdersNew from "@/views/pages/dashboard/orders/new";
+import DashboardOrdersManage from "@/views/pages/dashboard/orders/manage";
+
 import AdminDashboardDepartmentsList from "@/views/pages/dashboard/admin/departments/list";
 import AdminDashboardDepartmentsNew from "@/views/pages/dashboard/admin/departments/new";
 import AdminDashboardDepartmentsEdit from "@/views/pages/dashboard/admin/departments/edit";
@@ -115,6 +119,10 @@ let routes = [
             {path: 'tickets', component: DashboardTicketsList, meta: {middleware: 'auth', dashboard_access: true, controller: 'App.Http.Controllers.Api.Dashboard.TicketController'}},
             {path: 'tickets/new', component: DashboardTicketsNew, meta: {middleware: 'auth', dashboard_access: true, controller: 'App.Http.Controllers.Api.Dashboard.TicketController'}},
             {path: 'tickets/:uuid/manage', component: DashboardTicketsManage, meta: {middleware: 'auth', dashboard_access: true, controller: 'App.Http.Controllers.Api.Dashboard.TicketController'}},
+
+            {path: 'orders', component: DashboardOrdersList, meta: {middleware: 'auth', dashboard_access: true, controller: 'App.Http.Controllers.Api.Dashboard.OrderController'}},
+            {path: 'orders/new', component: DashboardOrdersNew, meta: {middleware: 'auth', dashboard_access: true, controller: 'App.Http.Controllers.Api.Dashboard.OrderController'}},
+            {path: 'orders/:uuid/manage', component: DashboardOrdersManage, meta: {middleware: 'auth', dashboard_access: true, controller: 'App.Http.Controllers.Api.Dashboard.OrderController'}},
 
             {path: 'canned-replies', component: DashboardCannedRepliesList, meta: {middleware: 'auth', dashboard_access: true, controller: 'App.Http.Controllers.Api.Dashboard.CannedReplyController'}},
             {path: 'canned-replies/new', component: DashboardCannedRepliesNew, meta: {middleware: 'auth', dashboard_access: true, controller: 'App.Http.Controllers.Api.Dashboard.CannedReplyController'}},

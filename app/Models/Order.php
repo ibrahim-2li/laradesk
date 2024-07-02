@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Order extends Model
 {
@@ -30,7 +31,7 @@ class Order extends Model
 
     public function orderStatus(): BelongsTo
     {
-        return $this->belongsTo(SrderStatus::class);
+        return $this->belongsTo(OrderStatus::class);
     }
 
     public function ordersType(): BelongsTo

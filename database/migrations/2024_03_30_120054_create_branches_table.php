@@ -17,6 +17,8 @@ class CreateBranchesTable extends Migration
         Schema::create('branches', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->boolean('all_agents')->default(false);
+            $table->boolean('public')->default(false);
             $table->timestamps();
             });
         }

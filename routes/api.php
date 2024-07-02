@@ -13,9 +13,11 @@ use App\Http\Controllers\Api\Dashboard\Admin\UserRoleController as DashboardAdmi
 use App\Http\Controllers\Api\Dashboard\CannedReplyController as DashboardCannedReplyController;
 use App\Http\Controllers\Api\Dashboard\StatsController as DashboardStatsController;
 use App\Http\Controllers\Api\Dashboard\TicketController as DashboardTicketController;
+use App\Http\Controllers\Api\Dashboard\OrderController as DashboardOrderController;
 use App\Http\Controllers\Api\File\FileController as FileFileController;
 use App\Http\Controllers\Api\Language\LanguageController as LanguageLanguageController;
 use App\Http\Controllers\Api\Ticket\TicketController as UserTicketController;
+use App\Http\Controllers\Api\Ticket\OrderController as UserOrderController;
 
 Route::group(['prefix' => 'lang'], static function () {
     Route::get('/', [LanguageLanguageController::class, 'list'])->name('language.list');
@@ -46,6 +48,13 @@ Route::post('tickets/attachments', [FileFileController::class, 'uploadAttachment
 Route::post('tickets/{ticket}/reply', [UserTicketController::class, 'reply'])->name('tickets.reply');
 Route::apiResource('tickets', UserTicketController::class)->except(['update', 'destroy']);
 
+Route::get('orders/statuses', [UserOrderController::class, 'statuses'])->name('orders.statuses');
+Route::get('orders/departments', [UserOrderController::class, 'departments'])->name('orders.departments');
+Route::post('orders/attachments', [FileFileController::class, 'uploadAttachment'])->name('orders.upload-attachment');
+Route::post('orders/{order}/reply', [UserOrderController::class, 'reply'])->name('orders.reply');
+Route::apiResource('orders', UserOrderController::class)->except(['update', 'destroy']);
+
+
 Route::group(['prefix' => 'dashboard'], static function () {
 
     Route::group(['prefix' => 'stats'], static function () {
@@ -62,6 +71,7 @@ Route::group(['prefix' => 'dashboard'], static function () {
     Route::post('tickets/{ticket}/quick-actions', [DashboardTicketController::class, 'ticketQuickActions'])->name('dashboard.tickets.ticket-quick-actions');
     Route::post('tickets/{ticket}/reply', [DashboardTicketController::class, 'reply'])->name('dashboard.tickets.reply');
     Route::apiResource('tickets', DashboardTicketController::class)->except(['update']);
+    Route::apiResource('orders', DashboardOrderController::class)->except(['update']);
 
     Route::apiResource('canned-replies', DashboardCannedReplyController::class);
 
