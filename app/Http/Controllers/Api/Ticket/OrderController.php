@@ -27,7 +27,7 @@ use Illuminate\Http\Request;
 use Str;
 use Throwable;
 
-class TicketController extends Controller
+class OrderController extends Controller
 {
     public function __construct()
     {

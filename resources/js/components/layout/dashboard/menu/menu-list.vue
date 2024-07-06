@@ -49,11 +49,11 @@
             to="/dashboard/admin/departments"
         ></menu-item>
         <menu-item
-            v-if="$store.state.permissions && $store.state.permissions['App.Http.Controllers.Api.Dashboard.Admin.DepartmentController']"
-            :label="$t('Brunches')"
+            v-if="$store.state.permissions && $store.state.permissions['App.Http.Controllers.Api.Dashboard.Admin.BranchController']"
+            :label="$t('Branches')"
             :mobile="mobile"
             icon="font-awesome.users-class-regular"
-            to="/dashboard/admin/brunches"
+            to="/dashboard/admin/branches"
         ></menu-item>
         <menu-item
             v-if="$store.state.permissions && $store.state.permissions['App.Http.Controllers.Api.Dashboard.Admin.LabelController']"

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\Account\AccountController as AccountAccountController;
 use App\Http\Controllers\Api\Auth\AuthController as AuthAuthController;
 use App\Http\Controllers\Api\Dashboard\Admin\DepartmentController as DashboardAdminDepartmentController;
+use App\Http\Controllers\Api\Dashboard\Admin\BranchController as DashboardAdminBranchController;
 use App\Http\Controllers\Api\Dashboard\Admin\LabelController as DashboardAdminLabelController;
 use App\Http\Controllers\Api\Dashboard\Admin\LanguageController as DashboardAdminLanguageController;
 use App\Http\Controllers\Api\Dashboard\Admin\PriorityController as DashboardAdminPriorityController;
@@ -79,6 +80,9 @@ Route::group(['prefix' => 'dashboard'], static function () {
 
         Route::get('departments/users', [DashboardAdminDepartmentController::class, 'users'])->name('dashboard.departments.users');
         Route::apiResource('departments', DashboardAdminDepartmentController::class);
+
+        Route::get('branches/users', [DashboardAdminBranchController::class, 'users'])->name('dashboard.branches.users');
+        Route::apiResource('branches', DashboardAdminBranchController::class);
 
         Route::apiResource('labels', DashboardAdminLabelController::class);
 

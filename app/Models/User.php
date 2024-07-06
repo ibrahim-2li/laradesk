@@ -107,6 +107,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Department::class, 'user_departments');
     }
 
+    public function branches(): BelongsToMany
+    {
+        return $this->belongsToMany(Branch::class, 'user_branches');
+    }
+
     public function getGravatar(): string
     {
         return 'https://www.gravatar.com/avatar/'.md5(strtolower(trim($this->email))).'?s=80&d=retro';

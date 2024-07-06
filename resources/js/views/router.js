@@ -37,9 +37,9 @@ import AdminDashboardDepartmentsList from "@/views/pages/dashboard/admin/departm
 import AdminDashboardDepartmentsNew from "@/views/pages/dashboard/admin/departments/new";
 import AdminDashboardDepartmentsEdit from "@/views/pages/dashboard/admin/departments/edit";
 
-import AdminDashboardBrunchesList from "@/views/pages/dashboard/admin/brunches/list";
-import AdminDashboardBrunchesNew from "@/views/pages/dashboard/admin/brunches/new";
-import AdminDashboardBrunchesEdit from "@/views/pages/dashboard/admin/brunches/edit";
+import AdminDashboardBranchList from "@/views/pages/dashboard/admin/branches/list";
+import AdminDashboardBranchNew from "@/views/pages/dashboard/admin/branches/new";
+import AdminDashboardBranchEdit from "@/views/pages/dashboard/admin/branches/edit";
 
 import AdminDashboardLabelsList from "@/views/pages/dashboard/admin/labels/list";
 import AdminDashboardLabelsNew from "@/views/pages/dashboard/admin/labels/new";
@@ -132,9 +132,9 @@ let routes = [
             {path: 'admin/departments/new', component: AdminDashboardDepartmentsNew, meta: {middleware: 'auth', dashboard_access: true, controller: 'App.Http.Controllers.Api.Dashboard.Admin.DepartmentController'}},
             {path: 'admin/departments/:id/edit', component: AdminDashboardDepartmentsEdit, meta: {middleware: 'auth', dashboard_access: true, controller: 'App.Http.Controllers.Api.Dashboard.Admin.DepartmentController'}},
 
-            {path: 'admin/brunches', component: AdminDashboardDepartmentsList, meta: {middleware: 'auth', dashboard_access: true, controller: 'App.Http.Controllers.Api.Dashboard.Admin.DepartmentController'}},
-            {path: 'admin/brunches/new', component: AdminDashboardDepartmentsNew, meta: {middleware: 'auth', dashboard_access: true, controller: 'App.Http.Controllers.Api.Dashboard.Admin.DepartmentController'}},
-            {path: 'admin/brunches/:id/edit', component: AdminDashboardDepartmentsEdit, meta: {middleware: 'auth', dashboard_access: true, controller: 'App.Http.Controllers.Api.Dashboard.Admin.DepartmentController'}},
+            {path: 'admin/branches', component: AdminDashboardBranchList, meta: {middleware: 'auth', dashboard_access: true, controller: 'App.Http.Controllers.Api.Dashboard.Admin.BranchController'}},
+            {path: 'admin/branches/new', component: AdminDashboardBranchNew, meta: {middleware: 'auth', dashboard_access: true, controller: 'App.Http.Controllers.Api.Dashboard.Admin.BranchController'}},
+            {path: 'admin/branches/:id/edit', component: AdminDashboardBranchEdit, meta: {middleware: 'auth', dashboard_access: true, controller: 'App.Http.Controllers.Api.Dashboard.Admin.BranchController'}},
 
             {path: 'admin/labels', component: AdminDashboardLabelsList, meta: {middleware: 'auth', dashboard_access: true, controller: 'App.Http.Controllers.Api.Dashboard.Admin.LabelController'}},
             {path: 'admin/labels/new', component: AdminDashboardLabelsNew, meta: {middleware: 'auth', dashboard_access: true, controller: 'App.Http.Controllers.Api.Dashboard.Admin.LabelController'}},
