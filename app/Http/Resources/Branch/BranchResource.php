@@ -17,13 +17,13 @@ class BranchResource extends JsonResource
     public function toArray($request)
     {
         /** @var Branch $branche */
-        $branche = $this;
+        $branches = $this;
         return [
-            'id' => $branche->id,
-            'name' => $branche->name,
-            'all_agents' => $branche->all_agents,
-            'public' => $branche->public,
-            'agents' => $branche->agent()->pluck('id')
+            'id' => $branches->id,
+            'name' => $branches->name,
+            'all_agents' => $branches->all_agents,
+            'public' => $branches->public,
+            'agents' => $branches->agent()->pluck('id')
         ];
     }
 }

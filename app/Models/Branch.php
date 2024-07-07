@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Carbon;
 
 /**
- * App\Models\Department
+ * App\Models\Branch
  *
  * @property int $id
  * @property string $name
@@ -21,15 +21,15 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property-read Collection|User[] $agent
  * @property-read int|null $agent_count
- * @method static Builder|Department newModelQuery()
- * @method static Builder|Department newQuery()
- * @method static Builder|Department query()
- * @method static Builder|Department whereAllAgents($value)
- * @method static Builder|Department whereCreatedAt($value)
- * @method static Builder|Department whereId($value)
- * @method static Builder|Department whereName($value)
- * @method static Builder|Department wherePublic($value)
- * @method static Builder|Department whereUpdatedAt($value)
+ * @method static Builder|Branch newModelQuery()
+ * @method static Builder|Branch newQuery()
+ * @method static Builder|Branch query()
+ * @method static Builder|Branch whereAllAgents($value)
+ * @method static Builder|Branch whereCreatedAt($value)
+ * @method static Builder|Branch whereId($value)
+ * @method static Builder|Branch whereName($value)
+ * @method static Builder|Branch wherePublic($value)
+ * @method static Builder|Branch whereUpdatedAt($value)
  * @mixin Eloquent
  */
 

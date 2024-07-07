@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources\Order;
 
-use App\Http\Resources\Department\DepartmentSelectResource;
+use App\Http\Resources\Branch\BranchSelectResource;
 use App\Http\Resources\OrderReply\OrderReplyDetailsResource;
 use App\Models\Order;
 use Illuminate\Http\Request;
@@ -24,8 +24,8 @@ class OrderDetailsResource extends JsonResource
             'id' => $Order->id,
             'uuid' => $Order->uuid,
             'subject' => $Order->subject,
-            'department' => new DepartmentSelectResource($Order->department),
-            'department_id' => $Order->department_id,
+            'branches' => new BranchSelectResource($Order->branches),
+            'branches_id' => $Order->branches_id,
             'created_at' => $Order->created_at->toISOString(),
             'updated_at' => $Order->updated_at->toISOString(),
             'OrderReplies' => OrderReplyDetailsResource::collection($Order->OrderReplies()->orderByDesc('created_at')->get()),

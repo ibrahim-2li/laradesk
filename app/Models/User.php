@@ -107,7 +107,7 @@ class User extends Authenticatable
         return $this->belongsToMany(Department::class, 'user_departments');
     }
 
-    public function branches(): BelongsToMany
+    public function branch(): BelongsToMany
     {
         return $this->belongsToMany(Branch::class, 'user_branches');
     }

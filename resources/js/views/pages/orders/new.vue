@@ -5,15 +5,15 @@
                 <div class="md:flex md:items-center md:justify-between">
                     <div class="flex-1 min-w-0">
                         <h2 class="py-0.5 text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:leading-9 sm:truncate">
-                            {{ $t('New ticket') }}
+                            {{ $t('New Order') }}
                         </h2>
                     </div>
                     <div class="mt-4 flex md:mt-0 md:ml-4">
                         <router-link
                             class="btn btn-blue shadow-sm rounded-md"
-                            to="/tickets/list"
+                            to="/orders/list"
                         >
-                            {{ $t('Return to tickets list') }}
+                            {{ $t('Return to orders list') }}
                         </router-link>
                     </div>
                 </div>
@@ -23,7 +23,7 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="mt-10 my-6 bg-white shadow overflow-hidden sm:rounded-md">
                     <loading :status="loading.form"/>
-                    <form @submit.prevent="saveTicket">
+                    <form @submit.prevent="saveOrder">
                         <div class="bg-white md:grid md:grid-cols-3 px-4 py-5">
                             <div class="md:col-span-2">
                                 <div class="grid grid-cols-3 gap-6">
@@ -32,31 +32,31 @@
                                         <div class="mt-1 relative rounded-md shadow-sm">
                                             <input
                                                 id="subject"
-                                                v-model="ticket.subject"
+                                                v-model="order.subject"
                                                 :placeholder="$t('Subject')"
                                                 class="form-input block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5"
                                                 required
                                             >
                                         </div>
                                     </div>
-                                    <div v-if="departmentList.length > 0" class="col-span-3">
-                                        <label class="block text-sm font-medium leading-5 text-gray-700" for="department">{{ $t('Department') }}</label>
+                                    <div v-if="branchesList.length > 0" class="col-span-3">
+                                        <label class="block text-sm font-medium leading-5 text-gray-700" for="branches">{{ $t('Branches') }}</label>
                                         <div class="mt-1 relative rounded-md shadow-sm">
                                             <input-select
-                                                id="department"
-                                                v-model="ticket.department_id"
-                                                :options="departmentList"
+                                                id="branches"
+                                                v-model="order.branches_id"
+                                                :options="branchesList"
                                                 option-label="name"
                                                 required
                                             />
                                         </div>
                                     </div>
                                     <div class="col-span-3">
-                                        <label class="block text-sm font-medium leading-5 text-gray-700" for="ticket_body">{{ $t('Ticket body') }}</label>
+                                        <label class="block text-sm font-medium leading-5 text-gray-700" for="order_body">{{ $t('Order body') }}</label>
                                         <div class="mt-1 relative rounded-md shadow-sm">
                                             <input-wysiwyg
-                                                id="ticket_body"
-                                                v-model="ticket.body"
+                                                id="order_body"
+                                                v-model="order.body"
                                                 :plugins="{images: true, attachment: true}"
                                                 @selectUploadFile="selectUploadFile"
                                             >
@@ -68,9 +68,9 @@
                                             </input-wysiwyg>
                                         </div>
                                     </div>
-                                    <div v-if="ticket.attachments.length > 0" class="col-span-3">
+                                    <div v-if="order.attachments.length > 0" class="col-span-3">
                                         <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-2">
-                                            <template v-for="(attachment, index) in ticket.attachments">
+                                            <template v-for="(attachment, index) in order.attachments">
                                                 <attachment :details="attachment" v-on:remove="removeAttachment(index)"/>
                                             </template>
                                         </div>
@@ -84,7 +84,7 @@
                                     class="btn btn-green shadow-sm rounded-md"
                                     type="submit"
                                 >
-                                    {{ $t('Create ticket') }}
+                                    {{ $t('Create order') }}
                                 </button>
                             </div>
                         </div>
@@ -101,7 +101,7 @@ export default {
     name: "index",
     metaInfo() {
         return {
-            title: this.$i18n.t('New ticket')
+            title: this.$i18n.t('New order')
         }
     },
     data() {
@@ -111,39 +111,40 @@ export default {
                 file: false,
             },
             uploadingFileProgress: 0,
-            ticket: {
+            order: {
                 subject: null,
-                department_id: null,
+                branches_id: null,
                 body: '',
                 attachments: [],
             },
-            departmentList: [],
+            branchesList: [],
         }
     },
     mounted() {
-        this.getDepartments();
+        this.getBranches();
     },
     methods: {
-        getDepartments() {
+        getBranches() {
             const self = this;
             self.loading.form = true;
-            axios.get('api/tickets/departments').then(function (response) {
-                self.departmentList = response.data;
+            axios.get('api/orders/branches').then(function (response) {
+                self.branchesList = response.data;
                 self.loading.form = false;
-            }).catch(function () {
+            }).catch(function (error) {
                 self.loading.form = false;
+                console.error('Error saving order:', error);
             });
         },
-        saveTicket() {
+        saveOrder() {
             const self = this;
             self.loading.form = true;
-            axios.post('api/tickets', self.ticket).then(function (response) {
+            axios.post('api/orders', self.order).then(function (response) {
                 self.$notify({
                     title: self.$i18n.t('Success').toString(),
                     text: self.$i18n.t('Data saved correctly').toString(),
                     type: 'success'
                 });
-                self.$router.push('/tickets/' + response.data.ticket.uuid);
+                self.$router.push('/orders/' + response.data.order.uuid);
             }).catch(function () {
                 self.loading.form = false;
             });
@@ -165,7 +166,7 @@ export default {
             self.loading.file = true;
             formData.append('file', e.target.files[0]);
             axios.post(
-                'api/tickets/attachments',
+                'api/orders/attachments',
                 formData,
                 {
                     headers: {'Content-Type': 'multipart/form-data'},
@@ -177,7 +178,7 @@ export default {
                 self.loading.file = false;
                 self.uploadingFileProgress = 0;
                 self.$refs.fileInput.value = null;
-                self.ticket.attachments.push(response.data);
+                self.order.attachments.push(response.data);
             }).catch(function () {
                 self.loading.file = false;
                 self.uploadingFileProgress = 0;
@@ -185,7 +186,7 @@ export default {
             });
         },
         removeAttachment(attachment) {
-            this.ticket.attachments.splice(attachment, 1);
+            this.order.attachments.splice(attachment, 1);
         }
     }
 }

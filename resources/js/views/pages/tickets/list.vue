@@ -16,6 +16,14 @@
                             {{ $t('New ticket') }}
                         </router-link>
                     </div>
+                    <div class="mt-4 flex md:mt-0 md:ml-4">
+                        <router-link
+                            class="btn btn-green shadow-sm rounded-md"
+                            to="/orders/new"
+                        >
+                            {{ $t('New order') }}
+                        </router-link>
+                    </div>
                 </div>
             </div>
         </header>

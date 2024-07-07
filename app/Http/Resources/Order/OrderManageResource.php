@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources\Order;
 
-use App\Http\Resources\Department\DepartmentSelectResource;
+use App\Http\Resources\Branch\BranchSelectResource;
 use App\Http\Resources\Label\LabelSelectResource;
 use App\Http\Resources\Priority\PriorityResource;
 use App\Http\Resources\Status\StatusResource;
@@ -32,8 +32,8 @@ class OrderManageResource extends JsonResource
             'status_id' => $Order->status_id,
             'priority' => new PriorityResource($Order->priority),
             'priority_id' => $Order->priority_id,
-            'department' => new DepartmentSelectResource($Order->department),
-            'department_id' => $Order->department_id,
+            'branches' => new BranchSelectResource($Order->branches),
+            'branches_id' => $Order->branches_id,
             'labels' => LabelSelectResource::collection($Order->labels),
             'user' => new UserDetailsResource($Order->user),
             'user_id' => $Order->user_id,

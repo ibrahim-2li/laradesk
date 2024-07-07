@@ -17,10 +17,10 @@ class BranchSelectResource extends JsonResource
     public function toArray($request)
     {
         /** @var Branch $branche */
-        $branche = $this;
+        $branches = $this;
         return [
-            'id' => $branche->id,
-            'name' => $branche->name,
+            'id' => $branches->id,
+            'name' => $branches->name,
         ];
     }
 }

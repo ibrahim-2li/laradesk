@@ -17,14 +17,14 @@ class BranchDetailsResource extends JsonResource
      */
     public function toArray($request)
     {
-        /** @var Branch $branche */
-        $branche = $this;
+        /** @var Branch $branches */
+        $branches = $this;
         return [
-            'id' => $branche->id,
-            'name' => $branche->name,
-            'all_agents' => (bool) $branche->all_agents,
-            'public' => (bool) $branche->public,
-            'agents' => !$branche->all_agents ? UserDetailsResource::collection($branche->agent->take(5)) : []
+            'id' => $branches->id,
+            'name' => $branches->name,
+            'all_agents' => (bool) $branches->all_agents,
+            'public' => (bool) $branches->public,
+            'agents' => !$branches->all_agents ? UserDetailsResource::collection($branches->agent->take(5)) : []
         ];
     }
 }

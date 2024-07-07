@@ -18,7 +18,7 @@ use App\Http\Controllers\Api\Dashboard\OrderController as DashboardOrderControll
 use App\Http\Controllers\Api\File\FileController as FileFileController;
 use App\Http\Controllers\Api\Language\LanguageController as LanguageLanguageController;
 use App\Http\Controllers\Api\Ticket\TicketController as UserTicketController;
-use App\Http\Controllers\Api\Ticket\OrderController as UserOrderController;
+use App\Http\Controllers\Api\Order\OrderController as UserOrderController;
 
 Route::group(['prefix' => 'lang'], static function () {
     Route::get('/', [LanguageLanguageController::class, 'list'])->name('language.list');
@@ -50,7 +50,7 @@ Route::post('tickets/{ticket}/reply', [UserTicketController::class, 'reply'])->n
 Route::apiResource('tickets', UserTicketController::class)->except(['update', 'destroy']);
 
 Route::get('orders/statuses', [UserOrderController::class, 'statuses'])->name('orders.statuses');
-Route::get('orders/departments', [UserOrderController::class, 'departments'])->name('orders.departments');
+Route::get('orders/branches', [UserOrderController::class, 'branches'])->name('orders.branches');
 Route::post('orders/attachments', [FileFileController::class, 'uploadAttachment'])->name('orders.upload-attachment');
 Route::post('orders/{order}/reply', [UserOrderController::class, 'reply'])->name('orders.reply');
 Route::apiResource('orders', UserOrderController::class)->except(['update', 'destroy']);

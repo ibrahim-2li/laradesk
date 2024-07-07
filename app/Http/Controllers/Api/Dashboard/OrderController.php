@@ -4,29 +4,29 @@ namespace App\Http\Controllers\Api\Dashboard;
 
 use App\Http\Controllers\Api\File\FileController;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Dashboard\Ticket\StoreRequest;
-use App\Http\Requests\Dashboard\Ticket\TicketReplyRequest;
+use App\Http\Requests\Dashboard\Order\StoreRequest;
+use App\Http\Requests\Dashboard\Order\OrderReplyRequest;
 use App\Http\Requests\File\StoreFileRequest;
 use App\Http\Resources\CannedReply\CannedReplyResource;
-use App\Http\Resources\Department\DepartmentSelectResource;
+use App\Http\Resources\Branch\BranchSelectResource;
 use App\Http\Resources\Label\LabelSelectResource;
 use App\Http\Resources\Priority\PriorityResource;
 use App\Http\Resources\Status\StatusResource;
-use App\Http\Resources\Ticket\TicketListResource;
-use App\Http\Resources\Ticket\TicketManageResource;
+use App\Http\Resources\Order\OrderListResource;
+use App\Http\Resources\Order\OrderManageResource;
 use App\Http\Resources\User\UserDetailsResource;
 use App\Models\CannedReply;
-use App\Models\Department;
+use App\Models\Branch;
 use App\Models\Label;
 use App\Models\Priority;
 use App\Models\Setting;
 use App\Models\Status;
-use App\Models\Ticket;
-use App\Models\TicketReply;
+use App\Models\Order;
+use App\Models\OrderReply;
 use App\Models\User;
 use App\Models\UserRole;
-use App\Notifications\Ticket\NewTicketFromAgent;
-use App\Notifications\Ticket\NewTicketReplyFromAgentToUser;
+use App\Notifications\Order\NewOrderFromAgent;
+use App\Notifications\Order\NewOrderReplyFromAgentToUser;
 use Auth;
 use Carbon\Carbon;
 use Exception;
@@ -56,7 +56,7 @@ class OrderController extends Controller
         $user = Auth::user();
         $sort = json_decode($request->get('sort', json_encode(['order' => 'asc', 'column' => 'created_at'], JSON_THROW_ON_ERROR)), true, 512, JSON_THROW_ON_ERROR);
         if ($user->role_id !== 1) {
-            $items = Ticket::filter($request->all())
+            $items = Order::filter($request->all())
                 ->where(function (Builder $query) use ($user) {
                     $query->where('agent_id', $user->id);
                     $query->orWhere('closed_by', $user->id);
@@ -70,12 +70,12 @@ class OrderController extends Controller
                 ->orderBy($sort['column'], $sort['order'])
                 ->paginate((int) $request->get('perPage', 10));
         } else {
-            $items = Ticket::filter($request->all())
+            $items = Order::filter($request->all())
                 ->orderBy($sort['column'], $sort['order'])
                 ->paginate((int) $request->get('perPage', 10));
         }
         return response()->json([
-            'items' => TicketListResource::collection($items->items()),
+            'items' => OrderListResource::collection($items->items()),
             'pagination' => [
                 'currentPage' => $items->currentPage(),
                 'perPage' => $items->perPage(),
@@ -95,26 +95,26 @@ class OrderController extends Controller
     /** public function store(StoreRequest $request): JsonResponse
    * {
     *    $request->validated();
-     *   $ticket = new Ticket();
-      *  $ticket->uuid = Str::uuid();
-       * $ticket->subject = $request->get('subject');
-*        $ticket->status_id = $request->get('status_id');
- *       $ticket->priority_id = $request->get('priority_id');
-  *      $ticket->department_id = $request->get('department_id');
-   *     $ticket->user_id = $request->get('user_id');
-    *    $ticket->agent_id = $request->get('agent_id');
-     *   $ticket->saveOrFail();
-      *  $ticketReply = new TicketReply();
-       * $ticketReply->user_id = Auth::id();
-        *$ticketReply->body = $request->get('body');
-*        if ($ticket->ticketReplies()->save($ticketReply)) {
+     *   $order = new Order();
+      *  $order->uuid = Str::uuid();
+       * $order->subject = $request->get('subject');
+*        $order->status_id = $request->get('status_id');
+ *       $order->priority_id = $request->get('priority_id');
+  *      $order->department_id = $request->get('department_id');
+   *     $order->user_id = $request->get('user_id');
+    *    $order->agent_id = $request->get('agent_id');
+     *   $order->saveOrFail();
+      *  $orderReply = new OrderReply();
+       * $orderReply->user_id = Auth::id();
+        *$orderReply->body = $request->get('body');
+*        if ($order->orderReplies()->save($orderReply)) {
  *           if ($request->has('attachments')) {
-  *              $ticketReply->ticketAttachments()->sync(collect($request->get('attachments'))->map(function ($attachment) {
+  *              $orderReply->orderAttachments()->sync(collect($request->get('attachments'))->map(function ($attachment) {
    *                 return $attachment['id'];
     *            }));
      *       }
-      *      $ticket->user->notify((new NewTicketFromAgent($ticket))->locale(Setting::getDecoded('app_locale')));
-       *     return response()->json(['message' => __('Data saved correctly'), 'ticket' => new TicketManageResource($ticket)]);
+      *      $order->user->notify((new NewOrderFromAgent($order))->locale(Setting::getDecoded('app_locale')));
+       *     return response()->json(['message' => __('Data saved correctly'), 'order' => new OrderManageResource($order)]);
  *       }
 *        return response()->json(['message' => __('An error occurred while saving data')], 500);
   *  }
@@ -124,96 +124,96 @@ public function store(StoreRequest $request): JsonResponse
 {
     $request->validated();
 
-    // Create a new ticket instance
-    $ticket = new Ticket();
-    $ticket->uuid = Str::uuid();
-    $ticket->subject = $request->get('subject');
-    $ticket->status_id = $request->get('status_id');
-    $ticket->priority_id = $request->get('priority_id');
-    $ticket->department_id = $request->get('department_id');
-    $ticket->user_id = $request->get('user_id');
-    $ticket->agent_id = $request->get('agent_id'); // Assign the agent_id from the request
+    // Create a new order instance
+    $order = new Order();
+    $order->uuid = Str::uuid();
+    $order->subject = $request->get('subject');
+    $order->status_id = $request->get('status_id');
+    $order->priority_id = $request->get('priority_id');
+    $order->department_id = $request->get('department_id');
+    $order->user_id = $request->get('user_id');
+    $order->agent_id = $request->get('agent_id'); // Assign the agent_id from the request
 
-    // Save the ticket
+    // Save the order
     try {
-        $ticket->saveOrFail();
+        $order->saveOrFail();
     } catch (\Exception $e) {
-        // Handle any errors during ticket saving
-        return response()->json(['message' => __('An error occurred while saving ticket')], 500);
+        // Handle any errors during order saving
+        return response()->json(['message' => __('An error occurred while saving order')], 500);
     }
 
-    // Create a new ticket reply instance
-    $ticketReply = new TicketReply();
-    $ticketReply->user_id = Auth::id();
-    $ticketReply->body = $request->get('body');
+    // Create a new order reply instance
+    $orderReply = new OrderReply();
+    $orderReply->user_id = Auth::id();
+    $orderReply->body = $request->get('body');
 
-    // Save the ticket reply
-    if ($ticket->ticketReplies()->save($ticketReply)) {
+    // Save the order reply
+    if ($order->orderReplies()->save($orderReply)) {
         // Attach attachments if present
         if ($request->has('attachments')) {
-            $ticketReply->ticketAttachments()->sync(
+            $orderReply->orderAttachments()->sync(
                 collect($request->get('attachments'))->pluck('id')
             );
         }
 
-        // Notify user about the new ticket
-        $ticket->user->notify((new NewTicketFromAgent($ticket))->locale(Setting::getDecoded('app_locale')));
+        // Notify user about the new order
+        $order->user->notify((new NewOrderFromAgent($order))->locale(Setting::getDecoded('app_locale')));
 
         return response()->json([
-            'message' => __('Ticket created successfully'),
-            'ticket' => new TicketManageResource($ticket)
+            'message' => __('order created successfully'),
+            'order' => new OrderManageResource($order)
         ]);
     }
 
-    return response()->json(['message' => __('An error occurred while saving ticket reply')], 500);
+    return response()->json(['message' => __('An error occurred while saving order reply')], 500);
 }
 
 
     /**
      * Display the specified resource.
      *
-     * @param  Ticket  $ticket
+     * @param  Order  $order
      * @return JsonResponse
      */
-    public function show(Ticket $ticket): JsonResponse
+    public function show(Order $order): JsonResponse
     {
         /** @var User $user */
         $user = Auth::user();
-        if (!$ticket->verifyUser($user)) {
-            return response()->json(['message' => __('You do not have permissions to manage this ticket')], 403);
+        if (!$order->verifyUser($user)) {
+            return response()->json(['message' => __('You do not have permissions to manage this order')], 403);
         }
-        return response()->json(new TicketManageResource($ticket));
+        return response()->json(new OrderManageResource($order));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  TicketReplyRequest  $request
-     * @param  Ticket  $ticket
+     * @param  OrderReplyRequest  $request
+     * @param  Order  $order
      * @return JsonResponse
      */
-    public function reply(Ticket $ticket, TicketReplyRequest $request): JsonResponse
+    public function reply(Order $order, OrderReplyRequest $request): JsonResponse
     {
         /** @var User $user */
         $user = Auth::user();
-        if (!$ticket->verifyUser($user)) {
-            return response()->json(['message' => __('You do not have permissions to manage this ticket')], 403);
+        if (!$order->verifyUser($user)) {
+            return response()->json(['message' => __('You do not have permissions to manage this order')], 403);
         }
         $request->validated();
-        $ticketReply = new TicketReply();
-        $ticketReply->user_id = Auth::id();
-        $ticketReply->body = $request->get('body');
-        if ($ticket->ticketReplies()->save($ticketReply)) {
+        $orderReply = new OrderReply();
+        $orderReply->user_id = Auth::id();
+        $orderReply->body = $request->get('body');
+        if ($order->orderReplies()->save($orderReply)) {
             if ($request->has('attachments')) {
-                $ticketReply->ticketAttachments()->sync(collect($request->get('attachments'))->map(function ($attachment) {
+                $orderReply->orderAttachments()->sync(collect($request->get('attachments'))->map(function ($attachment) {
                     return $attachment['id'];
                 }));
             }
-            $ticket->status_id = $request->get('status_id');
-            $ticket->updated_at = Carbon::now();
-            $ticket->save();
-            $ticket->user->notify((new NewTicketReplyFromAgentToUser($ticket))->locale(Setting::getDecoded('app_locale')));
-            return response()->json(['message' => __('Data saved correctly'), 'ticket' => new TicketManageResource($ticket)]);
+            $order->status_id = $request->get('status_id');
+            $order->updated_at = Carbon::now();
+            $order->save();
+            $order->user->notify((new NewOrderReplyFromAgentToUser($order))->locale(Setting::getDecoded('app_locale')));
+            return response()->json(['message' => __('Data saved correctly'), 'order' => new OrderManageResource($order)]);
         }
         return response()->json(['message' => __('An error occurred while saving data')], 500);
     }
@@ -221,23 +221,23 @@ public function store(StoreRequest $request): JsonResponse
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Ticket  $ticket
+     * @param  Order  $order
      * @return JsonResponse
      * @throws Exception
      */
-    public function destroy(Ticket $ticket): JsonResponse
+    public function destroy(Order $order): JsonResponse
     {
         /** @var User $user */
         $user = Auth::user();
-        if (!$ticket->verifyUser($user)) {
-            return response()->json(['message' => __('You do not have permissions to manage this ticket')], 403);
+        if (!$order->verifyUser($user)) {
+            return response()->json(['message' => __('You do not have permissions to manage this order')], 403);
         }
-        $ticket->labels()->sync([]);
-        foreach ($ticket->ticketReplies()->get() as $ticketReply) {
-            $ticketReply->ticketAttachments()->sync([]);
+        $order->labels()->sync([]);
+        foreach ($order->orderReplies()->get() as $orderReply) {
+            $orderReply->orderAttachments()->sync([]);
         }
-        $ticket->ticketReplies()->delete();
-        if ($ticket->delete()) {
+        $order->orderReplies()->delete();
+        if ($order->delete()) {
             return response()->json(['message' => 'Data deleted successfully']);
         }
         return response()->json(['message' => __('An error occurred while deleting data')], 500);
@@ -277,9 +277,9 @@ public function store(StoreRequest $request): JsonResponse
         $action = $request->get('action');
         /** @var User $user */
         $user = Auth::user();
-        $tickets = Ticket::whereIn('id', $request->get('tickets'));
+        $orders = Order::whereIn('id', $request->get('orders'));
         if ($user && $user->role_id !== 1) {
-            $tickets->where(function (Builder $query) use ($user) {
+            $orders->where(function (Builder $query) use ($user) {
                 $query->where('agent_id', $user->id);
                 $query->orWhere('closed_by', $user->id);
                 $query->orWhereIn('department_id', $user->departments()->pluck('id')->toArray());
@@ -290,93 +290,93 @@ public function store(StoreRequest $request): JsonResponse
                 });
             });
         }
-        if ($tickets->count() < 1) {
-            return response()->json(['message' => __('You have not selected a ticket or do not have permissions to perform this action')], 403);
+        if ($orders->count() < 1) {
+            return response()->json(['message' => __('You have not selected a order or do not have permissions to perform this action')], 403);
         }
         if ($action === 'agent') {
-            $tickets->update(['agent_id' => $request->get('value')]);
-            return response()->json(['message' => __('Tickets assigned to the selected agent')]);
+            $orders->update(['agent_id' => $request->get('value')]);
+            return response()->json(['message' => __('orders assigned to the selected agent')]);
         }
         if ($action === 'department') {
-            $tickets->update(['department_id' => $request->get('value')]);
-            return response()->json(['message' => __('Tickets assigned to the selected department')]);
+            $orders->update(['department_id' => $request->get('value')]);
+            return response()->json(['message' => __('orders assigned to the selected department')]);
         }
         if ($action === 'label') {
-            foreach ($tickets->get() as $ticket) {
-                /** @var Ticket $ticket */
-                $ticket->labels()->syncWithoutDetaching($request->get('value'));
-                $ticket->updated_at = Carbon::now();
-                $ticket->save();
+            foreach ($orders->get() as $order) {
+                /** @var Order $order */
+                $order->labels()->syncWithoutDetaching($request->get('value'));
+                $order->updated_at = Carbon::now();
+                $order->save();
             }
-            return response()->json(['message' => __('The label has been added to selected tickets')]);
+            return response()->json(['message' => __('The label has been added to selected orders')]);
         }
         if ($action === 'priority') {
-            $tickets->update(['priority_id' => $request->get('value')]);
-            return response()->json(['message' => __('The priority of the selected tickets has been changed')]);
+            $orders->update(['priority_id' => $request->get('value')]);
+            return response()->json(['message' => __('The priority of the selected orders has been changed')]);
         }
         if ($action === 'delete') {
-            foreach ($tickets->get() as $ticket) {
-                /** @var Ticket $ticket */
-                $ticket->labels()->sync([]);
-                foreach ($ticket->ticketReplies()->get() as $ticketReply) {
-                    $ticketReply->ticketAttachments()->sync([]);
+            foreach ($orders->get() as $order) {
+                /** @var Order $order */
+                $order->labels()->sync([]);
+                foreach ($order->orderReplies()->get() as $orderReply) {
+                    $orderReply->orderAttachments()->sync([]);
                 }
-                $ticket->ticketReplies()->delete();
-                $ticket->delete();
+                $order->orderReplies()->delete();
+                $order->delete();
             }
-            return response()->json(['message' => __('The selected tickets have been deleted')]);
+            return response()->json(['message' => __('The selected orders have been deleted')]);
         }
         return response()->json(['message' => __('Quick action not found')], 404);
     }
 
     /**
-     * @param  Ticket  $ticket
+     * @param  Order  $order
      * @param  Request  $request
      * @return JsonResponse
      * @throws Throwable
      */
-    public function ticketQuickActions(Ticket $ticket, Request $request): JsonResponse
+    public function orderQuickActions(Order $order, Request $request): JsonResponse
     {
         $value = $request->get('value');
         $action = $request->get('action');
         /** @var User $user */
         $user = Auth::user();
-        if (!$ticket->verifyUser($user)) {
-            return response()->json(['message' => __('You do not have permissions to manage this ticket')], 403);
+        if (!$order->verifyUser($user)) {
+            return response()->json(['message' => __('You do not have permissions to manage this order')], 403);
         }
         if ($action === 'agent') {
-            $ticket->agent_id = $value;
-            $ticket->saveOrFail();
-            return response()->json(['message' => __('Ticket assigned to the selected agent'), 'ticket' => new TicketManageResource($ticket), 'access' => $ticket->verifyUser($user)]);
+            $order->agent_id = $value;
+            $order->saveOrFail();
+            return response()->json(['message' => __('order assigned to the selected agent'), 'order' => new OrderManageResource($order), 'access' => $order->verifyUser($user)]);
         }
         if ($action === 'department') {
-            $ticket->department_id = $value;
-            $ticket->saveOrFail();
-            return response()->json(['message' => __('Ticket assigned to the selected department'), 'ticket' => new TicketManageResource($ticket), 'access' => $ticket->verifyUser($user)]);
+            $order->department_id = $value;
+            $order->saveOrFail();
+            return response()->json(['message' => __('order assigned to the selected department'), 'order' => new OrderManageResource($order), 'access' => $order->verifyUser($user)]);
         }
         if ($action === 'label') {
-            $ticket->labels()->syncWithoutDetaching($request->get('value'));
-            $ticket->updated_at = Carbon::now();
-            $ticket->save();
-            return response()->json(['message' => __('Label has been assigned to ticket'), 'ticket' => new TicketManageResource($ticket), 'access' => true]);
+            $order->labels()->syncWithoutDetaching($request->get('value'));
+            $order->updated_at = Carbon::now();
+            $order->save();
+            return response()->json(['message' => __('Label has been assigned to order'), 'order' => new OrderManageResource($order), 'access' => true]);
         }
         if ($action === 'priority') {
-            $ticket->priority_id = $value;
-            $ticket->saveOrFail();
-            return response()->json(['message' => __('Ticket priority has been changed'), 'ticket' => new TicketManageResource($ticket), 'access' => true]);
+            $order->priority_id = $value;
+            $order->saveOrFail();
+            return response()->json(['message' => __('order priority has been changed'), 'order' => new OrderManageResource($order), 'access' => true]);
         }
         return response()->json(['message' => __('Quick action not found')], 404);
     }
 
-    public function removeLabel(Ticket $ticket, Request $request): JsonResponse
+    public function removeLabel(Order $order, Request $request): JsonResponse
     {
         /** @var User $user */
         $user = Auth::user();
-        if (!$ticket->verifyUser($user)) {
-            return response()->json(['message' => __('You do not have permissions to manage this ticket')], 403);
+        if (!$order->verifyUser($user)) {
+            return response()->json(['message' => __('You do not have permissions to manage this order')], 403);
         }
-        if ($ticket->labels()->detach($request->get('label'))) {
-            return response()->json(['message' => __('Data saved correctly'), 'ticket' => new TicketManageResource($ticket)]);
+        if ($order->labels()->detach($request->get('label'))) {
+            return response()->json(['message' => __('Data saved correctly'), 'order' => new OrderManageResource($order)]);
         }
         return response()->json(['message' => __('An error occurred while saving data')], 500);
     }
