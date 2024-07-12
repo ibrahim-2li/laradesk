@@ -558,6 +558,7 @@ class ComposerStaticInit0a33ec4fa29211857fc6176b3830e4cc
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
         'App\\Filters\\CannedReplyFilter' => __DIR__ . '/../..' . '/app/Filters/CannedReplyFilter.php',
+        'App\\Filters\\OrderFilter' => __DIR__ . '/../..' . '/app/Filters/OrderFilter.php',
         'App\\Filters\\TicketFilter' => __DIR__ . '/../..' . '/app/Filters/TicketFilter.php',
         'App\\Filters\\UserFilter' => __DIR__ . '/../..' . '/app/Filters/UserFilter.php',
         'App\\Filters\\UserRoleFilter' => __DIR__ . '/../..' . '/app/Filters/UserRoleFilter.php',

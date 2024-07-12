@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use Eloquent;
+use App\Models\Order;
+use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Label
@@ -37,5 +38,10 @@ class Label extends Model
     public function tickets(): BelongsToMany
     {
         return $this->belongsToMany(Ticket::class, 'ticket_labels');
+    }
+
+    public function orders(): BelongsToMany
+    {
+        return $this->belongsToMany(Order::class, 'order_labels');
     }
 }

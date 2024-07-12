@@ -10,7 +10,7 @@
                         <button
                             class="btn btn-red shadow-sm rounded-md"
                             type="button"
-                            @click="deleteBranchModal = true"
+                            @click="deleteBrancheModal = true"
                         >
                             {{ $t('Delete branches') }}
                         </button>
@@ -34,7 +34,7 @@
                                     <div class="mt-1 relative rounded-md shadow-sm">
                                         <input
                                             id="name"
-                                            v-model="branche.name"
+                                            v-model="branches.name"
                                             :placeholder="$t('Name')"
                                             class="form-input block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5"
                                             required
@@ -45,7 +45,7 @@
                                     <label class="block text-sm font-medium leading-5 text-gray-700" for="all_agents">{{ $t('All agents') }}</label>
                                     <input-switch
                                         id="all_agents"
-                                        v-model="branche.all_agents"
+                                        v-model="branches.all_agents"
                                         :disabled-label="$t('Only selected agents')"
                                         :enabled-label="$t('All agents')"
                                     ></input-switch>
@@ -57,7 +57,7 @@
                                     <label class="block text-sm font-medium leading-5 text-gray-700" for="public">{{ $t('Visibility') }}</label>
                                     <input-switch
                                         id="public"
-                                        v-model="branche.public"
+                                        v-model="branches.public"
                                         :disabled-label="$t('The branches is private')"
                                         :enabled-label="$t('The branches is public')"
                                     ></input-switch>
@@ -67,7 +67,7 @@
                                 </div>
                             </div>
                         </div>
-                        <template v-if="!branche.all_agents">
+                        <template v-if="!branches.all_agents">
                             <div class="md:col-span-3">
                                 <div class="py-3">
                                     <div class="border-t border-gray-200"></div>
@@ -87,7 +87,7 @@
                                                 <div class="flex items-center px-6 py-3 hover:bg-gray-100 cursor-pointer rounded" @click="selectAgent(user.id)">
                                                     <div>
                                                         <div class="flex items-center justify-center">
-                                                            <svg-vue v-if="branche.agents.includes(user.id)" class="w-5 h-5 text-green-400" icon="font-awesome.check-circle-solid"></svg-vue>
+                                                            <svg-vue v-if="branches.agents.includes(user.id)" class="w-5 h-5 text-green-400" icon="font-awesome.check-circle-solid"></svg-vue>
                                                             <div v-else class="w-5 h-5 p-1 overflow-hidden rounded-full border"></div>
                                                         </div>
                                                     </div>
@@ -129,7 +129,7 @@
                 </div>
             </div>
         </form>
-        <div v-show="deleteBranchModal" class="fixed z-20 inset-0 overflow-y-auto">
+        <div v-show="deleteBrancheModal" class="fixed z-20 inset-0 overflow-y-auto">
             <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                 <transition
                     duration="300"
@@ -140,7 +140,7 @@
                     leave-class="opacity-100"
                     leave-to-class="opacity-0"
                 >
-                    <div v-show="deleteBranchModal" class="fixed inset-0 transition-opacity">
+                    <div v-show="deleteBrancheModal" class="fixed inset-0 transition-opacity">
                         <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
                     </div>
                 </transition>
@@ -154,7 +154,7 @@
                     leave-to-class="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                 >
                     <div
-                        v-show="deleteBranchModal"
+                        v-show="deleteBrancheModal"
                         aria-labelledby="modal-headline"
                         aria-modal="true"
                         class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
@@ -184,14 +184,14 @@
                             <button
                                 class="btn btn-red mr-2 sm:mr-0"
                                 type="button"
-                                @click="deleteBranche"
+                                @click="deletebranche"
                             >
                                 {{ $t('Delete branches') }}
                             </button>
                             <button
                                 class="btn btn-white mr-0 sm:mr-2"
                                 type="button"
-                                @click="deleteBranchModal = false"
+                                @click="deleteBrancheModal = false"
                             >
                                 {{ $t('Cancel') }}
                             </button>
@@ -214,9 +214,9 @@ export default {
     data() {
         return {
             loading: true,
-            deleteBranchModal: false,
+            deleteBrancheModal: false,
             users: [],
-            branche: {
+            branches: {
                 name: null,
                 all_agents: false,
                 public: true,
@@ -231,14 +231,14 @@ export default {
         saveBranche() {
             const self = this;
             self.loading = true;
-            axios.put('api/dashboard/admin/branches/' + self.$route.params.id, self.branche).then(function (response) {
+            axios.put('api/dashboard/admin/branches/' + self.$route.params.id, self.branches).then(function (response) {
                 self.loading = false;
                 self.$notify({
                     title: self.$i18n.t('Success').toString(),
                     text: self.$i18n.t('Data updated correctly').toString(),
                     type: 'success'
                 });
-                self.branche = response.data.branche;
+                self.branches = response.data.branches;
             }).catch(function () {
                 self.loading = false;
 
@@ -248,23 +248,23 @@ export default {
             const self = this;
             axios.get('api/dashboard/admin/branches/users').then(function (response) {
                 self.users = response.data;
-                self.getBranche();
+                self.getBranches();
             }).catch(function () {
                 self.loading = false;
             });
         },
-        getBranche() {
+        getBranches() {
             const self = this;
             self.loading = true;
             axios.get('api/dashboard/admin/branches/' + self.$route.params.id).then(function (response) {
-                self.branche = response.data;
+                self.branches = response.data;
                 self.loading = false;
             }).catch(function (error) {
                 self.loading = false;
-                console.error('Error updating branche:', error);
+                console.error('Error updating branches:', error);
             });
         },
-        deleteBranche() {
+        deletebranche() {
             const self = this;
             axios.delete('api/dashboard/admin/branches/' + self.$route.params.id).then(function () {
                 self.$notify({
@@ -279,14 +279,14 @@ export default {
             });
         },
         selectAgent(user) {
-            if (this.branche.agents.includes(user)) {
-                for (let i = 0; i < this.branche.agents.length; i++) {
-                    if (this.branche.agents[i] === user) {
-                        this.branche.agents.splice(i, 1);
+            if (this.branches.agents.includes(user)) {
+                for (let i = 0; i < this.branches.agents.length; i++) {
+                    if (this.branches.agents[i] === user) {
+                        this.branches.agents.splice(i, 1);
                     }
                 }
             } else {
-                this.branche.agents.push(user);
+                this.branches.agents.push(user);
             }
         }
     }

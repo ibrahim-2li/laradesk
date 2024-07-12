@@ -12,6 +12,7 @@ return array(
     'App\\Console\\Kernel' => $baseDir . '/app/Console/Kernel.php',
     'App\\Exceptions\\Handler' => $baseDir . '/app/Exceptions/Handler.php',
     'App\\Filters\\CannedReplyFilter' => $baseDir . '/app/Filters/CannedReplyFilter.php',
+    'App\\Filters\\OrderFilter' => $baseDir . '/app/Filters/OrderFilter.php',
     'App\\Filters\\TicketFilter' => $baseDir . '/app/Filters/TicketFilter.php',
     'App\\Filters\\UserFilter' => $baseDir . '/app/Filters/UserFilter.php',
     'App\\Filters\\UserRoleFilter' => $baseDir . '/app/Filters/UserRoleFilter.php',

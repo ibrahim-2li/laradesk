@@ -5,15 +5,15 @@
                 <div class="md:flex md:items-center md:justify-between">
                     <div class="flex-1 min-w-0">
                         <h2 class="py-0.5 text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:leading-9 sm:truncate">
-                            {{ $t('Ticket details') }}
+                            {{ $t('Order details') }}
                         </h2>
                     </div>
                     <div class="mt-4 flex md:mt-0 md:ml-4">
                         <router-link
                             class="btn btn-blue shadow-sm rounded-md"
-                            to="/tickets/list"
+                            to="/orders/list"
                         >
-                            {{ $t('Return to tickets list') }}
+                            {{ $t('Return to orders list') }}
                         </router-link>
                     </div>
                 </div>
@@ -25,11 +25,11 @@
                     <loading :status="loading.form"/>
                     <div class="sm:flex sm:items-center py-3 max-w-full">
                         <div class="px-6 sm:pl-6 sm:pr-3 sm:flex-1 sm:w-3/4">
-                            <div class="text-xl truncate">{{ ticket.subject }}</div>
+                            <div class="text-xl truncate">{{ order.subject }}</div>
                         </div>
                         <div class="px-6 sm:pl-3 sm:pr-6 sm:flex-1 sm:w-1/4">
                             <div class="flex items-center sm:float-right">
-                                <div class="text-sm sm:pr-2">{{ ticket.created_at | momentFormatDateTimeAgo }}</div>
+                                <div class="text-sm sm:pr-2">{{ order.created_at | momentFormatDateTimeAgo }}</div>
                                 <button class="flex items-center btn btn-white p-2 ml-3 sm:ml-0" type="button" @click="replyForm = true">
                                     <svg-vue class="h-4 w-4 mr-2" icon="font-awesome.reply-regular"></svg-vue>
                                     {{ $t('Reply') }}
@@ -41,8 +41,8 @@
                         <loading :status="loading.reply"/>
                         <form @submit.prevent="addReply">
                             <input-wysiwyg
-                                id="ticket_body"
-                                v-model="ticketReply.body"
+                                id="order_body"
+                                v-model="orderReply.body"
                                 :plugins="{images: true, attachment: true, shortCode: true}"
                                 @selectUploadFile="selectUploadFile"
                             >
@@ -71,37 +71,37 @@
                             </input-wysiwyg>
                         </form>
                         <input ref="fileInput" hidden type="file" @change="uploadFile($event)">
-                        <template v-if="ticketReply.attachments.length > 0">
+                        <template v-if="orderReply.attachments.length > 0">
                             <div class="mt-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2">
-                                <template v-for="(attachment, index) in ticketReply.attachments">
+                                <template v-for="(attachment, index) in orderReply.attachments">
                                     <attachment :details="attachment" v-on:remove="removeAttachment(index)"/>
                                 </template>
                             </div>
                         </template>
                     </div>
-                    <template v-if="ticket.ticketReplies.length > 0">
-                        <template v-for="ticketReply in ticket.ticketReplies">
+                    <template v-if="order.orderReplies.length > 0">
+                        <template v-for="orderReply in order.orderReplies">
                             <div class="flex p-6 border-t">
                                 <img
                                     :alt="$t('Avatar')"
-                                    :src="ticketReply.user.avatar !== 'gravatar' ? ticketReply.user.avatar : ticketReply.user.gravatar"
+                                    :src="orderReply.user.avatar !== 'gravatar' ? orderReply.user.avatar : orderReply.user.gravatar"
                                     class="h-12 w-12 hidden sm:inline"
                                 />
                                 <div class="sm:pl-6 pb-2 w-full">
                                     <div class="md:flex md:items-center pb-1">
                                         <div class="md:flex-1 text-lg font-semibold text-gray-800">
-                                            {{ ticketReply.user.name }}
+                                            {{ orderReply.user.name }}
                                         </div>
                                         <div class="md:flex-1">
                                             <div class="md:float-right text-sm">
-                                                {{ ticketReply.created_at | momentFormatDateTime }}
+                                                {{ orderReply.created_at | momentFormatDateTime }}
                                             </div>
                                         </div>
                                     </div>
-                                    <p class="text-gray-700 ticket-reply-body" v-html="ticketReply.body"/>
-                                    <template v-if="ticketReply.attachments.length > 0">
+                                    <p class="text-gray-700 order-reply-body" v-html="orderReply.body"/>
+                                    <template v-if="orderReply.attachments.length > 0">
                                         <div class="mt-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2">
-                                            <template v-for="attachment in ticketReply.attachments">
+                                            <template v-for="attachment in orderReply.attachments">
                                                 <attachment :details="attachment" :remove-button="false"/>
                                             </template>
                                         </div>
@@ -118,7 +118,7 @@
                                         <svg-vue class="h-full h-auto w-48 mb-6" icon="undraw.task-list"></svg-vue>
                                     </div>
                                     <div class="flex justify-center items-center">
-                                        <div class="w-full font-semibold text-2xl">{{ $t('This ticket has no conversations') }}</div>
+                                        <div class="w-full font-semibold text-2xl">{{ $t('This order has no conversations') }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -135,7 +135,7 @@ export default {
     name: "index",
     metaInfo() {
         return {
-            title: this.$i18n.t('Ticket details')
+            title: this.$i18n.t('Order details')
         }
     },
     data() {
@@ -147,13 +147,13 @@ export default {
             },
             replyForm: false,
             uploadingFileProgress: 0,
-            ticket: {
+            order: {
                 subject: null,
                 created_at: null,
-                ticketReplies: [],
+                orderReplies: [],
             },
-            ticketReply: {
-                status_id: null,
+            orderReply: {
+                order_status_id: null,
                 body: '',
                 attachments: [],
             },
@@ -168,38 +168,38 @@ export default {
         },
     },
     mounted() {
-        this.getTicket();
+        this.getOrder();
     },
     methods: {
-        getTicket() {
+        getOrder() {
             const self = this;
             self.loading.form = true;
-            axios.get('api/tickets/' + self.$route.params.uuid).then(function (response) {
+            axios.get('api/orders/' + self.$route.params.uuid).then(function (response) {
                 self.loading.form = false;
-                self.ticket = response.data;
+                self.order = response.data;
             }).catch(function () {
-                self.$router.push('/tickets/list');
+                self.$router.push('/orders/list');
             });
         },
         addReply() {
             const self = this;
             self.loading.reply = true;
-            axios.post('api/tickets/' + self.$route.params.uuid + '/reply', self.ticketReply).then(function (response) {
+            axios.post('api/orders/' + self.$route.params.uuid + '/reply', self.orderReply).then(function (response) {
                 self.$notify({
                     title: self.$i18n.t('Success').toString(),
                     text: self.$i18n.t('Data saved correctly').toString(),
                     type: 'success'
                 });
                 self.discardReply();
-                self.ticket = response.data.ticket;
+                self.order = response.data.order;
                 self.loading.reply = false;
             }).catch(function () {
                 self.loading.reply = false;
             });
         },
         discardReply() {
-            this.ticketReply.body = '';
-            this.ticketReply.attachments = [];
+            this.orderReply.body = '';
+            this.orderReply.attachments = [];
             this.replyForm = false;
         },
         selectUploadFile() {
@@ -219,7 +219,7 @@ export default {
             self.loading.file = true;
             formData.append('file', e.target.files[0]);
             axios.post(
-                'api/tickets/attachments',
+                'api/orders/attachments',
                 formData,
                 {
                     headers: {'Content-Type': 'multipart/form-data'},
@@ -231,7 +231,7 @@ export default {
                 self.loading.file = false;
                 self.uploadingFileProgress = 0;
                 self.$refs.fileInput.value = null;
-                self.ticketReply.attachments.push(response.data);
+                self.orderReply.attachments.push(response.data);
             }).catch(function () {
                 self.loading.file = false;
                 self.uploadingFileProgress = 0;
@@ -239,7 +239,7 @@ export default {
             });
         },
         removeAttachment(attachment) {
-            this.ticketReply.attachments.splice(attachment, 1);
+            this.orderReply.attachments.splice(attachment, 1);
         }
     }
 }

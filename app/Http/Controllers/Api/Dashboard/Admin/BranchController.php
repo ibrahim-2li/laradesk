@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Dashboard\Admin;
 
 use Exception;
 use App\Models\User;
+use App\Models\Order;
 use App\Models\Branch;
 use App\Models\Ticket;
 use App\Models\UserRole;
@@ -63,9 +64,9 @@ class BranchController extends Controller
      * @param  Branch  $branche
      * @return JsonResponse
      */
-    public function show(Branch $branche): JsonResponse
+    public function show(Branch $branch): JsonResponse
     {
-        return response()->json(new BranchResource($branche));
+        return response()->json(new BranchResource($branch));
     }
 
     /**
@@ -75,19 +76,19 @@ class BranchController extends Controller
      * @param  Branch  $branche
      * @return JsonResponse
      */
-    public function update(UpdateRequest $request, Branch $branche): JsonResponse
+    public function update(UpdateRequest $request, Branch $branch): JsonResponse
     {
         $request->validated();
-        $branche->name = $request->get('name');
-        $branche->all_agents = $request->get('all_agents');
-        $branche->public = $request->get('public');
+        $branch->name = $request->get('name');
+        $branch->all_agents = $request->get('all_agents');
+        $branch->public = $request->get('public');
         $agents = [];
-        if (!$branche->all_agents) {
+        if (!$branch->all_agents) {
             $agents = $request->get('agents');
         }
-        if ($branche->save()) {
-            $branche->agent()->sync($agents);
-            return response()->json(['message' => 'Data updated correctly', 'branche' => new BranchResource($branche)]);
+        if ($branch->save()) {
+            $branch->agent()->sync($agents);
+            return response()->json(['message' => 'Data updated correctly', 'branch' => new BranchResource($branch)]);
         }
         return response()->json(['message' => __('An error occurred while saving data')], 500);
     }
@@ -95,17 +96,17 @@ class BranchController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Branch  $branche
+     * @param  Branch  $branch
      * @return JsonResponse
      * @throws Exception
      */
-    public function destroy(Branch $branche): JsonResponse
+    public function destroy(Branch $branch): JsonResponse
     {
-        //Ticket::where('branche_id', $branche->id)->update(['branches_id' => null]);
+        Order::where('branches_id', $branch->id)->update(['branches_id' => null]);
        // DB::table('user_branches')->where('branches_id',$branche->id)->update(['branches_id' => null]);
-       // $branche->agent()->sync([]);
+        $branch->agent()->sync([]);
         //$branche->delete();
-        if ($branche->delete()) {
+        if ($branch->delete()) {
             return response()->json(['message' => 'Data deleted successfully']);
         }
         return response()->json(['message' => __('An error occurred while deleting data')], 500);

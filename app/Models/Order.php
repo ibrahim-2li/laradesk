@@ -19,10 +19,12 @@ class Order extends Model
     use Filterable, HasFactory;
 
     protected $casts = [
+
+        'orders_status_id' => 'integer',
+        'priority_id' => 'integer',
         'branches_id' => 'integer',
-        'order_status_id' => 'integer',
-        'orders_type_id' => 'integer',
         'user_id' => 'integer',
+        'agent_id' => 'integer',
         'closed_at' => 'datetime'
 
     ];
@@ -32,29 +34,31 @@ class Order extends Model
         return 'uuid';
     }
 
-    public function branch(): BelongsTo
+
+
+    public function Status(): BelongsTo
     {
-        return $this->belongsTo(Branch::class);
+        return $this->belongsTo(OrderStatus::class , 'orders_status_id');
     }
 
-    public function department(): BelongsTo
+    public function priority(): BelongsTo
     {
-        return $this->belongsTo(Department::class);
+        return $this->belongsTo(Priority::class);
     }
 
-    public function orderStatus(): BelongsTo
+    public function branches(): BelongsTo
     {
-        return $this->belongsTo(OrderStatus::class);
+        return $this->belongsTo(Branch::class , 'branches_id');
     }
 
-    public function ordersType(): BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(OrdersType::class);
+        return $this->belongsTo(User::class);
     }
 
-    public function orderReplies(): HasMany
+    public function agent(): BelongsTo
     {
-        return $this->hasMany(OrderReply::class);
+        return $this->belongsTo(User::class);
     }
 
     public function closedBy(): BelongsTo
@@ -62,11 +66,21 @@ class Order extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function orderReplies(): HasMany
+    {
+        return $this->hasMany(OrderReply::class);
+    }
+
+    public function labels(): BelongsToMany
+    {
+        return $this->belongsToMany(Label::class, 'order_labels');
+    }
+
     public function verifyUser(User $user): bool
     {
         if ($user->role_id !== 1) {
             $userId = $user->id;
-            return $this->branches_id === null || ($this->branches->all_agents || $this->branches->agent()->pluck('id')->contains($userId)) || ($this->agent_id === null || $this->agent_id === $userId) || $this->closed_by === $userId;
+            return $this->branch_id === null || ($this->branch->all_agents || $this->branch->agent()->pluck('id')->contains($userId)) || ($this->agent_id === null || $this->agent_id === $userId) || $this->closed_by === $userId;
         }
         return true;
     }

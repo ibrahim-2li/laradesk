@@ -5,15 +5,23 @@
                 <div class="md:flex md:items-center md:justify-between">
                     <div class="flex-1 min-w-0">
                         <h2 class="py-0.5 text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:leading-9 sm:truncate">
-                            {{ $t('My orders') }}
+                            {{ $t('My Orders') }}
                         </h2>
                     </div>
                     <div class="mt-4 flex md:mt-0 md:ml-4">
                         <router-link
                             class="btn btn-blue shadow-sm rounded-md"
+                            to="/Orders/new"
+                        >
+                            {{ $t('New ticket') }}
+                        </router-link>
+                    </div>
+                    <div class="mt-4 flex md:mt-0 md:ml-4">
+                        <router-link
+                            class="btn btn-green shadow-sm rounded-md"
                             to="/orders/new"
                         >
-                            {{ $t('New orders') }}
+                            {{ $t('New order') }}
                         </router-link>
                     </div>
                 </div>
@@ -36,7 +44,7 @@
                                         v-model.lazy="filters.search"
                                         :placeholder="$t('Search')"
                                         class="form-input block border-gray-300 w-full rounded-none rounded-l-md pl-10 text-sm transition ease-in-out duration-150"
-                                        @change="getTickets"
+                                        @change="getOrders"
                                     >
                                 </div>
                                 <div class="relative inline-flex rounded-none">
@@ -45,7 +53,7 @@
                                         v-model="filters.status"
                                         aria-label="Sort by"
                                         class="-mx-px block form-select w-full pl-3 pr-9 py-2 rounded-none border border-r-0 border-gray-300 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150"
-                                        @change="getTickets"
+                                        @change="getOrders"
                                     >
                                         <option :value="null">{{ $t('All requests') }}</option>
                                         <template v-for="status in statusList">
@@ -79,7 +87,7 @@
                                         @change="changeSort"
                                     >
                                         <option value="subject">{{ $t('Subject') }}</option>
-                                        <option value="status_id">{{ $t('Status') }}</option>
+                                        <option value="orders_status_id">{{ $t('Status') }}</option>
                                         <option value="created_at">{{ $t('Created at') }}</option>
                                         <option value="updated_at">{{ $t('Updated at') }}</option>
                                     </select>
@@ -87,7 +95,7 @@
                             </div>
                         </div>
                     </div>
-                    <template v-if="ticketList.length > 0">
+                    <template v-if="orderList.length > 0">
                         <div class="-my-2 sm:-mx-6 lg:-mx-8">
                             <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                                 <table class="min-w-full  divide-y divide-gray-200">
@@ -108,30 +116,30 @@
                                     </tr>
                                     </thead>
                                     <tbody class="bg-white divide-y divide-gray-100">
-                                    <template v-for="ticket in ticketList">
+                                    <template v-for="order in orderList " >
                                         <router-link
-                                            :to="'/tickets/' + ticket.uuid"
+                                            :to="'/orders/' + order.uuid"
                                             class="cursor-pointer hover:bg-gray-100 p"
                                             tag="tr"
                                         >
                                             <td class="px-6 py-4 max-w-0 w-full whitespace-no-wrap">
                                                 <div class="w-full truncate text-sm leading-5 text-gray-900">
-                                                    {{ ticket.subject }}
+                                                    {{ order.subject }}
                                                 </div>
                                             </td>
                                             <td class="px-6 py-4 whitespace-no-wrap leading-5">
                                                 <div class="text-sm text-gray-800">
-                                                    {{ ticket.created_at | momentFormatDate }}
+                                                    {{ order.created_at | momentFormatDate }}
                                                 </div>
                                             </td>
                                             <td class="px-6 py-4 whitespace-no-wrap leading-5">
                                                 <div class="text-sm text-gray-800">
-                                                    {{ ticket.updated_at | momentFormatDateTimeAgo }}
+                                                    {{ order.updated_at | momentFormatDateTimeAgo }}
                                                 </div>
                                             </td>
                                             <td class="px-6 py-4 whitespace-no-wrap leading-5">
                                                 <div class="text-sm text-gray-800">
-                                                    {{ ticket.status.name }}
+                                                    {{ order.status ? order.status.name : 'No status' }}
                                                 </div>
                                             </td>
                                         </router-link>
@@ -204,17 +212,17 @@ export default {
     name: "index",
     metaInfo() {
         return {
-            title: this.$i18n.t('My tickets')
+            title: this.$i18n.t('My orders')
         }
     },
     mounted() {
         this.getStatuses();
-        this.getTickets();
+        this.getOrders();
     },
     data() {
         return {
             loading: true,
-            ticketList: [],
+            orderList: [],
             statusList: [],
             filters: {
                 search: '',
@@ -251,7 +259,7 @@ export default {
     methods: {
         getStatuses() {
             const self = this;
-            axios.get('api/tickets/statuses').then(function (response) {
+            axios.get('api/orders/statuses').then(function (response) {
                 self.statusList = response.data;
             });
         },
@@ -259,7 +267,7 @@ export default {
             const self = this;
             if ((page > 0) && (page <= self.pagination.totalPages) && (page !== self.page)) {
                 self.page = page;
-                self.getTickets();
+                self.getOrders();
             }
         },
         changeSort() {
@@ -269,12 +277,12 @@ export default {
             } else if (self.sort.order === 'desc') {
                 self.sort.order = 'asc';
             }
-            self.getTickets();
+            self.getOrders();
         },
-        getTickets() {
+        getOrders() {
             const self = this;
             self.loading = true;
-            axios.get('api/tickets', {
+            axios.get('api/orders', {
                 params: {
                     page: self.page,
                     sort: self.sort,
@@ -283,11 +291,11 @@ export default {
                     status: self.filters.status,
                 }
             }).then(function (response) {
-                self.ticketList = response.data.items;
+                self.orderList = response.data.items;
                 self.pagination = response.data.pagination;
                 if (self.pagination.totalPages < self.pagination.currentPage) {
                     self.page = self.pagination.totalPages;
-                    self.getTickets();
+                    self.getOrders();
                 } else {
                     self.loading = false;
                 }

@@ -50,8 +50,8 @@ class OrderReply extends Model
         return $this->belongsTo(Order::class);
     }
 
-    public function ticketAttachments(): BelongsToMany
+    public function orderAttachments(): BelongsToMany
     {
-        return $this->belongsToMany(File::class, 'ticket_attachments');
+        return $this->belongsToMany(File::class, 'order_attachments');
     }
 }

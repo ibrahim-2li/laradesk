@@ -17,11 +17,11 @@ class OrderStatusResource extends JsonResource
     public function toArray($request)
     {
         /** @var OrderStatus $status */
-        $orderstatus = $this;
+        $status = $this;
         return [
-            'id' => $orderstatus->id,
-            'name' => $orderstatus->name,
-            'created_at' => $orderstatus->created_at->toISOString()
+            'id' => $status->id,
+            'name' => $status->name,
+            'created_at' => $status->created_at->toISOString()
         ];
     }
 }

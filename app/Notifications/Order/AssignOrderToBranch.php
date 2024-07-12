@@ -13,7 +13,7 @@ class AssignOrderToBranch extends Notification
 {
     use Queueable;
 
-    private $ticket;
+    private $order;
     private $agent;
 
     /**

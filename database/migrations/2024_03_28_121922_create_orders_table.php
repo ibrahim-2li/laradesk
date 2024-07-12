@@ -18,10 +18,12 @@ class CreateOrdersTable extends Migration
             $table->id();
             $table->uuid('uuid')->index();
             $table->string('subject');
+            $table->foreignId('orders_status_id')->nullable()->constrained('order_statuses')->nullOnDelete();
+            $table->foreignId('priority_id')->nullable()->constrained('priorities')->nullOnDelete();
             $table->foreignId('branches_id')->nullable()->constrained('branches')->nullOnDelete();
-            $table->foreignId('orders_status_id')->nullable()->constrained('orders_statuses')->nullOnDelete();
-            $table->foreignId('orders_type_id')->nullable()->constrained('orders_type')->nullOnDelete();
+         // $table->foreignId('orders_type_id')->nullable()->constrained('orders_type')->nullOnDelete();
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('agent_id')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('closed_by')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamp('closed_at')->nullable();
             $table->timestamps();

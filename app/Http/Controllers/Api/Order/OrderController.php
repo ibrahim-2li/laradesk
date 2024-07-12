@@ -88,9 +88,13 @@ class OrderController extends Controller
                 }));
             }
             $order->user->notify((new NewOrderRequest($order))->locale(Setting::getDecoded('app_locale')));
-            if ($order->branches_id !== null) {
-                foreach ($order->branches->agents() as $agent) {
-                    $agent->notify(new AssignOrderToBranch($order, $agent));
+            if ($order->branches_id !== null && $order->branches) {
+                foreach ($order->branches as $branch) {
+                    if ($branch->agents) {
+                        foreach ($branch->agents as $agent) {
+                            $agent->notify(new AssignOrderToBranch($order, $agent));
+                        }
+                    }
                 }
             }
             return response()->json(['message' => __('Data saved correctly'), 'order' => new OrderManageResource($order)]);

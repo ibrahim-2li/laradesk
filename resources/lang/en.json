@@ -405,5 +405,21 @@
     "Your current password": "Your current password",
     "Your name": "Your name",
     "Your new password": "Your new password",
-    "Orders": "Orders"
+    "Orders": "Orders",
+    "New Order": "New Order",
+    "This Order has no conversations": "This order has no conversations",
+    "Order assigned to the selected agent": "Order assigned to the selected agent",
+    "Order assigned to the selected branch": "Order assigned to the selected branch",
+    "Order body": "Order body",
+    "Order details": "Order details",
+    "Order details and classification": "Order details and classification",
+    "Order priority has been changed": "Order priority has been changed",
+    "Order summary": "Order summary",
+    "Order": "Orders",
+    "Orders assigned to the selected agent": "Orderss assigned to the selected agent",
+    "Orders assigned to the selected branch": "Orders assigned to the selected branch",
+    "Orders with this branch will be changed to \"Without branch\"": "Orders with this branch will be changed to \"Without branch\"",
+    "Branch" : "Branch",
+    "Branches" : "Branches"
+
 }

@@ -5,7 +5,7 @@ namespace App\Http\Resources\Order;
 use App\Http\Resources\Branch\BranchSelectResource;
 use App\Http\Resources\Label\LabelSelectResource;
 use App\Http\Resources\Priority\PriorityResource;
-use App\Http\Resources\Status\StatusResource;
+use App\Http\Resources\OrderStatus\OrderStatusResource;
 use App\Http\Resources\OrderReply\OrderReplyDetailsResource;
 use App\Http\Resources\User\UserDetailsResource;
 use App\Models\Order;
@@ -23,28 +23,29 @@ class OrderManageResource extends JsonResource
     public function toArray($request)
     {
         /** @var Order $Order */
-        $Order = $this;
+        $order = $this;
         return [
-            'id' => $Order->id,
-            'uuid' => $Order->uuid,
-            'subject' => $Order->subject,
-            'status' => new StatusResource($Order->status),
-            'status_id' => $Order->status_id,
-            'priority' => new PriorityResource($Order->priority),
-            'priority_id' => $Order->priority_id,
-            'branches' => new BranchSelectResource($Order->branches),
-            'branches_id' => $Order->branches_id,
-            'labels' => LabelSelectResource::collection($Order->labels),
-            'user' => new UserDetailsResource($Order->user),
-            'user_id' => $Order->user_id,
-            'agent' => new UserDetailsResource($Order->agent),
-            'agent_id' => $Order->agent_id,
-            'closedBy' => new UserDetailsResource($Order->closedBy),
-            'closed_by' => $Order->closed_by,
-            'closed_at' => $Order->closed_at ? $Order->closed_at->toISOString() : null,
-            'created_at' => $Order->created_at->toISOString(),
-            'updated_at' => $Order->updated_at->toISOString(),
-            'OrderReplies' => OrderReplyDetailsResource::collection($Order->OrderReplies()->orderByDesc('created_at')->get()),
+            'id' => $order->id,
+            'uuid' => $order->uuid,
+            'subject' => $order->subject,
+            'statuso' => new OrderStatusResource($order->statuso),
+            'order_status_id' => $order->order_status_id,
+            'branches' => new BranchSelectResource($order->branches),
+            'branches_id' => $order->branches_id,
+            'priority' => new PriorityResource($order->priority),
+            'priority_id' => $order->priority_id,
+            'labels' => LabelSelectResource::collection($order->labels),
+            'user' => new UserDetailsResource($order->user),
+            'user_id' => $order->user_id,
+            'agent' => new UserDetailsResource($order->agent),
+            'agent_id' => $order->agent_id,
+            'closedBy' => new UserDetailsResource($order->closedBy),
+            'closed_by' => $order->closed_by,
+            'closed_at' => $order->closed_at ? $order->closed_at->toISOString() : null,
+            'created_at' => $order->created_at->toISOString(),
+            'updated_at' => $order->updated_at->toISOString(),
+            'orderReplies' => OrderReplyDetailsResource::collection($order->orderReplies()->orderByDesc('created_at')->get()),
+
         ];
     }
 }

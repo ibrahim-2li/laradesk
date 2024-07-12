@@ -39,13 +39,13 @@
                                             >
                                         </div>
                                     </div>
-                                    <div v-if="branchesList.length > 0" class="col-span-3">
+                                    <div v-if="branchList.length > 0" class="col-span-3">
                                         <label class="block text-sm font-medium leading-5 text-gray-700" for="branches">{{ $t('Branches') }}</label>
                                         <div class="mt-1 relative rounded-md shadow-sm">
                                             <input-select
                                                 id="branches"
                                                 v-model="order.branches_id"
-                                                :options="branchesList"
+                                                :options="branchList"
                                                 option-label="name"
                                                 required
                                             />
@@ -57,7 +57,7 @@
                                             <input-wysiwyg
                                                 id="order_body"
                                                 v-model="order.body"
-                                                :plugins="{images: true, attachment: true}"
+                                                :plugins="{images: false, attachment: false}"
                                                 @selectUploadFile="selectUploadFile"
                                             >
                                                 <template v-slot:top>
@@ -117,7 +117,7 @@ export default {
                 body: '',
                 attachments: [],
             },
-            branchesList: [],
+            branchList: [],
         }
     },
     mounted() {
@@ -128,7 +128,7 @@ export default {
             const self = this;
             self.loading.form = true;
             axios.get('api/orders/branches').then(function (response) {
-                self.branchesList = response.data;
+                self.branchList = response.data;
                 self.loading.form = false;
             }).catch(function (error) {
                 self.loading.form = false;
@@ -136,20 +136,27 @@ export default {
             });
         },
         saveOrder() {
-            const self = this;
-            self.loading.form = true;
-            axios.post('api/orders', self.order).then(function (response) {
-                self.$notify({
-                    title: self.$i18n.t('Success').toString(),
-                    text: self.$i18n.t('Data saved correctly').toString(),
-                    type: 'success'
-                });
-                self.$router.push('/orders/' + response.data.order.uuid);
-            }).catch(function () {
-                self.loading.form = false;
+    const self = this;
+    self.loading.form = true;
+    axios.post('api/orders', self.order)
+        .then(function (response) {
+            self.$notify({
+                title: self.$i18n.t('Success').toString(),
+                text: self.$i18n.t('Data saved correctly').toString(),
+                type: 'success'
             });
-        },
-        selectUploadFile() {
+
+            // Reset only specific fields
+            self.order.body = ''; // Reset Order body
+            self.order.attachments = []; // Reset attachments
+
+            self.$router.push('/orders/' + response.data.order.uuid);
+        })
+        .catch(function () {
+            self.loading.form = false;
+        });
+},
+     selectUploadFile() {
             if (!this.loading.file) {
                 this.$refs.fileInput.click();
             } else {

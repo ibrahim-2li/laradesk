@@ -5,7 +5,7 @@ namespace App\Http\Resources\Order;
 use App\Http\Resources\Branch\BranchSelectResource;
 use App\Http\Resources\Label\LabelSelectResource;
 use App\Http\Resources\Priority\PriorityResource;
-use App\Http\Resources\Status\StatusResource;
+use App\Http\Resources\OrderStatus\OrderStatusResource;
 use App\Http\Resources\OrderReply\OrderReplyQuickDetailsResource;
 use App\Http\Resources\User\UserDetailsResource;
 use App\Models\Order;
@@ -22,23 +22,23 @@ class OrderListResource extends JsonResource
      */
     public function toArray($request)
     {
-        /** @var Order $Order */
-        $Order = $this;
+        /** @var Order $order */
+        $order = $this;
         return [
-            'id' => $Order->id,
-            'uuid' => $Order->uuid,
-            'subject' => $Order->subject,
-            'lastReply' => new OrderReplyQuickDetailsResource($Order->OrderReplies->last()),
-            'status' => new StatusResource($Order->status),
-            'priority' => new PriorityResource($Order->priority),
-            'branches' => new BranchSelectResource($Order->branches),
-            'labels' => LabelSelectResource::collection($Order->labels),
-            'user' => new UserDetailsResource($Order->user),
-            'agent' => new UserDetailsResource($Order->agent),
-            'closedBy' => new UserDetailsResource($Order->closedBy),
-            'closed_at' => $Order->closed_at ? $Order->closed_at->toISOString() : null,
-            'created_at' => $Order->created_at->toISOString(),
-            'updated_at' => $Order->updated_at->toISOString()
+            'id' => $order->id,
+            'uuid' => $order->uuid,
+            'subject' => $order->subject,
+            'lastReply' => new OrderReplyQuickDetailsResource($order->orderReplies->last()),
+            'status' => new OrderStatusResource($order->status),
+            'priority' => new PriorityResource($order->priority),
+            'branches' => new BranchSelectResource($order->branches),
+            'labels' => LabelSelectResource::collection($order->labels),
+            'user' => new UserDetailsResource($order->user),
+            'agent' => new UserDetailsResource($order->agent),
+            'closedBy' => new UserDetailsResource($order->closedBy),
+            'closed_at' => $order->closed_at ? $order->closed_at->toISOString() : null,
+            'created_at' => $order->created_at->toISOString(),
+            'updated_at' => $order->updated_at->toISOString()
         ];
     }
 }
