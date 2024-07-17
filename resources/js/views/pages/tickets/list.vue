@@ -19,9 +19,9 @@
                     <div class="mt-4 flex md:mt-0 md:ml-4">
                         <router-link
                             class="btn btn-green shadow-sm rounded-md"
-                            to="/orders/new"
+                            to="/orders/list"
                         >
-                            {{ $t('New order') }}
+                            {{ $t('Orderes') }}
                         </router-link>
                     </div>
                 </div>

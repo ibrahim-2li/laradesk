@@ -28,7 +28,7 @@ class OrderManageResource extends JsonResource
             'id' => $order->id,
             'uuid' => $order->uuid,
             'subject' => $order->subject,
-            'statuso' => new OrderStatusResource($order->statuso),
+            'status' => new OrderStatusResource($order->status),
             'order_status_id' => $order->order_status_id,
             'branches' => new BranchSelectResource($order->branches),
             'branches_id' => $order->branches_id,

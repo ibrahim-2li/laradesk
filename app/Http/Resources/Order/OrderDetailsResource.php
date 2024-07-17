@@ -19,16 +19,16 @@ class OrderDetailsResource extends JsonResource
     public function toArray($request)
     {
         /** @var Order $Order */
-        $Order = $this;
+        $order = $this;
         return [
-            'id' => $Order->id,
-            'uuid' => $Order->uuid,
-            'subject' => $Order->subject,
-            'branches' => new BranchSelectResource($Order->branches),
-            'branches_id' => $Order->branches_id,
-            'created_at' => $Order->created_at->toISOString(),
-            'updated_at' => $Order->updated_at->toISOString(),
-            'OrderReplies' => OrderReplyDetailsResource::collection($Order->OrderReplies()->orderByDesc('created_at')->get()),
+            'id' => $order->id,
+            'uuid' => $order->uuid,
+            'subject' => $order->subject,
+            'branches' => new BranchSelectResource($order->branches),
+            'branches_id' => $order->branches_id,
+            'created_at' => $order->created_at->toISOString(),
+            'updated_at' => $order->updated_at->toISOString(),
+            'orderReplies' => OrderReplyDetailsResource::collection($order->orderReplies()->orderByDesc('created_at')->get()),
         ];
     }
 }

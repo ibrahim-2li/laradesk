@@ -72,6 +72,14 @@ Route::group(['prefix' => 'dashboard'], static function () {
     Route::post('tickets/{ticket}/quick-actions', [DashboardTicketController::class, 'ticketQuickActions'])->name('dashboard.tickets.ticket-quick-actions');
     Route::post('tickets/{ticket}/reply', [DashboardTicketController::class, 'reply'])->name('dashboard.tickets.reply');
     Route::apiResource('tickets', DashboardTicketController::class)->except(['update']);
+
+    Route::get('orders/filters', [DashboardOrderController::class, 'filters'])->name('dashboard.orders.filters');
+    Route::get('orders/canned-replies', [DashboardOrderController::class, 'cannedReplies'])->name('dashboard.orders.canned-replies');
+    Route::post('orders/quick-actions', [DashboardOrderController::class, 'quickActions'])->name('dashboard.orders.quick-actions');
+    Route::post('orders/attachments', [DashboardOrderController::class, 'uploadAttachment'])->name('dashboard.orders.upload-attachment');
+    Route::post('orders/{order}/remove-label', [DashboardOrderController::class, 'removeLabel'])->name('dashboard.orders.remove-label');
+    Route::post('orders/{order}/quick-actions', [DashboardOrderController::class, 'orderQuickActions'])->name('dashboard.orders.order-quick-actions');
+    Route::post('orders/{order}/reply', [DashboardOrderController::class, 'reply'])->name('dashboard.orders.reply');
     Route::apiResource('orders', DashboardOrderController::class)->except(['update']);
 
     Route::apiResource('canned-replies', DashboardCannedReplyController::class);

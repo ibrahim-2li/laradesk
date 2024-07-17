@@ -20,7 +20,7 @@
             v-if="$store.state.permissions && $store.state.permissions['App.Http.Controllers.Api.Dashboard.TicketController']"
             :label="$t('Orders')"
             :mobile="mobile"
-            icon="font-awesome.inbox-regular"
+            icon="font-awesome.pennant-regular"
             to="/dashboard/orders"
         ></menu-item>
         <menu-item

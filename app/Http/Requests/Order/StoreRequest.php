@@ -25,7 +25,7 @@ class StoreRequest extends FormRequest
     {
         return [
             'subject' => ['required', 'max:255'],
-            'branches_id' => ['exclude_if:branches_id,null', 'exists:branches,id'],
+            'branches_id' => ['required','exclude_if:branches_id,null', 'exists:branches,id'],
             'body' => ['required'],
         ];
     }

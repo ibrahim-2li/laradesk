@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use Storage;
 use Eloquent;
+use App\Models\OrderReply;
 use EloquentFilter\Filterable;
+use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Carbon;
-use Storage;
 
 /**
  * App\Models\File
@@ -68,6 +69,12 @@ class File extends Model
     public function ticketReply(): ?TicketReply
     {
         return TicketReply::whereHas('ticketAttachments', function (Builder $builder) {
+            return $builder->where('file_id', $this->id);
+        })->first();
+    }
+    public function orderReply(): ?OrderReply
+    {
+        return OrderReply::whereHas('orderAttachments', function (Builder $builder) {
             return $builder->where('file_id', $this->id);
         })->first();
     }

@@ -68,7 +68,7 @@
                                                                         :placeholder="$t('Search')"
                                                                         aria-label="Search"
                                                                         class="form-input block w-full rounded-l-md pl-10 text-sm transition ease-in-out duration-150"
-                                                                        @change="getTickets"
+                                                                        @change="getOrderes"
                                                                     >
                                                                 </div>
                                                             </div>
@@ -86,7 +86,7 @@
                                                                         :placeholder="$t('User')"
                                                                         aria-label="User"
                                                                         class="form-input block w-full rounded-l-md pl-10 text-sm transition ease-in-out duration-150"
-                                                                        @change="getTickets"
+                                                                        @change="getOrderes"
                                                                     >
                                                                 </div>
                                                             </div>
@@ -100,7 +100,7 @@
                                                                     :options="agentList"
                                                                     multiple
                                                                     option-label="name"
-                                                                    @change="getTickets"
+                                                                    @change="getOrderes"
                                                                 >
                                                                     <template v-slot:selectOption="props">
                                                                         <div class="flex items-center space-x-3">
@@ -116,15 +116,15 @@
                                                             </div>
                                                             <div class="col-span-3 mb-2">
                                                                 <label class="block text-sm font-medium leading-5 text-gray-700" for="label">
-                                                                    {{ $t('Departments') }}
+                                                                    {{ $t('Branches') }}
                                                                 </label>
                                                                 <input-select
-                                                                    id="department"
-                                                                    v-model="filters.departments"
-                                                                    :options="departmentList"
+                                                                    id="branch"
+                                                                    v-model="filters.branches"
+                                                                    :options="branchList"
                                                                     multiple
                                                                     option-label="name"
-                                                                    @change="getTickets"
+                                                                    @change="getOrderes"
                                                                 />
                                                             </div>
                                                             <div class="col-span-3 mb-2">
@@ -137,7 +137,7 @@
                                                                     :options="labelList"
                                                                     multiple
                                                                     option-label="name"
-                                                                    @change="getTickets"
+                                                                    @change="getOrderes"
                                                                 >
                                                                     <template v-slot:selectedOption="props">
                                                                         <template v-if="props && !props.anySelected">
@@ -169,7 +169,7 @@
                                                                     :options="statusList"
                                                                     multiple
                                                                     option-label="name"
-                                                                    @change="getTickets"
+                                                                    @change="getOrderes"
                                                                 />
                                                             </div>
                                                             <div class="col-span-3 mb-2">
@@ -182,7 +182,7 @@
                                                                     :options="priorityList"
                                                                     multiple
                                                                     option-label="name"
-                                                                    @change="getTickets"
+                                                                    @change="getOrderes"
                                                                 />
                                                             </div>
                                                             <div class="col-span-3 mb-2">
@@ -217,7 +217,7 @@
                                                                         <option value="subject">{{ $t('Subject') }}</option>
                                                                         <option value="status_id">{{ $t('Status') }}</option>
                                                                         <option value="priority_id">{{ $t('Priority') }}</option>
-                                                                        <option value="department_id">{{ $t('Department') }}</option>
+                                                                        <option value="branch_id">{{ $t('Branch') }}</option>
                                                                         <option value="user_id">{{ $t('User') }}</option>
                                                                         <option value="agent_id">{{ $t('Agent') }}</option>
                                                                         <option value="created_at">{{ $t('Created at') }}</option>
@@ -236,7 +236,7 @@
                                                                     :options="[{id: 5, name: 5}, {id: 10, name: 10}, {id: 25, name: 25}, {id: 50, name: 50}]"
                                                                     option-label="name"
                                                                     required
-                                                                    @change="getTickets"
+                                                                    @change="getOrderes"
                                                                 />
                                                             </div>
                                                         </div>
@@ -252,7 +252,7 @@
                     <button
                         type="button"
                         class="rounded-md border border-gray-400 px-3 py-2 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue transition ease-in-out duration-150"
-                        @click="getTickets"
+                        @click="getOrderes"
                     >
                         <svg-vue class="w-4 h-4" icon="font-awesome.sync-regular"></svg-vue>
                     </button>
@@ -260,9 +260,9 @@
             </div>
         </div>
         <loading :status="loading"/>
-        <div class="tickets-list">
+        <div class="orders-list">
             <div class="hidden sm:block">
-                <div v-show="selectedRows.length > 0" v-on-clickaway="closeQuickActionDropdown" class="tickets-list-toolbar">
+                <div v-show="selectedRows.length > 0" v-on-clickaway="closeQuickActionDropdown" class="orders-list-toolbar">
                     <div class="relative inline-block text-left">
                         <button class="btn hover:bg-gray-100 p-4 border-r border-gray-200 rounded-none" type="button" @click="toggleQuickActionDropdown('agent')">
                             <svg-vue class="h-6 w-6 text-gray-700" icon="font-awesome.user-tag-regular"></svg-vue>
@@ -285,20 +285,20 @@
                         </div>
                     </div>
                     <div class="relative inline-block text-left">
-                        <button class="btn hover:bg-gray-100 p-4 border-r border-gray-200 rounded-none" type="button" @click="toggleQuickActionDropdown('department')">
+                        <button class="btn hover:bg-gray-100 p-4 border-r border-gray-200 rounded-none" type="button" @click="toggleQuickActionDropdown('branch')">
                             <svg-vue class="h-6 w-6 text-gray-700" icon="font-awesome.users-class-regular"></svg-vue>
                         </button>
-                        <div v-show="quickActions.department" class="origin-top-right absolute left-0 mt-1 w-56 rounded-md shadow-lg">
+                        <div v-show="quickActions.branch" class="origin-top-right absolute left-0 mt-1 w-56 rounded-md shadow-lg">
                             <div class="rounded-md bg-white shadow-xs">
                                 <div class="py-1">
-                                    <template v-for="department in departmentList">
+                                    <template v-for="branch in branchList">
                                         <a
                                             class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                                             href="#"
                                             role="menuitem"
-                                            @click.prevent="quickAction('department', department.id)"
+                                            @click.prevent="quickAction('branch', branch.id)"
                                         >
-                                            {{ department.name }}
+                                            {{ branch.name }}
                                         </a>
                                     </template>
                                 </div>
@@ -352,24 +352,24 @@
                     </button>
                 </div>
             </div>
-            <template v-if="ticketList.length > 0">
+            <template v-if="orderList.length > 0">
                 <div class="sm:hidden">
                     <ul class="border-b border-gray-200 divide-y divide-gray-200">
-                        <template v-for="ticket in ticketList">
+                        <template v-for="order in orderList">
                             <li>
                                 <router-link
-                                    :to="'/dashboard/tickets/' + ticket.uuid + '/manage'"
+                                    :to="'/dashboard/orders/' + order.uuid + '/manage'"
                                     class="flex items-center justify-between px-4 py-4 hover:bg-gray-100 sm:px-6"
                                 >
                                     <div class="flex items-center truncate space-x-3">
                                         <img
                                             :alt="$t('Avatar')"
-                                            :src="ticket.user.avatar !== 'gravatar' ? ticket.user.avatar : ticket.user.gravatar"
+                                            :src="order.user.avatar !== 'gravatar' ? order.user.avatar : order.user.gravatar"
                                             class="h-8 w-8 mr-4 rounded-full"
                                         >
                                         <div class="whitespace-no-wrap">
                                             <div class="text-sm leading-5 text-gray-900">
-                                                <template v-for="label in ticket.labels">
+                                                <template v-for="label in order.labels">
                                                     <div
                                                         :style="{backgroundColor: label.color}"
                                                         class="inline-flex items-center px-2 py-0.5 mr-1 rounded text-xs font-medium leading-4 text-gray-100"
@@ -377,10 +377,10 @@
                                                         {{ label.name }}
                                                     </div>
                                                 </template>
-                                                {{ ticket.subject }}
+                                                {{ order.subject }}
                                             </div>
                                             <div class="text-sm leading-5 text-gray-500 w-full truncate">
-                                                {{ ticket.lastReply ? ticket.lastReply.body : null }}
+                                                {{ order.lastReply ? order.lastReply.body : null }}
                                             </div>
                                         </div>
                                     </div>
@@ -397,19 +397,19 @@
                             <tr>
                                 <th class="px-3 pt-2 pb-3">
                                     <input
-                                        id="select-all-tickets"
+                                        id="select-all-orders"
                                         v-model="selectAll"
                                         aria-label="Checkbox"
                                         class="form-checkbox cursor-pointer h-4 w-4 text-blue-600 transition duration-150 ease-in-out"
                                         type="checkbox"
-                                        @change="selectAllTickets"
+                                        @change="selectAllOrders"
                                     >
                                 </th>
                                 <th class="hidden lg:table-cell px-3 py-2 text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider">
                                     {{ $t('Customer') }}
                                 </th>
                                 <th class="px-3 py-2 text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider whitespace-no-wrap overflow-x-auto" colspan="2">
-                                    {{ $t('Ticket summary') }}
+                                    {{ $t('Order summary') }}
                                 </th>
                                 <th class="px-3 py-2 text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider whitespace-no-wrap overflow-x-auto">
                                     {{ $t('Agent') }}
@@ -420,21 +420,21 @@
                             </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-100">
-                            <template v-for="ticket in ticketList">
+                            <template v-for="order in orderList">
                                 <router-link
-                                    :to="'/dashboard/tickets/' + ticket.uuid + '/manage'"
+                                    :to="'/dashboard/orders/' + order.uuid + '/manage'"
                                     class="cursor-pointer hover:bg-gray-100"
                                     tag="tr"
                                 >
                                     <td class="px-3 py-4 whitespace-no-wrap text-center text-sm leading-5 font-medium">
                                         <input
-                                            :id="'ticket-' + ticket.id"
+                                            :id="'order-' + order.id"
                                             v-model="selectedRows"
-                                            :value="ticket.id"
+                                            :value="order.id"
                                             aria-label="Checkbox"
                                             class="form-checkbox cursor-pointer h-4 w-4 text-blue-600 transition duration-150 ease-in-out"
                                             type="checkbox"
-                                            @change="selectTicket"
+                                            @change="selectOrder"
                                             @click.stop
                                         >
                                     </td>
@@ -443,23 +443,23 @@
                                             <div class="flex-shrink-0 h-10 w-10">
                                                 <img
                                                     :alt="$t('Avatar')"
-                                                    :src="ticket.user.avatar !== 'gravatar' ? ticket.user.avatar : ticket.user.gravatar"
+                                                    :src="order.user.avatar !== 'gravatar' ? order.user.avatar : order.user.gravatar"
                                                     class="h-10 w-10 rounded-full"
                                                 >
                                             </div>
                                             <div class="ml-4">
                                                 <div class="text-sm leading-5 font-medium text-gray-900">
-                                                    {{ ticket.user.name }}
+                                                    {{ order.user.name }}
                                                 </div>
                                                 <div class="text-sm leading-5 text-gray-500">
-                                                    {{ ticket.user.email }}
+                                                    {{ order.user.email }}
                                                 </div>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="px-3 py-4 max-w-0 w-full whitespace-no-wrap">
                                         <div class="flex text-sm leading-5 text-gray-900">
-                                            <template v-for="label in ticket.labels">
+                                            <template v-for="label in order.labels">
                                                 <div
                                                     :style="{backgroundColor: label.color}"
                                                     class="hidden lg:inline-flex items-center px-2 py-0.5 mr-1 rounded text-xs font-medium leading-4 text-gray-100"
@@ -468,31 +468,31 @@
                                                 </div>
                                             </template>
                                             <div class="w-full truncate">
-                                                {{ ticket.department ? ticket.department.name : $t('Unassigned') }}<br>
-                                                {{ ticket.subject }}
+                                                {{ order.branch ? order.branch.name : $t('Unassigned') }}<br>
+                                                {{ order.subject }}
 
                                             </div>
                                         </div>
                                         <div class="text-sm leading-5 text-gray-500 w-full truncate">
-                                            {{ ticket.lastReply ? ticket.lastReply.body : null }}
+                                            {{ order.lastReply ? order.lastReply.body : null }}
                                         </div>
                                     </td>
                                     <td class="px-3 py-4 whitespace-no-wrap leading-5">
                                         <div class="text-sm leading-5 font-medium text-gray-900">
-                                            {{ ticket.status ? ticket.status.name : $t('Unassigned') }}
+                                            {{ order.status ? order.status.name : $t('Unassigned') }}
                                         </div>
                                         <div class="text-sm leading-5 text-gray-500">
-                                            {{ ticket.priority ? ticket.priority.name : $t('Unassigned') }}
+                                            {{ order.priority ? order.priority.name : $t('Unassigned') }}
                                         </div>
                                     </td>
                                     <td class="px-3 py-4 whitespace-no-wrap leading-5">
                                         <div class="text-sm leading-5 text-gray-900">
-                                            {{ ticket.agent ? ticket.agent.name : $t('Unassigned') }}
+                                            {{ order.agent ? order.agent.name : $t('Unassigned') }}
                                         </div>
                                     </td>
                                     <td class="px-3 py-4 whitespace-no-wrap leading-5">
                                         <div class="text-sm text-gray-500">
-                                            {{ ticket.updated_at | momentFormatDateTimeAgo }}
+                                            {{ order.updated_at | momentFormatDateTimeAgo }}
                                         </div>
                                     </td>
                                 </router-link>
@@ -593,11 +593,11 @@
                                 </div>
                                 <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                                     <h3 id="modal-headline" class="text-lg leading-6 font-medium text-gray-900">
-                                        {{ $t('Delete tickets') }}
+                                        {{ $t('Delete orders') }}
                                     </h3>
                                     <div class="mt-2">
                                         <p class="text-sm leading-5 text-gray-500">
-                                            {{ $t('Are you sure you want to delete the selected tickets?') }}
+                                            {{ $t('Are you sure you want to delete the selected orders?') }}
                                             {{ $t('All data will be permanently removed') }}.
                                             {{ $t('All related data will be deleted') }}.
                                             {{ $t('This action cannot be undone') }}.
@@ -612,7 +612,7 @@
                                 type="button"
                                 @click="quickAction('delete')"
                             >
-                                {{ $t('Delete tickets') }}
+                                {{ $t('Delete orders') }}
                             </button>
                             <button
                                 class="btn btn-white mr-0 sm:mr-2"
@@ -636,7 +636,7 @@ export default {
     name: "list",
     metaInfo() {
         return {
-            title: this.$i18n.t('Tickets')
+            title: this.$i18n.t('Orders')
         }
     },
     mixins: [clickaway],
@@ -648,14 +648,14 @@ export default {
                 search: '',
                 user: '',
                 agents: [],
-                departments: [],
+                branches: [],
                 labels: [],
                 statuses: [1, 2],
                 priorities: [],
             },
             quickActions: {
                 agent: false,
-                department: false,
+                branch: false,
                 label: false,
                 priority: false,
                 delete: false,
@@ -673,11 +673,11 @@ export default {
                 totalPages: 0
             },
             agentList: [],
-            departmentList: [],
+            branchList: [],
             labelList: [],
             statusList: [],
             priorityList: [],
-            ticketList: [],
+            orderList: [],
             selectAll: false,
             selectedRows: [],
         }
@@ -687,7 +687,7 @@ export default {
             return this.filters.search !== ''
                 || this.filters.user !== ''
                 || this.filters.agents !== 0
-                || this.filters.departments.length !== 0
+                || this.filters.branches.length !== 0
                 || this.filters.labels.length !== 0
                 || this.filters.statuses.length !== 0
                 || this.filters.priorities.length !== 0;
@@ -699,14 +699,14 @@ export default {
         },
     },
     mounted() {
-        this.getTickets();
+        this.getOrderes();
         this.getFilters();
     },
     methods: {
         openFiltersSidebar() {
             const self = this;
             self.selectedRows = [];
-            self.selectTicket();
+            self.selectOrder();
             setTimeout(function () {
                 self.filtersSidebar = true;
             }, 100);
@@ -716,7 +716,7 @@ export default {
         },
         closeQuickActionDropdown() {
             this.quickActions.agent = false;
-            this.quickActions.department = false;
+            this.quickActions.branch = false;
             this.quickActions.label = false;
             this.quickActions.priority = false;
             this.quickActions.delete = false;
@@ -724,13 +724,13 @@ export default {
         toggleQuickActionDropdown(quickAction) {
             if (quickAction === 'agent') {
                 this.quickActions.agent = !this.quickActions.agent;
-                this.quickActions.department = false;
+                this.quickActions.branch = false;
                 this.quickActions.label = false;
                 this.quickActions.priority = false;
                 this.quickActions.delete = false;
             }
-            if (quickAction === 'department') {
-                this.quickActions.department = !this.quickActions.department;
+            if (quickAction === 'branch') {
+                this.quickActions.branch = !this.quickActions.branch;
                 this.quickActions.agent = false;
                 this.quickActions.label = false;
                 this.quickActions.priority = false;
@@ -739,21 +739,21 @@ export default {
             if (quickAction === 'label') {
                 this.quickActions.label = !this.quickActions.label;
                 this.quickActions.agent = false;
-                this.quickActions.department = false;
+                this.quickActions.branch = false;
                 this.quickActions.priority = false;
                 this.quickActions.delete = false;
             }
             if (quickAction === 'priority') {
                 this.quickActions.priority = !this.quickActions.priority;
                 this.quickActions.agent = false;
-                this.quickActions.department = false;
+                this.quickActions.branch = false;
                 this.quickActions.label = false;
                 this.quickActions.delete = false;
             }
             if (quickAction === 'delete') {
                 this.quickActions.delete = !this.quickActions.delete;
                 this.quickActions.agent = false;
-                this.quickActions.department = false;
+                this.quickActions.branch = false;
                 this.quickActions.label = false;
                 this.quickActions.priority = false;
             }
@@ -762,7 +762,7 @@ export default {
             const self = this;
             if ((page > 0) && (page <= self.pagination.totalPages) && (page !== self.page)) {
                 self.page = page;
-                self.getTickets();
+                self.getOrderes();
             }
         },
         changeSort() {
@@ -772,27 +772,27 @@ export default {
             } else if (self.sort.order === 'desc') {
                 self.sort.order = 'asc';
             }
-            self.getTickets();
+            self.getOrderes();
         },
-        selectTicket() {
+        selectOrder() {
             this.closeQuickActionDropdown();
-            this.selectAll = Object.keys(this.selectedRows).length === Object.keys(this.ticketList).length;
+            this.selectAll = Object.keys(this.selectedRows).length === Object.keys(this.orderList).length;
         },
-        selectAllTickets() {
+        selectAllOrders() {
             this.selectedRows = [];
             this.closeQuickActionDropdown();
             if (this.selectAll) {
-                for (let ticket in this.ticketList) {
-                    this.selectedRows.push(this.ticketList[ticket].id);
+                for (let order in this.orderList) {
+                    this.selectedRows.push(this.orderList[order].id);
                 }
             }
         },
-        getTickets() {
+        getOrderes() {
             const self = this;
             self.selectAll = false;
             self.selectedRows = [];
             self.loading = true;
-            axios.get('api/dashboard/tickets', {
+            axios.get('api/dashboard/orders', {
                 params: {
                     page: self.page,
                     sort: self.sort,
@@ -800,19 +800,19 @@ export default {
                     search: self.filters.search,
                     user: self.filters.user,
                     agents: self.filters.agents,
-                    departments: self.filters.departments,
+                    branches: self.filters.branches,
                     labels: self.filters.labels,
                     statuses: self.filters.statuses,
                     priorities: self.filters.priorities,
                 }
             }).then(function (response) {
-                self.ticketList = response.data.items;
+                self.orderList = response.data.items;
                 self.pagination = response.data.pagination;
                 if (self.pagination.totalPages < self.pagination.currentPage) {
                     self.page = self.pagination.totalPages;
-                    self.getTickets();
+                    self.getOrderes();
                 } else {
-                    if (self.ticketList.length === 0) {
+                    if (self.orderList.length === 0) {
                         self.selectAll = false;
                         self.selectedRows = [];
                     }
@@ -824,9 +824,9 @@ export default {
         },
         getFilters() {
             const self = this;
-            axios.get('api/dashboard/tickets/filters').then(function (response) {
+            axios.get('api/dashboard/orders/filters').then(function (response) {
                 self.agentList = response.data.agents;
-                self.departmentList = response.data.departments;
+                self.branchList = response.data.branches;
                 self.labelList = response.data.labels;
                 self.statusList = response.data.statuses;
                 self.priorityList = response.data.priorities;
@@ -834,17 +834,17 @@ export default {
         },
         quickAction(param, value) {
             const self = this;
-            axios.post('api/dashboard/tickets/quick-actions', {
+            axios.post('api/dashboard/orders/quick-actions', {
                 action: param,
                 value: value,
-                tickets: self.selectedRows,
+                orders: self.selectedRows,
             }).then(function (response) {
                 self.$notify({
                     title: self.$i18n.t('Success').toString(),
                     text: response.data.message,
                     type: 'success'
                 });
-                self.getTickets();
+                self.getOrderes();
             }).catch(function () {
                 self.closeQuickActionDropdown();
             });
@@ -854,13 +854,13 @@ export default {
 </script>
 
 <style lang="scss">
-.tickets-list {
+.orders-list {
     @apply bg-white w-full z-0 overflow-y-auto;
     height: calc(100vh - 270px);
 }
 
 @media (min-width: theme('screens.md')) {
-    .tickets-list {
+    .orders-list {
         height: calc(100vh - 216px);
     }
 }
@@ -877,13 +877,13 @@ export default {
     }
 }
 
-.tickets-list-toolbar {
+.orders-list-toolbar {
     @apply bg-white fixed flex rounded-md shadow-lg;
     left: 50px;
 }
 
 @media (min-width: theme('screens.md')) {
-    .tickets-list-toolbar {
+    .orders-list-toolbar {
         left: 50%;
     }
 }

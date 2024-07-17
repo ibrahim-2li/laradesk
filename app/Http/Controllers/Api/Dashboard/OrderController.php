@@ -60,11 +60,11 @@ class OrderController extends Controller
                 ->where(function (Builder $query) use ($user) {
                     $query->where('agent_id', $user->id);
                     $query->orWhere('closed_by', $user->id);
-                    $query->orWhereIn('department_id', $user->departments()->pluck('id')->toArray());
+                    $query->orWhereIn('branches_id', $user->branches()->pluck('id')->toArray());
                     $query->orWhere(function (Builder $query) use ($user) {
-                        $departments = array_unique(array_merge($user->departments()->pluck('id')->toArray(), Department::where('all_agents', 1)->pluck('id')->toArray()));
+                        $branches = array_unique(array_merge($user->branches()->pluck('id')->toArray(), Branch::where('all_agents', 1)->pluck('id')->toArray()));
                         $query->whereNull('agent_id');
-                        $query->whereIn('department_id', $departments);
+                        $query->whereIn('branches_id', $branches);
                     });
                 })
                 ->orderBy($sort['column'], $sort['order'])
@@ -100,7 +100,7 @@ class OrderController extends Controller
        * $order->subject = $request->get('subject');
 *        $order->status_id = $request->get('status_id');
  *       $order->priority_id = $request->get('priority_id');
-  *      $order->department_id = $request->get('department_id');
+  *      $order->branches_id = $request->get('branches_id');
    *     $order->user_id = $request->get('user_id');
     *    $order->agent_id = $request->get('agent_id');
      *   $order->saveOrFail();
@@ -130,7 +130,7 @@ public function store(StoreRequest $request): JsonResponse
     $order->subject = $request->get('subject');
     $order->status_id = $request->get('status_id');
     $order->priority_id = $request->get('priority_id');
-    $order->department_id = $request->get('department_id');
+    $order->branches_id = $request->get('branches_id');
     $order->user_id = $request->get('user_id');
     $order->agent_id = $request->get('agent_id'); // Assign the agent_id from the request
 
@@ -251,7 +251,7 @@ public function store(StoreRequest $request): JsonResponse
         return response()->json([
             'agents' => UserDetailsResource::collection($agents),
             'customers' => UserDetailsResource::collection(User::where('status', true)->get()),
-            'departments' => DepartmentSelectResource::collection(Department::all()),
+            'branches' => BranchSelectResource::collection(Branch::all()),
             'labels' => LabelSelectResource::collection(Label::all()),
             'statuses' => StatusResource::collection(Status::all()),
             'priorities' => PriorityResource::collection(Priority::orderBy('value')->get()),
@@ -282,11 +282,11 @@ public function store(StoreRequest $request): JsonResponse
             $orders->where(function (Builder $query) use ($user) {
                 $query->where('agent_id', $user->id);
                 $query->orWhere('closed_by', $user->id);
-                $query->orWhereIn('department_id', $user->departments()->pluck('id')->toArray());
+                $query->orWhereIn('branches_id', $user->branches()->pluck('id')->toArray());
                 $query->orWhere(function (Builder $query) use ($user) {
-                    $departments = array_unique(array_merge($user->departments()->pluck('id')->toArray(), Department::where('all_agents', 1)->pluck('id')->toArray()));
+                    $branches = array_unique(array_merge($user->branches()->pluck('id')->toArray(), Branch::where('all_agents', 1)->pluck('id')->toArray()));
                     $query->whereNull('agent_id');
-                    $query->whereIn('department_id', $departments);
+                    $query->whereIn('branches_id', $branches);
                 });
             });
         }
@@ -298,7 +298,7 @@ public function store(StoreRequest $request): JsonResponse
             return response()->json(['message' => __('orders assigned to the selected agent')]);
         }
         if ($action === 'department') {
-            $orders->update(['department_id' => $request->get('value')]);
+            $orders->update(['branches_id' => $request->get('value')]);
             return response()->json(['message' => __('orders assigned to the selected department')]);
         }
         if ($action === 'label') {
@@ -350,7 +350,7 @@ public function store(StoreRequest $request): JsonResponse
             return response()->json(['message' => __('order assigned to the selected agent'), 'order' => new OrderManageResource($order), 'access' => $order->verifyUser($user)]);
         }
         if ($action === 'department') {
-            $order->department_id = $value;
+            $order->branches_id = $value;
             $order->saveOrFail();
             return response()->json(['message' => __('order assigned to the selected department'), 'order' => new OrderManageResource($order), 'access' => $order->verifyUser($user)]);
         }

@@ -47,7 +47,7 @@ class OrderReply extends Model
 
     public function order(): BelongsTo
     {
-        return $this->belongsTo(Order::class);
+        return $this->belongsTo(Order::class, 'order_id');
     }
 
     public function orderAttachments(): BelongsToMany
