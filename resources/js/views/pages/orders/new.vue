@@ -124,77 +124,83 @@ export default {
         this.getBranches();
     },
     methods: {
-        getBranches() {
-            const self = this;
-            self.loading.form = true;
-            axios.get('api/orders/branches').then(function (response) {
+    getBranches() {
+        const self = this;
+        self.loading.form = true;
+        axios.get('api/orders/branches')
+            .then(function (response) {
                 self.branchList = response.data;
-                self.loading.form = false;
-            }).catch(function (error) {
-                self.loading.form = false;
-                console.error('Error saving order:', error);
-            });
-        },
-        saveOrder() {
-    const self = this;
-    self.loading.form = true;
-    axios.post('api/orders', self.order)
-        .then(function (response) {
-            self.$notify({
-                title: self.$i18n.t('Success').toString(),
-                text: self.$i18n.t('Data saved correctly').toString(),
-                type: 'success'
-            });
-
-            // Reset only specific fields
-            self.order.body = ''; // Reset Order body
-            self.order.attachments = []; // Reset attachments
-
-            self.$router.push('/orders/' + response.data.order.uuid);
-        })
-        .catch(function () {
-            self.loading.form = false;
-        });
-},
-     selectUploadFile() {
-            if (!this.loading.file) {
-                this.$refs.fileInput.click();
-            } else {
-                this.$notify({
-                    title: this.$i18n.t('Error').toString(),
-                    text: this.$i18n.t('A file is being uploaded').toString(),
-                    type: 'warning'
-                });
-            }
-        },
-        uploadFile(e) {
-            const self = this;
-            const formData = new FormData();
-            self.loading.file = true;
-            formData.append('file', e.target.files[0]);
-            axios.post(
-                'api/orders/attachments',
-                formData,
-                {
-                    headers: {'Content-Type': 'multipart/form-data'},
-                    onUploadProgress: function (progressEvent) {
-                        self.uploadingFileProgress = Math.round((progressEvent.loaded / progressEvent.total) * 100);
-                    }.bind(this)
+                if (self.branchList.length > 0) {
+                    self.order.branches_id = self.branchList[0].id;
                 }
-            ).then(function (response) {
-                self.loading.file = false;
-                self.uploadingFileProgress = 0;
-                self.$refs.fileInput.value = null;
-                self.order.attachments.push(response.data);
-            }).catch(function () {
-                self.loading.file = false;
-                self.uploadingFileProgress = 0;
-                self.$refs.fileInput.value = null;
+                self.loading.form = false;
+            })
+            .catch(function (error) {
+                self.loading.form = false;
+                console.error('Error fetching branches:', error);
             });
-        },
-        removeAttachment(attachment) {
-            this.order.attachments.splice(attachment, 1);
+    },
+    saveOrder() {
+        const self = this;
+        self.loading.form = true;
+        axios.post('api/orders', self.order)
+            .then(function (response) {
+                self.$notify({
+                    title: self.$i18n.t('Success').toString(),
+                    text: self.$i18n.t('Data saved correctly').toString(),
+                    type: 'success'
+                });
+
+                // Reset only specific fields
+                self.order.body = ''; // Reset Order body
+                self.order.attachments = []; // Reset attachments
+
+                self.$router.push('/orders/' + response.data.order.uuid);
+            })
+            .catch(function () {
+                self.loading.form = false;
+            });
+    },
+    selectUploadFile() {
+        if (!this.loading.file) {
+            this.$refs.fileInput.click();
+        } else {
+            this.$notify({
+                title: this.$i18n.t('Error').toString(),
+                text: this.$i18n.t('A file is being uploaded').toString(),
+                type: 'warning'
+            });
         }
+    },
+    uploadFile(e) {
+        const self = this;
+        const formData = new FormData();
+        self.loading.file = true;
+        formData.append('file', e.target.files[0]);
+        axios.post(
+            'api/orders/attachments',
+            formData,
+            {
+                headers: {'Content-Type': 'multipart/form-data'},
+                onUploadProgress: function (progressEvent) {
+                    self.uploadingFileProgress = Math.round((progressEvent.loaded / progressEvent.total) * 100);
+                }.bind(this)
+            }
+        ).then(function (response) {
+            self.loading.file = false;
+            self.uploadingFileProgress = 0;
+            self.$refs.fileInput.value = null;
+            self.order.attachments.push(response.data);
+        }).catch(function () {
+            self.loading.file = false;
+            self.uploadingFileProgress = 0;
+            self.$refs.fileInput.value = null;
+        });
+    },
+    removeAttachment(attachment) {
+        this.order.attachments.splice(attachment, 1);
     }
+}
+
 }
 </script>

@@ -149,13 +149,20 @@ class OrderController extends Controller
         return response()->json(['message' => __('An error occurred while saving data')], 500);
     }
 
-    public function branches(): JsonResponse
+    public function branches(Request $request): JsonResponse
     {
-        return response()->json(BranchSelectResource::collection(Branch::where('public', '=', true)->get()));
+        $userId = Auth::id(); // Get the authenticated user's ID
+        $branches = Branch::whereHas('users', function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        })->orWhere('public', '=', true)->get();
+
+        return response()->json(BranchSelectResource::collection($branches));
     }
 
     public function statuses(): JsonResponse
     {
         return response()->json(OrderStatusResource::collection(OrderStatus::all()));
     }
+    // In your controller method
+
 }

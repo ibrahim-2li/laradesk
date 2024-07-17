@@ -42,6 +42,10 @@ class Branch extends Model
         return $this->belongsToMany(User::class, 'user_branches', 'branches_id', 'user_id');
     }
 
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'user_branches', 'branches_id', 'user_id');
+    }
     public function agents()
     {
         if (!$this->all_agents) {
