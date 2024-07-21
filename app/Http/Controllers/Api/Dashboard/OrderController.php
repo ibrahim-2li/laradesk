@@ -11,7 +11,7 @@ use App\Http\Resources\CannedReply\CannedReplyResource;
 use App\Http\Resources\Branch\BranchSelectResource;
 use App\Http\Resources\Label\LabelSelectResource;
 use App\Http\Resources\Priority\PriorityResource;
-use App\Http\Resources\Status\StatusResource;
+use App\Http\Resources\OrderStatus\OrderStatusResource;
 use App\Http\Resources\Order\OrderListResource;
 use App\Http\Resources\Order\OrderManageResource;
 use App\Http\Resources\User\UserDetailsResource;
@@ -20,7 +20,7 @@ use App\Models\Branch;
 use App\Models\Label;
 use App\Models\Priority;
 use App\Models\Setting;
-use App\Models\Status;
+use App\Models\OrderStatus;
 use App\Models\Order;
 use App\Models\OrderReply;
 use App\Models\User;
@@ -128,7 +128,7 @@ public function store(StoreRequest $request): JsonResponse
     $order = new Order();
     $order->uuid = Str::uuid();
     $order->subject = $request->get('subject');
-    $order->status_id = $request->get('status_id');
+    $order->order_status_id = $request->get('order_status_id');
     $order->priority_id = $request->get('priority_id');
     $order->branches_id = $request->get('branches_id');
     $order->user_id = $request->get('user_id');
@@ -253,7 +253,7 @@ public function store(StoreRequest $request): JsonResponse
             'customers' => UserDetailsResource::collection(User::where('status', true)->get()),
             'branches' => BranchSelectResource::collection(Branch::all()),
             'labels' => LabelSelectResource::collection(Label::all()),
-            'statuses' => StatusResource::collection(Status::all()),
+            'statuses' => OrderStatusResource::collection(OrderStatus::all()),
             'priorities' => PriorityResource::collection(Priority::orderBy('value')->get()),
         ]);
     }

@@ -7,10 +7,10 @@
                 </div>
                 <div class="mt-4 flex md:mt-0 md:ml-4">
                     <router-link
-                        class="btn btn-blue shadow-sm rounded-md mr-4"
-                        to="/dashboard/tickets/new"
+                        class="btn btn-green shadow-sm rounded-md mr-4"
+                        to="/dashboard/orders/new"
                     >
-                        {{ $t('Create ticket') }}
+                        {{ $t('Create Order') }}
                     </router-link>
                     <div class="rounded-md shadow-sm mr-4">
                         <button
@@ -405,11 +405,17 @@
                                         @change="selectAllOrders"
                                     >
                                 </th>
-                                <th class="hidden lg:table-cell px-3 py-2 text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider">
+                                <th class="hidden lg:table-cell px-3 py-2 text-left text-xs leading-4 font-medium text-gray-600 uppercase ">
                                     {{ $t('Customer') }}
                                 </th>
-                                <th class="px-3 py-2 text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider whitespace-no-wrap overflow-x-auto" colspan="2">
+                                <th class="px-3 py-2 text-left text-xs leading-4 font-medium text-gray-600 uppercase ">
                                     {{ $t('Order summary') }}
+                                </th>
+                                <th class="px-3 py-2 text-center text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider">
+                                    {{ $t('Branch') }}
+                                </th>
+                                <th class="px-3 py-2 text-center text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider whitespace-no-wrap overflow-x-auto">
+                                    {{ $t('Status') }}
                                 </th>
                                 <th class="px-3 py-2 text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider whitespace-no-wrap overflow-x-auto">
                                     {{ $t('Agent') }}
@@ -417,6 +423,7 @@
                                 <th class="px-3 py-2 text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider whitespace-no-wrap overflow-x-auto">
                                     {{ $t('Updated at') }}
                                 </th>
+
                             </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-100">
@@ -457,9 +464,10 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="px-3 py-4 max-w-0 w-full whitespace-no-wrap">
-                                        <div class="flex text-sm leading-5 text-gray-900">
+                                    <td class="float-left">
+                                        <div class=" text-center text-xs leading-4 text-gray-900">
                                             <template v-for="label in order.labels">
+                                                <br/><br/>
                                                 <div
                                                     :style="{backgroundColor: label.color}"
                                                     class="hidden lg:inline-flex items-center px-2 py-0.5 mr-1 rounded text-xs font-medium leading-4 text-gray-100"
@@ -468,17 +476,22 @@
                                                 </div>
                                             </template>
                                             <div class="w-full truncate">
-                                                {{ order.branch ? order.branch.name : $t('Unassigned') }}<br>
                                                 {{ order.subject }}
 
                                             </div>
-                                        </div>
-                                        <div class="text-sm leading-5 text-gray-500 w-full truncate">
+                                            <div class="text-sm leading-5 text-gray-500 w-full truncate">
                                             {{ order.lastReply ? order.lastReply.body : null }}
                                         </div>
+                                        </div>
                                     </td>
-                                    <td class="px-3 py-4 whitespace-no-wrap leading-5">
-                                        <div class="text-sm leading-5 font-medium text-gray-900">
+                                    <td class="px-3 py-2 text-center text-xs leading-4  text-gray-600 uppercase tracking-wider">
+                                        <div class="text-center text-sm leading-5 text-gray-900">
+                                                {{ order.branches ? order.branches.name : $t('Unassigned') }}
+                                            </div>
+
+                                    </td>
+                                    <td class="px-3 py-2 text-center text-xs leading-4  text-gray-600  tracking-wider whitespace-no-wrap overflow-x-auto">
+                                        <div class="text-sm leading-5  text-gray-900">
                                             {{ order.status ? order.status.name : $t('Unassigned') }}
                                         </div>
                                         <div class="text-sm leading-5 text-gray-500">
@@ -490,7 +503,7 @@
                                             {{ order.agent ? order.agent.name : $t('Unassigned') }}
                                         </div>
                                     </td>
-                                    <td class="px-3 py-4 whitespace-no-wrap leading-5">
+                                    <td class="px-4 py-4 whitespace-no-wrap leading-5">
                                         <div class="text-sm text-gray-500">
                                             {{ order.updated_at | momentFormatDateTimeAgo }}
                                         </div>

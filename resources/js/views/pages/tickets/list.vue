@@ -128,12 +128,12 @@
                                                 </div>
                                             </td>
                                             <td class="px-6 py-4 whitespace-no-wrap leading-5">
-                                                <div class="text-sm text-gray-800">
+                                                <div class="text-s text-gray-800">
                                                     {{ ticket.created_at | momentFormatDate }}
                                                 </div>
                                             </td>
                                             <td class="px-6 py-4 whitespace-no-wrap leading-5">
-                                                <div class="text-sm text-gray-800">
+                                                <div class="text-s text-gray-800">
                                                     {{ ticket.updated_at | momentFormatDateTimeAgo }}
                                                 </div>
                                             </td>
