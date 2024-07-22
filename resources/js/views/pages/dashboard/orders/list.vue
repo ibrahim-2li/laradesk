@@ -408,7 +408,7 @@
                                 <th class="hidden lg:table-cell px-3 py-2 text-left text-xs leading-4 font-medium text-gray-600 uppercase ">
                                     {{ $t('Customer') }}
                                 </th>
-                                <th class="px-3 py-2 text-left text-xs leading-4 font-medium text-gray-600 uppercase ">
+                                <th class="align-left px-3 py-2 text-left text-xs leading-4 font-medium text-gray-600 uppercase ">
                                     {{ $t('Order summary') }}
                                 </th>
                                 <th class="px-3 py-2 text-center text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider">
@@ -423,7 +423,6 @@
                                 <th class="px-3 py-2 text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider whitespace-no-wrap overflow-x-auto">
                                     {{ $t('Updated at') }}
                                 </th>
-
                             </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-100">
@@ -466,8 +465,8 @@
                                     </td>
                                     <td class="float-left">
                                         <div class=" text-center text-xs leading-4 text-gray-900">
+                                            <br/>
                                             <template v-for="label in order.labels">
-                                                <br/><br/>
                                                 <div
                                                     :style="{backgroundColor: label.color}"
                                                     class="hidden lg:inline-flex items-center px-2 py-0.5 mr-1 rounded text-xs font-medium leading-4 text-gray-100"
@@ -475,22 +474,20 @@
                                                     {{ label.name }}
                                                 </div>
                                             </template>
-                                            <div class="w-full truncate">
+                                        </div>
+                                            <div class="truncate text-xs text-center">
                                                 {{ order.subject }}
-
                                             </div>
-                                            <div class="text-sm leading-5 text-gray-500 w-full truncate">
+                                            <div class="text-xs leading-5 text-gray-500 w-full truncate text-center">
                                             {{ order.lastReply ? order.lastReply.body : null }}
                                         </div>
-                                        </div>
                                     </td>
-                                    <td class="px-3 py-2 text-center text-xs leading-4  text-gray-600 uppercase tracking-wider">
+                                    <td class="px-3 py-2 text-center text-xs leading-4  text-gray-600 tracking-wider">
                                         <div class="text-center text-sm leading-5 text-gray-900">
                                                 {{ order.branches ? order.branches.name : $t('Unassigned') }}
                                             </div>
-
                                     </td>
-                                    <td class="px-3 py-2 text-center text-xs leading-4  text-gray-600  tracking-wider whitespace-no-wrap overflow-x-auto">
+                                    <td class="px-3 py-2 text-center text-xs leading-4 text-gray-600 tracking-wider whitespace-no-wrap overflow-x-auto">
                                         <div class="text-sm leading-5  text-gray-900">
                                             {{ order.status ? order.status.name : $t('Unassigned') }}
                                         </div>
@@ -892,12 +889,12 @@ export default {
 
 .orders-list-toolbar {
     @apply bg-white fixed flex rounded-md shadow-lg;
-    left: 50px;
+    left: 30px;
 }
 
 @media (min-width: theme('screens.md')) {
     .orders-list-toolbar {
-        left: 50%;
+        left: 30%;
     }
 }
 </style>

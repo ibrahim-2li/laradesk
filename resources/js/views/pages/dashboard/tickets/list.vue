@@ -405,10 +405,10 @@
                                         @change="selectAllTickets"
                                     >
                                 </th>
-                                <th class="hidden lg:table-cell px-3 py-2 text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider">
+                                <th class="hidden lg:table-cell px-3 py-2 text-left text-xs leading-4 font-medium text-gray-600 uppercase ">
                                     {{ $t('Customer') }}
                                 </th>
-                                <th class="text-left text-xs leading-2 font-medium text-gray-600 uppercase">
+                                <th class="align-left px-3 py-2 text-left text-xs leading-4 font-medium text-gray-600 uppercase">
                                     {{ $t('Ticket summary') }}
                                 </th>
                                 <th class="px-3 py-2 text-center text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider">
@@ -444,7 +444,7 @@
                                             @click.stop
                                         >
                                     </td>
-                                    <td class="hidden lg:table-cell px-3 py-4 whitespace-no-wrap leading-4">
+                                    <td class="hidden lg:table-cell px-3 py-4 whitespace-no-wrap leading-5">
                                         <div class="flex items-center">
                                             <div class="flex-shrink-0 h-10 w-10">
                                                 <img
@@ -454,26 +454,25 @@
                                                 >
                                             </div>
                                             <div class="ml-4">
-                                                <div class="text-sm leading-4 font-medium text-gray-900">
+                                                <div class="text-sm leading-5 font-medium text-gray-900">
                                                     {{ ticket.user.name }}
                                                 </div>
-                                                <div class="text-sm leading-4 text-gray-500">
+                                                <div class="text-sm leading-5 text-gray-500">
                                                     {{ ticket.user.email }}
                                                 </div>
                                             </div>
                                         </div>
                                     </td>
                                     <td  class="float-left">
-                                        <div class=" text-center text-xs leading-4  text-gray-600">
+                                        <div class=" text-center text-xs leading-4 text-gray-600">
+                                            <br/>
                                             <template v-for="label in ticket.labels">
-                                                <br/><br/>
                                                 <div
                                                     :style="{backgroundColor: label.color}"
                                                     class="hidden lg:inline-flex items-center px-2 py-0.5 mr-1 rounded text-xs font-medium leading-4 text-gray-100"
                                                 >
                                                  {{ label.name }}
                                                 </div>
-
                                             </template>
                                             <div class="w-full truncate">
                                                 {{ ticket.subject }}
@@ -484,13 +483,13 @@
                                         </div>
                                         </div>
                                     </td>
-                                    <td class="px-3 py-2 text-center text-xs leading-4  text-gray-600  tracking-wider">
-                                        <div class=" text-center text-sm leading-5 text-gray-900">
+                                    <td class="px-3 py-2 text-center text-xs leading-4  text-gray-600 tracking-wider">
+                                        <div class="text-center text-sm leading-5 text-gray-900">
                                             {{ ticket.department ? ticket.department.name : $t('Unassigned') }}
                                         </div>
 
                                     </td>
-                                    <td class="px-3 py-2 text-center text-xs leading-4 text-gray-600  tracking-wider whitespace-no-wrap overflow-x-auto">
+                                    <td class="px-3 py-2 text-center text-xs leading-4 text-gray-600 tracking-wider whitespace-no-wrap overflow-x-auto">
                                         <div class="text-sm leading-5  text-gray-900">
                                             {{ ticket.status ? ticket.status.name : $t('Unassigned') }}
                                         </div>
@@ -506,7 +505,6 @@
                                     <td class="px-4 py-4 whitespace-no-wrap leading-5">
                                         <div class="text-sm text-gray-500">
                                             {{ ticket.updated_at | momentFormatDateTimeAgo }}<br>
-
                                         </div>
                                     </td>
                                 </router-link>
