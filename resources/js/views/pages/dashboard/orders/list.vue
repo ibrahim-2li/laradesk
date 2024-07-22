@@ -3,7 +3,7 @@
         <div class="bg-white border-b border-gray-200 py-6 sm:px-6 lg:px-8 px-5">
             <div class="md:flex md:items-center md:justify-between">
                 <div class="flex-1 min-w-0">
-                    <h1 class="py-0.5 text-2xl font-semibold text-gray-900">{{ $t('Tickets') }}</h1>
+                    <h1 class="py-0.5 text-2xl font-semibold text-gray-900">{{ $t('Orders') }}</h1>
                 </div>
                 <div class="mt-4 flex md:mt-0 md:ml-4">
                     <router-link
@@ -119,8 +119,8 @@
                                                                     {{ $t('Branches') }}
                                                                 </label>
                                                                 <input-select
-                                                                    id="branch"
-                                                                    v-model="filters.branches"
+                                                                    id="branches"
+                                                                    v-model="filters.branchese"
                                                                     :options="branchList"
                                                                     multiple
                                                                     option-label="name"
@@ -217,7 +217,7 @@
                                                                         <option value="subject">{{ $t('Subject') }}</option>
                                                                         <option value="status_id">{{ $t('Status') }}</option>
                                                                         <option value="priority_id">{{ $t('Priority') }}</option>
-                                                                        <option value="branch_id">{{ $t('Branch') }}</option>
+                                                                        <option value="branches_id">{{ $t('Branches') }}</option>
                                                                         <option value="user_id">{{ $t('User') }}</option>
                                                                         <option value="agent_id">{{ $t('Agent') }}</option>
                                                                         <option value="created_at">{{ $t('Created at') }}</option>
@@ -285,20 +285,20 @@
                         </div>
                     </div>
                     <div class="relative inline-block text-left">
-                        <button class="btn hover:bg-gray-100 p-4 border-r border-gray-200 rounded-none" type="button" @click="toggleQuickActionDropdown('branch')">
+                        <button class="btn hover:bg-gray-100 p-4 border-r border-gray-200 rounded-none" type="button" @click="toggleQuickActionDropdown('branches')">
                             <svg-vue class="h-6 w-6 text-gray-700" icon="font-awesome.users-class-regular"></svg-vue>
                         </button>
-                        <div v-show="quickActions.branch" class="origin-top-right absolute left-0 mt-1 w-56 rounded-md shadow-lg">
+                        <div v-show="quickActions.branches" class="origin-top-right absolute left-0 mt-1 w-56 rounded-md shadow-lg">
                             <div class="rounded-md bg-white shadow-xs">
                                 <div class="py-1">
-                                    <template v-for="branch in branchList">
+                                    <template v-for="branches in branchList">
                                         <a
                                             class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                                             href="#"
                                             role="menuitem"
-                                            @click.prevent="quickAction('branch', branch.id)"
+                                            @click.prevent="quickAction('branches', branches.id)"
                                         >
-                                            {{ branch.name }}
+                                            {{ branches.name }}
                                         </a>
                                     </template>
                                 </div>
@@ -412,7 +412,7 @@
                                     {{ $t('Order summary') }}
                                 </th>
                                 <th class="px-3 py-2 text-center text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider">
-                                    {{ $t('Branch') }}
+                                    {{ $t('branches') }}
                                 </th>
                                 <th class="px-3 py-2 text-center text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider whitespace-no-wrap overflow-x-auto">
                                     {{ $t('Status') }}
@@ -658,14 +658,14 @@ export default {
                 search: '',
                 user: '',
                 agents: [],
-                branches: [],
+                branchese: [],
                 labels: [],
                 statuses: [1, 2],
                 priorities: [],
             },
             quickActions: {
                 agent: false,
-                branch: false,
+                branches: false,
                 label: false,
                 priority: false,
                 delete: false,
@@ -697,7 +697,7 @@ export default {
             return this.filters.search !== ''
                 || this.filters.user !== ''
                 || this.filters.agents !== 0
-                || this.filters.branches.length !== 0
+                || this.filters.branchese.length !== 0
                 || this.filters.labels.length !== 0
                 || this.filters.statuses.length !== 0
                 || this.filters.priorities.length !== 0;
@@ -726,7 +726,7 @@ export default {
         },
         closeQuickActionDropdown() {
             this.quickActions.agent = false;
-            this.quickActions.branch = false;
+            this.quickActions.branches = false;
             this.quickActions.label = false;
             this.quickActions.priority = false;
             this.quickActions.delete = false;
@@ -734,13 +734,13 @@ export default {
         toggleQuickActionDropdown(quickAction) {
             if (quickAction === 'agent') {
                 this.quickActions.agent = !this.quickActions.agent;
-                this.quickActions.branch = false;
+                this.quickActions.branches = false;
                 this.quickActions.label = false;
                 this.quickActions.priority = false;
                 this.quickActions.delete = false;
             }
-            if (quickAction === 'branch') {
-                this.quickActions.branch = !this.quickActions.branch;
+            if (quickAction === 'branches') {
+                this.quickActions.branches = !this.quickActions.branches;
                 this.quickActions.agent = false;
                 this.quickActions.label = false;
                 this.quickActions.priority = false;
@@ -749,21 +749,21 @@ export default {
             if (quickAction === 'label') {
                 this.quickActions.label = !this.quickActions.label;
                 this.quickActions.agent = false;
-                this.quickActions.branch = false;
+                this.quickActions.branches = false;
                 this.quickActions.priority = false;
                 this.quickActions.delete = false;
             }
             if (quickAction === 'priority') {
                 this.quickActions.priority = !this.quickActions.priority;
                 this.quickActions.agent = false;
-                this.quickActions.branch = false;
+                this.quickActions.branches = false;
                 this.quickActions.label = false;
                 this.quickActions.delete = false;
             }
             if (quickAction === 'delete') {
                 this.quickActions.delete = !this.quickActions.delete;
                 this.quickActions.agent = false;
-                this.quickActions.branch = false;
+                this.quickActions.branches = false;
                 this.quickActions.label = false;
                 this.quickActions.priority = false;
             }
@@ -810,7 +810,7 @@ export default {
                     search: self.filters.search,
                     user: self.filters.user,
                     agents: self.filters.agents,
-                    branches: self.filters.branches,
+                    branchese: self.filters.branchese,
                     labels: self.filters.labels,
                     statuses: self.filters.statuses,
                     priorities: self.filters.priorities,
@@ -836,7 +836,7 @@ export default {
             const self = this;
             axios.get('api/dashboard/orders/filters').then(function (response) {
                 self.agentList = response.data.agents;
-                self.branchList = response.data.branches;
+                self.branchList = response.data.branchese;
                 self.labelList = response.data.labels;
                 self.statusList = response.data.statuses;
                 self.priorityList = response.data.priorities;

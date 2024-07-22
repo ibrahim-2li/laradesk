@@ -60,11 +60,11 @@ class OrderController extends Controller
                 ->where(function (Builder $query) use ($user) {
                     $query->where('agent_id', $user->id);
                     $query->orWhere('closed_by', $user->id);
-                    $query->orWhereIn('branches_id', $user->branches()->pluck('id')->toArray());
+                    $query->orWhereIn('branches_id', $user->branchese()->pluck('id')->toArray());
                     $query->orWhere(function (Builder $query) use ($user) {
-                        $branches = array_unique(array_merge($user->branches()->pluck('id')->toArray(), Branch::where('all_agents', 1)->pluck('id')->toArray()));
+                        $branchese = array_unique(array_merge($user->branchese()->pluck('id')->toArray(), Branch::where('all_agents', 1)->pluck('id')->toArray()));
                         $query->whereNull('agent_id');
-                        $query->whereIn('branches_id', $branches);
+                        $query->whereIn('branches_id', $branchese);
                     });
                 })
                 ->orderBy($sort['column'], $sort['order'])
@@ -209,7 +209,7 @@ public function store(StoreRequest $request): JsonResponse
                     return $attachment['id'];
                 }));
             }
-            $order->status_id = $request->get('status_id');
+            $order->orders_status_id = $request->get('orders_status_id');
             $order->updated_at = Carbon::now();
             $order->save();
             $order->user->notify((new NewOrderReplyFromAgentToUser($order))->locale(Setting::getDecoded('app_locale')));
@@ -251,7 +251,7 @@ public function store(StoreRequest $request): JsonResponse
         return response()->json([
             'agents' => UserDetailsResource::collection($agents),
             'customers' => UserDetailsResource::collection(User::where('status', true)->get()),
-            'branches' => BranchSelectResource::collection(Branch::all()),
+            'branchese' => BranchSelectResource::collection(Branch::all()),
             'labels' => LabelSelectResource::collection(Label::all()),
             'statuses' => OrderStatusResource::collection(OrderStatus::all()),
             'priorities' => PriorityResource::collection(Priority::orderBy('value')->get()),
@@ -282,11 +282,11 @@ public function store(StoreRequest $request): JsonResponse
             $orders->where(function (Builder $query) use ($user) {
                 $query->where('agent_id', $user->id);
                 $query->orWhere('closed_by', $user->id);
-                $query->orWhereIn('branches_id', $user->branches()->pluck('id')->toArray());
+                $query->orWhereIn('branches_id', $user->branchese()->pluck('id')->toArray());
                 $query->orWhere(function (Builder $query) use ($user) {
-                    $branches = array_unique(array_merge($user->branches()->pluck('id')->toArray(), Branch::where('all_agents', 1)->pluck('id')->toArray()));
+                    $branchese = array_unique(array_merge($user->branchese()->pluck('id')->toArray(), Branch::where('all_agents', 1)->pluck('id')->toArray()));
                     $query->whereNull('agent_id');
-                    $query->whereIn('branches_id', $branches);
+                    $query->whereIn('branches_id', $branchese);
                 });
             });
         }

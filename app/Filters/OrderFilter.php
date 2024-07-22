@@ -36,7 +36,7 @@ class OrderFilter extends ModelFilter
         return $this->whereIn('agent_id', $agents);
     }
 
-    public function branch($branches): OrderFilter
+    public function branchese($branches): OrderFilter
     {
         return $this->whereIn('branches_id', $branches);
     }
