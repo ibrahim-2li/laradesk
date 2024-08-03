@@ -61,7 +61,7 @@ Route::group(['prefix' => 'dashboard'], static function () {
     Route::group(['prefix' => 'stats'], static function () {
         Route::get('count', [DashboardStatsController::class, 'count'])->name('dashboard.stats-count');
         Route::get('registered-users', [DashboardStatsController::class, 'registeredUsers'])->name('dashboard.stats.registered-users');
-        Route::get('opened-tickets', [DashboardStatsController::class, 'openedTickets'])->name('dashboard.stats.opened-tickets');
+        Route::get('opened-tickets', [DashboardStatsController::class, 'openedOrders'])->name('dashboard.stats.opened-tickets');
     });
 
     Route::get('tickets/filters', [DashboardTicketController::class, 'filters'])->name('dashboard.tickets.filters');

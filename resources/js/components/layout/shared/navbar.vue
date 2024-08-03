@@ -2,7 +2,7 @@
     <nav class="bg-white shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
-                <router-link class="flex" to="/">
+                <router-link class="flex" to="/orders/list">
                     <logo div-padding text-class="text-gray-800"></logo>
                 </router-link>
                 <div class="hidden sm:ml-6 sm:flex sm:items-center">

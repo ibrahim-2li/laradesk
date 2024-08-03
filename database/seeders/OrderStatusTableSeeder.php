@@ -17,9 +17,9 @@ class OrderStatusTableSeeder extends Seeder
         if (OrderStatus::count() === 0) {
             $now = Carbon::now();
             OrderStatus::insert([
-                ['name' => 'Requested', 'created_at' => $now, 'updated_at' => $now],
-                ['name' => 'Request sent', 'created_at' => $now, 'updated_at' => $now],
-                ['name' => 'Request pending', 'created_at' => $now, 'updated_at' => $now],
+                ['name' => 'تم الطلب', 'created_at' => $now, 'updated_at' => $now],
+                ['name' => 'الطلب معلق', 'created_at' => $now, 'updated_at' => $now],
+                ['name' => 'تم إرسال الطلب', 'created_at' => $now, 'updated_at' => $now],
             ]);
         }
     }

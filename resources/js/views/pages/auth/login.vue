@@ -93,7 +93,7 @@ export default {
                     if (response.data.user.role.dashboard_access) {
                         self.$router.push('/dashboard/home');
                     } else {
-                        self.$router.push('/tickets/list');
+                        self.$router.push('/orders/list');
                     }
                 }
             }).catch(function () {

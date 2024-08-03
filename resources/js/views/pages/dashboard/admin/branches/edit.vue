@@ -34,7 +34,7 @@
                                     <div class="mt-1 relative rounded-md shadow-sm">
                                         <input
                                             id="name"
-                                            v-model="branches.name"
+                                            v-model="branch.name"
                                             :placeholder="$t('Name')"
                                             class="form-input block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5"
                                             required
@@ -45,7 +45,7 @@
                                     <label class="block text-sm font-medium leading-5 text-gray-700" for="all_agents">{{ $t('All agents') }}</label>
                                     <input-switch
                                         id="all_agents"
-                                        v-model="branches.all_agents"
+                                        v-model="branch.all_agents"
                                         :disabled-label="$t('Only selected agents')"
                                         :enabled-label="$t('All agents')"
                                     ></input-switch>
@@ -57,7 +57,7 @@
                                     <label class="block text-sm font-medium leading-5 text-gray-700" for="public">{{ $t('Visibility') }}</label>
                                     <input-switch
                                         id="public"
-                                        v-model="branches.public"
+                                        v-model="branch.public"
                                         :disabled-label="$t('The branches is private')"
                                         :enabled-label="$t('The branches is public')"
                                     ></input-switch>
@@ -67,7 +67,7 @@
                                 </div>
                             </div>
                         </div>
-                        <template v-if="!branches.all_agents">
+                        <template v-if="!branch.all_agents">
                             <div class="md:col-span-3">
                                 <div class="py-3">
                                     <div class="border-t border-gray-200"></div>
@@ -87,7 +87,7 @@
                                                 <div class="flex items-center px-6 py-3 hover:bg-gray-100 cursor-pointer rounded" @click="selectAgent(user.id)">
                                                     <div>
                                                         <div class="flex items-center justify-center">
-                                                            <svg-vue v-if="branches.agents.includes(user.id)" class="w-5 h-5 text-green-400" icon="font-awesome.check-circle-solid"></svg-vue>
+                                                            <svg-vue v-if="branch.agents.includes(user.id)" class="w-5 h-5 text-green-400" icon="font-awesome.check-circle-solid"></svg-vue>
                                                             <div v-else class="w-5 h-5 p-1 overflow-hidden rounded-full border"></div>
                                                         </div>
                                                     </div>
@@ -216,7 +216,7 @@ export default {
             loading: true,
             deleteBrancheModal: false,
             users: [],
-            branches: {
+            branch: {
                 name: null,
                 all_agents: false,
                 public: true,
@@ -231,14 +231,14 @@ export default {
         saveBranche() {
             const self = this;
             self.loading = true;
-            axios.put('api/dashboard/admin/branches/' + self.$route.params.id, self.branches).then(function (response) {
+            axios.put('api/dashboard/admin/branches/' + self.$route.params.id, self.branch).then(function (response) {
                 self.loading = false;
                 self.$notify({
                     title: self.$i18n.t('Success').toString(),
                     text: self.$i18n.t('Data updated correctly').toString(),
                     type: 'success'
                 });
-                self.branches = response.data.branches;
+                self.branch = response.data.branch;
             }).catch(function () {
                 self.loading = false;
 
@@ -257,7 +257,7 @@ export default {
             const self = this;
             self.loading = true;
             axios.get('api/dashboard/admin/branches/' + self.$route.params.id).then(function (response) {
-                self.branches = response.data;
+                self.branch = response.data;
                 self.loading = false;
             }).catch(function (error) {
                 self.loading = false;
@@ -279,14 +279,14 @@ export default {
             });
         },
         selectAgent(user) {
-            if (this.branches.agents.includes(user)) {
-                for (let i = 0; i < this.branches.agents.length; i++) {
-                    if (this.branches.agents[i] === user) {
-                        this.branches.agents.splice(i, 1);
+            if (this.branch.agents.includes(user)) {
+                for (let i = 0; i < this.branch.agents.length; i++) {
+                    if (this.branch.agents[i] === user) {
+                        this.branch.agents.splice(i, 1);
                     }
                 }
             } else {
-                this.branches.agents.push(user);
+                this.branch.agents.push(user);
             }
         }
     }

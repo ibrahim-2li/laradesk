@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-white flex-1 relative">
+    <div class="bg-white flex-1 relative overflow-auto">
         <loading :status="loading.form"/>
         <div class="flex relative">
             <div :style="{height: 'calc(100vh - 70px)'}" class="flex-auto min-w-0">

@@ -95,21 +95,20 @@ let routes = [
         ]
     },
     {
-        path: '/tickets', component: HelpdeskLayout, redirect: '/tickets/list',
-        children: [
-            {path: 'list', component: HelpdeskTicketsListPage, meta: {middleware: 'auth'}},
-            {path: 'new', component: HelpdeskTicketsNewPage, meta: {middleware: 'auth'}},
-            {path: ':uuid', component: HelpdeskTicketsManagePage, meta: {middleware: 'auth'}},
-        ]
-    },
-
-    {
         path: '/orders', component: HelpdeskLayout, redirect: '/orders/list',
         children: [
             {path: 'list', component: HelpdeskOrdersListPage, meta: {middleware: 'auth'}},
             {path: 'new', component: HelpdeskOrdersNewPage, meta: {middleware: 'auth'}},
             {path: 'items', component: HelpdeskOrdersItemPage, meta: {middleware: 'auth'}},
             {path: ':uuid', component: HelpdeskOrdersManagePage, meta: {middleware: 'auth'}},
+        ]
+    },
+    {
+        path: '/tickets', component: HelpdeskLayout, redirect: '/tickets/list',
+        children: [
+            {path: 'list', component: HelpdeskTicketsListPage, meta: {middleware: 'auth'}},
+            {path: 'new', component: HelpdeskTicketsNewPage, meta: {middleware: 'auth'}},
+            {path: ':uuid', component: HelpdeskTicketsManagePage, meta: {middleware: 'auth'}},
         ]
     },
 

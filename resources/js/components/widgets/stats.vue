@@ -1,35 +1,35 @@
 <template>
     <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
         <div class="bg-white overflow-hidden shadow rounded-lg">
-            <loading :status="stats.open_tickets == null"/>
+            <loading :status="stats.open_orders == null"/>
             <div class="px-4 py-5 sm:p-6">
                 <dt class="text-sm font-medium text-gray-500 truncate">
-                    {{ $t('Open tickets') }}
+                    {{ $t('Open orders') }}
                 </dt>
                 <dd class="mt-1 text-3xl font-semibold text-gray-900">
-                    {{ stats.open_tickets ? stats.open_tickets : 0 }}
+                    {{ stats.open_orders ? stats.open_orders : 0 }}
                 </dd>
             </div>
         </div>
         <div class="bg-white overflow-hidden shadow rounded-lg">
-            <loading :status="stats.pending_tickets == null"/>
+            <loading :status="stats.pending_orders == null"/>
             <div class="px-4 py-5 sm:p-6">
                 <dt class="text-sm font-medium text-gray-500 truncate">
-                    {{ $t('Pending tickets') }}
+                    {{ $t('Pending orders') }}
                 </dt>
                 <dd class="mt-1 text-3xl font-semibold text-gray-900">
-                    {{ stats.pending_tickets ? stats.pending_tickets : 0 }}
+                    {{ stats.pending_orders ? stats.pending_orders : 0 }}
                 </dd>
             </div>
         </div>
         <div class="bg-white overflow-hidden shadow rounded-lg">
-            <loading :status="stats.solved_tickets == null"/>
+            <loading :status="stats.sended_orders == null"/>
             <div class="px-4 py-5 sm:p-6">
                 <dt class="text-sm font-medium text-gray-500 truncate">
-                    {{ $t('Solved tickets') }}
+                    {{ $t('Solved orders') }}
                 </dt>
                 <dd class="mt-1 text-3xl font-semibold text-gray-900">
-                    {{ stats.solved_tickets ? stats.solved_tickets : 0 }}
+                    {{ stats.sended_orders ? stats.sended_orders : 0 }}
                 </dd>
             </div>
         </div>
@@ -53,9 +53,9 @@ export default {
     data() {
         return {
             stats: {
-                open_tickets: null,
-                pending_tickets: null,
-                solved_tickets: null,
+                open_orders: null,
+                pending_orders: null,
+                sended_orders: null,
                 without_agent: null,
             }
         }

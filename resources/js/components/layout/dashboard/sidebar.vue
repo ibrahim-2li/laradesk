@@ -59,7 +59,7 @@
         </div>
         <div class="hidden md:flex md:flex-shrink-0">
             <div class="flex flex-col w-64">
-                <router-link class="flex h-16 flex-shrink-0 bg-gray-900" to="/">
+                <router-link class="flex h-16 flex-shrink-0 bg-gray-900" to="/orders/list">
                     <logo></logo>
                 </router-link>
                 <div class="h-0 flex-1 flex flex-col overflow-y-auto">
