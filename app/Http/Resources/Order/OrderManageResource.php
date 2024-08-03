@@ -2,15 +2,17 @@
 
 namespace App\Http\Resources\Order;
 
-use App\Http\Resources\Branch\BranchSelectResource;
-use App\Http\Resources\Label\LabelSelectResource;
-use App\Http\Resources\Priority\PriorityResource;
-use App\Http\Resources\OrderStatus\OrderStatusResource;
-use App\Http\Resources\OrderReply\OrderReplyDetailsResource;
-use App\Http\Resources\User\UserDetailsResource;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use App\Http\Resources\User\UserDetailsResource;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\Label\LabelSelectResource;
+use App\Http\Resources\Priority\PriorityResource;
+use App\Http\Resources\Branch\BranchSelectResource;
+use App\Http\Resources\OrderStatus\OrderStatusResource;
+use App\Http\Resources\OrderReply\OrderItemsDetailsResource;
+use App\Http\Resources\OrderReply\OrderReplyDetailsResource;
+use App\Http\Resources\OrderReply\ConfirmItemsDetailsResource;
 
 class OrderManageResource extends JsonResource
 {
@@ -45,7 +47,8 @@ class OrderManageResource extends JsonResource
             'created_at' => $order->created_at->toISOString(),
             'updated_at' => $order->updated_at->toISOString(),
             'orderReplies' => OrderReplyDetailsResource::collection($order->orderReplies()->orderByDesc('created_at')->get()),
-
+            'orderItems' => OrderItemsDetailsResource::collection($order->orderItems()->orderByDesc('created_at')->get()),
+            'confirmItems' => ConfirmItemsDetailsResource::collection($order->confirmItems()->orderByDesc('created_at')->get()),
         ];
     }
 }

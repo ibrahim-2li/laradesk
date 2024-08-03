@@ -26,6 +26,8 @@ class StoreRequest extends FormRequest
         return [
             'user_id' => ['required', 'exists:users,id'],
             'subject' => ['required', 'max:255'],
+            'item' => ['required', 'max:255'],
+            'item_count' => ['required', 'max:255'],
             'branches_id' => ['required', 'exists:branches,id'],
             'orders_status_id' => ['required', 'exists:order_statuses,id'],
             'priority_id' => ['required', 'exists:priorities,id'],
@@ -46,6 +48,12 @@ class StoreRequest extends FormRequest
 
             'subject.required' => __('The :attribute field is required', ['attribute' => __('subject')]),
             'subject.max' => __('The :attribute may not be greater than :max characters', ['attribute' => __('subject'), 'max' => 255]),
+
+            'item.required' => __('The :attribute field is required', ['attribute' => __('item')]),
+            'item.max' => __('The :attribute may not be greater than :max characters', ['attribute' => __('item'), 'max' => 255]),
+
+            'item_count.required' => __('The :attribute field is required', ['attribute' => __('item_count')]),
+            'item_count.max' => __('The :attribute may not be greater than :max characters', ['attribute' => __('item_count'), 'max' => 255]),
 
             'branches_id.required' => __('The :attribute field is required', ['attribute' => __('branches')]),
             'branches_id.exists' => __('The selected :attribute is invalid', ['attribute' => __('branches')]),

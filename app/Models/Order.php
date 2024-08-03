@@ -2,17 +2,19 @@
 
 namespace App\Models;
 
-use App\Models\Branch;
 use Eloquent;
+use App\Models\Item;
+use App\Models\Branch;
+use App\Models\ItemConfirm;
 use EloquentFilter\Filterable;
+use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Order extends Model
 {
@@ -69,6 +71,15 @@ class Order extends Model
     public function orderReplies(): HasMany
     {
         return $this->hasMany(OrderReply::class);
+    }
+
+    public function orderItems(): HasMany
+    {
+        return $this->hasMany(Item::class);
+    }
+    public function confirmItems(): HasMany
+    {
+        return $this->hasMany(ItemConfirm::class);
     }
 
     public function labels(): BelongsToMany

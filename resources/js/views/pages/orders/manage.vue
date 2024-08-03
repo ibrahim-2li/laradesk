@@ -29,101 +29,231 @@
                         </div>
                         <div class="px-6 sm:pl-3 sm:pr-6 sm:flex-1 sm:w-1/4">
                             <div class="flex items-center sm:float-right">
-                                <div class="text-sm sm:pr-2">{{ order.created_at | momentFormatDateTimeAgo }}</div>
-                                <button class="flex items-center btn btn-white p-2 ml-3 sm:ml-0" type="button" @click="replyForm = true">
-                                    <svg-vue class="h-4 w-4 mr-2" icon="font-awesome.reply-regular"></svg-vue>
-                                    {{ $t('Reply') }}
-                                </button>
+                                <div class="text-sm sm:pr-2">{{ order.updated_at | momentFormatDateTimeAgo }}</div>
+
+                                <template v-if="order.orders_status_id == 3">
+                                        <button class="flex items-center btn btn-white p-2 ml-3 sm:ml-0" type="button" @click="updateForm = true">
+                                        <svg-vue class="h-4 w-4 mr-2" icon="font-awesome.reply-regular"></svg-vue>
+                                        {{ $t('Order has being send') }}
+                                    </button>
+                                </template>
+
                             </div>
                         </div>
                     </div>
-                    <div v-if="replyForm" class="px-6 py-3 border-t">
-                        <loading :status="loading.reply"/>
-                        <form @submit.prevent="addReply">
-                            <input-wysiwyg
-                                id="order_body"
-                                v-model="orderReply.body"
-                                :plugins="{images: true, attachment: true, shortCode: true}"
-                                @selectUploadFile="selectUploadFile"
-                            >
-                                <template v-slot:top>
-                                    <div :class="{'bg-gray-200': uploadingFileProgress > 0}" class="h-1 w-full">
-                                        <div :style="{width: uploadingFileProgress + '%'}" class="bg-blue-500 py-0.5"></div>
-                                    </div>
-                                </template>
-                                <template v-slot:bottom>
-                                    <div class="flex justify-between border border-t-0">
-                                        <button
-                                            class="btn btn-secondary rounded-none"
-                                            type="button"
-                                            @click="discardReply"
-                                        >
-                                            {{ $t('Discard') }}
-                                        </button>
-                                        <button
-                                            class="btn btn-green rounded-none"
-                                            type="submit"
-                                        >
-                                            {{ $t('Send reply') }}
-                                        </button>
-                                    </div>
-                                </template>
-                            </input-wysiwyg>
-                        </form>
-                        <input ref="fileInput" hidden type="file" @change="uploadFile($event)">
-                        <template v-if="orderReply.attachments.length > 0">
-                            <div class="mt-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2">
-                                <template v-for="(attachment, index) in orderReply.attachments">
-                                    <attachment :details="attachment" v-on:remove="removeAttachment(index)"/>
-                                </template>
-                            </div>
-                        </template>
-                    </div>
-                    <template v-if="order.orderReplies.length > 0">
-                        <template v-for="orderReply in order.orderReplies">
-                            <div class="flex p-6 border-t">
-                                <img
-                                    :alt="$t('Avatar')"
-                                    :src="orderReply.user.avatar !== 'gravatar' ? orderReply.user.avatar : orderReply.user.gravatar"
-                                    class="h-12 w-12 hidden sm:inline"
-                                />
-                                <div class="sm:pl-6 pb-2 w-full">
-                                    <div class="md:flex md:items-center pb-1">
-                                        <div class="md:flex-1 text-lg font-semibold text-gray-800">
-                                            {{ orderReply.user.name }}
-                                        </div>
-                                        <div class="md:flex-1">
-                                            <div class="md:float-right text-sm">
-                                                {{ orderReply.created_at | momentFormatDateTime }}
+                    <template v-if="order.orders_status_id == 1">
+                            <div class="block">
+                                <template v-for="orderReply in order.orderReplies">
+                                    <div v-if="index === 0" :key="orderReply.id" class="border-t flex p-6">
+                                        <img
+                                            :alt="$t('Avatar')"
+                                            :src="orderReply.user.avatar !== 'gravatar' ? orderReply.user.avatar : orderReply.user.gravatar"
+                                            class="h-12 w-12 hidden sm:inline"
+                                        />
+                                        <div class="sm:pl-6 pb-2 w-full">
+                                            <div class="md:flex md:items-center pb-1">
+                                                <div class="md:flex-1 text-lg font-semibold text-gray-800">
+                                                    {{ orderReply.user.name }}
+                                                </div>
+                                                <div class="md:flex-1">
+                                                    <div class="md:float-right text-sm">
+                                                        {{ orderReply.created_at | momentFormatDateTime }}
+                                                    </div>
+                                                </div>
                                             </div>
+                                            <p class="text-gray-700 order-reply-body" v-html="orderReply.body"/>
+                                             <!-- Item Table -->
+                                                <div class="text-xl truncate">
+                                                    <div class="flex p-1 border-b">
+                                                    <div class="sm:pl-6 pb-2 w-full">
+                                                        <div class="table">
+                                                        <tr>
+                                                            <td style="width:50%">
+                                                            <div>
+                                                                <p class="md:text-left">{{ $t('Item Name') }}</p>
+                                                            </div>
+                                                            </td>
+                                                            <td style="width:50%">
+                                                            <div>
+                                                                <p class="text-gray-700 ">{{ $t('Details') }}</p>
+                                                            </div>
+                                                            </td>
+                                                            <td style="width:30%">
+                                                            <div>
+                                                                <p class="text-center text-gray-700">{{ $t('Count') }}</p>
+                                                            </div>
+                                                            </td>
+                                                        </tr>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                    <template v-for="(Item, index) in order.orderItems">
+                                                    <div class="flex p-1 border-t" :key="index">
+                                                        <div class="sm:pl-6 pb-2 w-full">
+                                                            <div class="table">
+                                                                <tr>
+                                                                    <td style="width:50%">
+                                                                        <p  class="md:float-left  text-sm"  v-html="Item.item"/>
+                                                                    </td>
+                                                                    <td style="width:50%">
+                                                                        <p class="text-gray-700 text-sm" v-html="Item.details"/>
+                                                                    </td>
+                                                                    <td  style="width:30%">
+                                                                        <p class="text-center text-gray-700 text-sm" v-html="Item.item_count"/>
+                                                                    </td>
+                                                                </tr>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    </template>
+                                                </div>
                                         </div>
                                     </div>
-                                    <p class="text-gray-700 order-reply-body" v-html="orderReply.body"/>
-                                    <template v-if="orderReply.attachments.length > 0">
-                                        <div class="mt-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2">
-                                            <template v-for="attachment in orderReply.attachments">
-                                                <attachment :details="attachment" :remove-button="false"/>
-                                            </template>
-                                        </div>
-                                    </template>
-                                </div>
+                                </template>
                             </div>
                         </template>
-                    </template>
-                    <template v-else>
-                        <div class="h-full flex border-t">
-                            <div class="m-auto">
-                                <div class="grid grid-cols-1 justify-items-center h-full w-full py-24">
-                                    <div class="flex justify-center items-center">
-                                        <svg-vue class="h-full h-auto w-48 mb-6" icon="undraw.task-list"></svg-vue>
+                        <template v-else>
+                                <div class="border-t flex p-6">
+                                    <img
+                                            :alt="$t('Avatar')"
+                                            :src="defaultAvatar"
+                                            class="h-12 w-12 hidden sm:inline"
+                                        />
+                                        <div class="sm:pl-6 pb-2 w-full">
+                                            <div class="md:flex md:items-center pb-1">
+                                                <div class="md:flex-1 text-lg font-semibold text-gray-800">
+                                                    {{ order.confirmItems.name }}
+                                                </div>
+                                                <div class="md:flex-1">
+                                                    <div class="md:float-right text-sm">
+                                                        {{ order.created_at | momentFormatDateTime }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <p class="text-gray-700 order-reply-body"> {{ $t('Order confirmed successfuly') }}</p>
+                                                <br>
+
+                                             <!-- Item Table -->
+                                                <div class="text-xl truncate">
+                                                    <div class="flex p-1 border-b">
+                                                    <div class="sm:pl-6 pb-2 w-full">
+                                                        <div class="table">
+                                                        <tr>
+                                                            <td style="width:50%">
+                                                            <div>
+                                                                <p class="md:text-left">{{ $t('Item Name') }}</p>
+                                                            </div>
+                                                            </td>
+                                                            <td style="width:50%">
+                                                            <div>
+                                                                <p class="text-gray-700 ">{{ $t('Details') }}</p>
+                                                            </div>
+                                                            </td>
+                                                            <td style="width:30%">
+                                                            <div>
+                                                                <p class="text-center text-gray-700">{{ $t('Count') }}</p>
+                                                            </div>
+                                                            </td>
+                                                        </tr>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                    <template v-for="Item in order.confirmItems">
+                                                    <div class="flex p-1 border-t">
+                                                        <div class="sm:pl-6 pb-2 w-full">
+                                                            <div class="table">
+                                                                <tr>
+                                                                    <td style="width:50%">
+                                                                        <p  class="md:float-left  text-sm"  v-html="Item.item"/>
+                                                                    </td>
+                                                                    <td style="width:50%">
+                                                                        <p class="text-gray-700 text-sm" v-html="Item.details"/>
+                                                                    </td>
+                                                                    <td  style="width:30%">
+                                                                        <p class="text-center text-gray-700 text-sm" v-html="Item.item_count"/>
+                                                                    </td>
+                                                                </tr>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    </template>
+                                                </div>
+                                                </div>
                                     </div>
-                                    <div class="flex justify-center items-center">
-                                        <div class="w-full font-semibold text-2xl">{{ $t('This order has no conversations') }}</div>
+                                </template>
+                                <template v-for="(orderReply, index) in order.orderReplies">
+                                    <div :class="{'border-t' : index > 0}" class="flex p-6">
+                                        <img
+                                            :alt="$t('Avatar')"
+                                            :src="orderReply.user.avatar !== 'gravatar' ? orderReply.user.avatar : orderReply.user.gravatar"
+                                            class="h-12 w-12 hidden sm:inline"
+                                        />
+                                        <div class="sm:pl-6 pb-2 w-full">
+                                            <div class="md:flex md:items-center pb-1">
+                                                <div class="md:flex-1 text-lg font-semibold text-gray-800">
+                                                    {{ orderReply.user.name }}
+                                                </div>
+                                                <div class="md:flex-1">
+                                                    <div class="md:float-right text-sm">
+                                                        {{ orderReply.created_at | momentFormatDateTime }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <p class="text-gray-700 order-reply-body" v-html="orderReply.body"/>
+                                             <!-- Item Table -->
+                                                <div class="text-xl truncate">
+                                                    <div class="flex p-1 border-b">
+                                                    <div class="sm:pl-6 pb-2 w-full">
+                                                        <div class="table">
+                                                        <tr>
+                                                            <td style="width:50%">
+                                                            <div>
+                                                                <p class="md:text-left">{{ $t('Item Name') }}</p>
+                                                            </div>
+                                                            </td>
+                                                            <td style="width:50%">
+                                                            <div>
+                                                                <p class="text-gray-700 ">{{ $t('Details') }}</p>
+                                                            </div>
+                                                            </td>
+                                                            <td style="width:30%">
+                                                            <div>
+                                                                <p class="text-center text-gray-700">{{ $t('Count') }}</p>
+                                                            </div>
+                                                            </td>
+                                                        </tr>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                    <template v-for="(Item, index) in order.orderItems">
+                                                    <div class="flex p-1 border-t" :key="index">
+                                                        <div class="sm:pl-6 pb-2 w-full">
+                                                            <div class="table">
+                                                                <tr>
+                                                                    <td style="width:50%">
+                                                                        <p  class="md:float-left  text-sm"  v-html="Item.item"/>
+                                                                    </td>
+                                                                    <td style="width:50%">
+                                                                        <p class="text-gray-700 text-sm" v-html="Item.details"/>
+                                                                    </td>
+                                                                    <td  style="width:30%">
+                                                                        <p class="text-center text-gray-700 text-sm" v-html="Item.item_count"/>
+                                                                    </td>
+                                                                </tr>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    </template>
+                                                </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </template>
+
+
+
+
+
+                        </template>
                 </div>
             </div>
         </main>
@@ -140,6 +270,9 @@ export default {
     },
     data() {
         return {
+
+            defaultAvatar: '/images/default/done.png', // relative path to your public directory
+
             loading: {
                 form: true,
                 reply: false,
@@ -151,6 +284,14 @@ export default {
                 subject: null,
                 created_at: null,
                 orderReplies: [],
+                itemConfirms: [],
+
+            },
+            itemConfirms: {
+               orders_status_id: null,
+                item: '',
+                item_count: '',
+                details: ' ,'
             },
             orderReply: {
                 order_status_id: null,

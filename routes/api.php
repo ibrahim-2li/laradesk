@@ -80,6 +80,7 @@ Route::group(['prefix' => 'dashboard'], static function () {
     Route::post('orders/{order}/remove-label', [DashboardOrderController::class, 'removeLabel'])->name('dashboard.orders.remove-label');
     Route::post('orders/{order}/quick-actions', [DashboardOrderController::class, 'orderQuickActions'])->name('dashboard.orders.order-quick-actions');
     Route::post('orders/{order}/reply', [DashboardOrderController::class, 'reply'])->name('dashboard.orders.reply');
+    Route::post('orders/{order}/update', [DashboardOrderController::class, 'update'])->name('dashboard.orders.update');
     Route::apiResource('orders', DashboardOrderController::class)->except(['update']);
 
     Route::apiResource('canned-replies', DashboardCannedReplyController::class);

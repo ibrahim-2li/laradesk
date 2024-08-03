@@ -2,39 +2,42 @@
 
 namespace App\Http\Controllers\Api\Dashboard;
 
-use App\Http\Controllers\Api\File\FileController;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Dashboard\Order\StoreRequest;
-use App\Http\Requests\Dashboard\Order\OrderReplyRequest;
-use App\Http\Requests\File\StoreFileRequest;
-use App\Http\Resources\CannedReply\CannedReplyResource;
-use App\Http\Resources\Branch\BranchSelectResource;
-use App\Http\Resources\Label\LabelSelectResource;
-use App\Http\Resources\Priority\PriorityResource;
-use App\Http\Resources\OrderStatus\OrderStatusResource;
-use App\Http\Resources\Order\OrderListResource;
-use App\Http\Resources\Order\OrderManageResource;
-use App\Http\Resources\User\UserDetailsResource;
-use App\Models\CannedReply;
-use App\Models\Branch;
-use App\Models\Label;
-use App\Models\Priority;
-use App\Models\Setting;
-use App\Models\OrderStatus;
-use App\Models\Order;
-use App\Models\OrderReply;
-use App\Models\User;
-use App\Models\UserRole;
-use App\Notifications\Order\NewOrderFromAgent;
-use App\Notifications\Order\NewOrderReplyFromAgentToUser;
-use Auth;
-use Carbon\Carbon;
-use Exception;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Str;
+use Auth;
+use Exception;
 use Throwable;
+use Carbon\Carbon;
+use App\Models\User;
+use App\Models\Label;
+use App\Models\Order;
+use App\Models\Branch;
+use App\Models\Setting;
+use App\Models\Priority;
+use App\Models\UserRole;
+use App\Models\OrderReply;
+use App\Models\CannedReply;
+use App\Models\ItemConfirm;
+use App\Models\OrderStatus;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\Builder;
+use App\Http\Requests\File\StoreFileRequest;
+use App\Notifications\Order\NewOrderFromAgent;
+use App\Http\Resources\Order\OrderListResource;
+use App\Http\Resources\User\UserDetailsResource;
+use App\Http\Controllers\Api\File\FileController;
+use App\Http\Resources\Label\LabelSelectResource;
+use App\Http\Resources\Order\OrderManageResource;
+use App\Http\Resources\Priority\PriorityResource;
+use App\Http\Requests\Dashboard\Order\StoreRequest;
+use App\Http\Resources\Branch\BranchSelectResource;
+use App\Http\Resources\CannedReply\CannedReplyResource;
+use App\Http\Resources\OrderStatus\OrderStatusResource;
+use App\Http\Requests\Dashboard\Order\OrderReplyRequest;
+use App\Notifications\Order\NewOrderReplyFromAgentToUser;
+use App\Http\Requests\Dashboard\Order\ConfirmItemsRequest;
 
 class OrderController extends Controller
 {
@@ -192,31 +195,78 @@ public function store(StoreRequest $request): JsonResponse
      * @param  Order  $order
      * @return JsonResponse
      */
-    public function reply(Order $order, OrderReplyRequest $request): JsonResponse
-    {
-        /** @var User $user */
-        $user = Auth::user();
-        if (!$order->verifyUser($user)) {
-            return response()->json(['message' => __('You do not have permissions to manage this order')], 403);
+
+     public function update(Order $order, ConfirmItemsRequest $request): JsonResponse
+{
+    $user = Auth::user();
+    if (!$order->verifyUser($user)) {
+        return response()->json(['message' => __('You do not have permissions to manage this order')], 403);
+    }
+
+    $validated = $request->validated();
+
+    DB::beginTransaction();
+    try {
+        // Delete old confirmItems related to this order
+        ItemConfirm::where('order_id', $order->id)->delete();
+
+        // Save new confirmItems
+        foreach ($validated['confirmItems'] as $item) {
+            $confirmItem = new ItemConfirm();
+            $confirmItem->user_id = $user->id;
+            $confirmItem->order_id = $order->id;
+            $confirmItem->item = $item['item'];
+            $confirmItem->item_count = $item['item_count'];
+            $confirmItem->details = $item['details'];
+            $confirmItem->save();
         }
-        $request->validated();
-        $orderReply = new OrderReply();
-        $orderReply->user_id = Auth::id();
-        $orderReply->body = $request->get('body');
-        if ($order->orderReplies()->save($orderReply)) {
-            if ($request->has('attachments')) {
-                $orderReply->orderAttachments()->sync(collect($request->get('attachments'))->map(function ($attachment) {
-                    return $attachment['id'];
-                }));
-            }
-            $order->orders_status_id = $request->get('orders_status_id');
-            $order->updated_at = Carbon::now();
-            $order->save();
-            $order->user->notify((new NewOrderReplyFromAgentToUser($order))->locale(Setting::getDecoded('app_locale')));
-            return response()->json(['message' => __('Data saved correctly'), 'order' => new OrderManageResource($order)]);
-        }
+
+        $order->orders_status_id = $request->get('orders_status_id');
+        $order->closed_by = $user->id;
+        $order->agent_id = $user->id;
+        $order->updated_at = Carbon::now();
+        $order->save();
+
+        $order->user->notify((new NewOrderReplyFromAgentToUser($order))->locale(Setting::getDecoded('app_locale')));
+
+        DB::commit();
+        return response()->json(['message' => __('Data saved correctly'), 'order' => new OrderManageResource($order)]);
+    } catch (\Exception $e) {
+        DB::rollBack();
         return response()->json(['message' => __('An error occurred while saving data')], 500);
     }
+}
+
+
+
+    public function reply(Order $order, ConfirmItemsRequest $request): JsonResponse
+{
+    $user = Auth::user();
+    if (!$order->verifyUser($user)) {
+        return response()->json(['message' => __('You do not have permissions to manage this order')], 403);
+    }
+    $request->validated();
+
+    if ($request->has('confirmItems')) {
+        foreach ($request->get('confirmItems') as $reply) {
+            $confirmItems = new ItemConfirm();
+            $confirmItems->user_id = Auth::id();
+            $confirmItems->item = $reply['item'];
+            $confirmItems->item_count = $reply['item_count'];
+            $confirmItems->details = $reply['details'];
+            $order->confirmItems()->save($confirmItems);
+        }
+    }
+
+    $order->orders_status_id = $request->get('orders_status_id');
+    $order->updated_at = Carbon::now();
+    $order->save();
+
+    $order->user->notify((new NewOrderReplyFromAgentToUser($order))->locale(Setting::getDecoded('app_locale')));
+
+    return response()->json(['message' => __('Data saved correctly'), 'order' => new OrderManageResource($order)]);
+}
+
 
     /**
      * Remove the specified resource from storage.

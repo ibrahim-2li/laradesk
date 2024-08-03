@@ -226,7 +226,7 @@ export default {
             statusList: [],
             filters: {
                 search: '',
-                status: null,
+                status: 1,
             },
             sort: {
                 order: 'desc',
