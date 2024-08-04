@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Carbon\Carbon;
 use App\Models\OrderStatus;
 use Illuminate\Database\Seeder;
 

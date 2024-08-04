@@ -31,17 +31,10 @@
                             <div class="flex items-center sm:float-right">
                                 <div class="text-sm sm:pr-2">{{ order.updated_at | momentFormatDateTimeAgo }}</div>
 
-                                <template v-if="order.orders_status_id == 3">
-                                        <button class="flex items-center btn btn-white p-2 ml-3 sm:ml-0" type="button" @click="updateForm = true">
-                                        <svg-vue class="h-4 w-4 mr-2" icon="font-awesome.reply-regular"></svg-vue>
-                                        {{ $t('Order has being send') }}
-                                    </button>
-                                </template>
-
                             </div>
                         </div>
                     </div>
-                    <template v-if="order.orders_status_id == 1">
+                    <template v-if="order.closed_by == null">
                             <div class="block">
                                 <template v-for="orderReply in order.orderReplies">
                                     <div v-if="index === 0" :key="orderReply.id" class="border-t flex p-6">

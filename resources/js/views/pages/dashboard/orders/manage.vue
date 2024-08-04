@@ -189,7 +189,7 @@
         </div>
     </form>
                         </div>
-                        <template v-if="order.orders_status_id == 1">
+                        <template v-if="order.closed_by == null">
                             <div class="block">
                                 <template v-for="orderReply in order.orderReplies">
                                     <div v-if="index === 0" :key="orderReply.id" class="border-t flex p-6">
