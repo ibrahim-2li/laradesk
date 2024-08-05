@@ -34,13 +34,13 @@
             </div>
         </div>
         <div class="bg-white overflow-hidden shadow rounded-lg">
-            <loading :status="stats.without_agent == null"/>
+            <loading :status="stats.all_orders == null"/>
             <div class="px-4 py-5 sm:p-6">
                 <dt class="text-sm font-medium text-gray-500 truncate">
-                    {{ $t('Without assign agent') }}
+                    {{ $t('All Orders') }}
                 </dt>
                 <dd class="mt-1 text-3xl font-semibold text-gray-900">
-                    {{ stats.without_agent ? stats.without_agent : 0 }}
+                    {{ stats.all_orders ? stats.all_orders : 0 }}
                 </dd>
             </div>
         </div>

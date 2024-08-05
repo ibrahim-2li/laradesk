@@ -26,6 +26,7 @@ class OrderDetailsResource extends JsonResource
             'id' => $order->id,
             'uuid' => $order->uuid,
             'subject' => $order->subject,
+            'orders_status_id' => $order->orders_status_id,
             'branches' => new BranchSelectResource($order->branches),
             'branches_id' => $order->branches_id,
             'created_at' => $order->created_at->toISOString(),

@@ -40,14 +40,14 @@ class StatsController extends Controller
             'open_orders' => (clone $query)->where('orders_status_id', 1)->count(),
             'pending_orders' => (clone $query)->where('orders_status_id', 2)->count(),
             'sended_orders' => (clone $query)->where('orders_status_id', 3)->count(),
-            'without_agent' => (clone $query)->whereNull('agent_id')->count(),
+            'all_orders' => (clone $query)->all()->count(),
         ]);
     }else{
         return response()->json([
             'open_orders' => Order::where('orders_status_id', 1)->count(),
             'pending_orders' => Order::where('orders_status_id', 2)->count(),
             'sended_orders' => Order::where('orders_status_id', 3)->count(),
-            'without_agent' => Order::whereNull('agent_id')->count(),
+            'all_orders' => Order::all()->count(),
         ]);
     }
     }
