@@ -1,7 +1,7 @@
 <template>
     <div id="app">
       <div class="py-10">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 px-5">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 px-2">
           <div class="md:flex md:items-center md:justify-between">
             <div class="flex-1 min-w-0">
               <h2 class="py-0.5 text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:leading-9 sm:truncate">
@@ -15,9 +15,9 @@
               </router-link>
             </div>
           </div>
-          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="max-w-7xl mx-auto px-1 sm:px-6 lg:px-1">
             <div class="mt-10 my-6 bg-white shadow overflow-hidden sm:rounded-md">
-              <div class="bg-white md:grid md:grid-cols-2 px-5 py-5">
+              <div class="bg-white md:grid md:grid-cols-2 lg:px-4 px-1 py-1">
                 <div class="md:col-span-2">
                   <div class="grid grid-cols-3 gap-6">
                     <div class="col-span-3">
@@ -42,10 +42,10 @@
                           <input-wysiwyg id="order_body" v-model="order.body"></input-wysiwyg>
                         </div>
                         <tr>
-                          <th style="width:50%" class="text-left text-sm font-medium text-gray-700">{{ $t('Item Name') }}</th>
-                          <th style="width:20%" class="text-left text-sm font-medium text-gray-700">{{ $t('Count') }}</th>
-                          <th style="width:40%" class="text-left text-sm font-medium text-gray-700">{{ $t('Details') }}</th>
-                          <th style="width:10%" class="text-left text-sm font-medium text-gray-700">{{ $t('Action') }}</th>
+                            <th style="width:45%" class="text-left text-sm font-medium text-gray-700">{{ $t('Item Name') }}</th>
+                          <th style="width:30%" class="text-left text-sm font-medium text-gray-700">{{ $t('Count') }}</th>
+                          <th style="width:35%" class="text-left text-sm font-medium text-gray-700">{{ $t('Details') }}</th>
+                          <th style="width:5%" class="text-left text-sm font-medium text-gray-700">{{ $t('Action') }}</th>
                         </tr>
                         <tr v-for="(item, index) in order.orderItems" :key="index">
                           <td>
@@ -59,7 +59,7 @@
                           <td>
                             <input
                               class="form-input block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5"
-                              type="number"
+                              type="number" min="1" step="1"
                               v-model="item.item_count"
                             />
                           </td>
@@ -77,7 +77,7 @@
                         <div class="bg-gray-100 px-4 py-3 sm:px-6">
                           <div class="inline-flex">
                             <div class="float-left col-md-12">
-                              <button class="btn btn-blue shadow-sm rounded-md" @click="addInvoiceItem()">{{ $t('Add Item') }}</button>
+                              <button class="btn btn-blue shadow-sm rounded-md" @click="addInvoiceItem()">{{ $t('Add Item') }}</button>&nbsp;
                             </div>
                             <button class="btn btn-green shadow-sm rounded-md" type="submit">
                               {{ $t('Save') }}
@@ -119,7 +119,7 @@
           orderItems: [
             {
               item: "",
-              item_count: 0,
+              item_count: 1,
               details: "",
             }
           ],

@@ -52,7 +52,11 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <p class="text-gray-700 order-reply-body"> {{ $t('Order confirmed successfuly') }}</p>
+                                            <p class="text-gray-700 order-reply-body"> <img
+                                            :alt="$t('Avatar')"
+                                            :src="defaultAvatar"
+                                            class="h-5 w-5 inline  sm:hidden"
+                                        /> {{ $t('Order confirmed successfuly') }}</p>
 
 
                                              <!-- Item Table -->

@@ -182,7 +182,7 @@
                         class="btn btn-green rounded-none"
                         type="submit"
                     >
-                        {{ $t('Send reply') }}
+                        {{ $t('Send') }}
                     </button>
                 </div>
             </div>
