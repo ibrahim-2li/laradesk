@@ -24,7 +24,7 @@ class StatsController extends Controller
     {
         $user = Auth::user();
         $query = Order::query();
-    if ($user->role_id !== 1) {
+    if ($user->role_id === 2 & 3) {
         // Get the IDs of the departments the user belongs to
         $branchesId = DB::table('user_branches')
         ->where('user_id', $user->id)

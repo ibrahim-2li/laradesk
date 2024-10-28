@@ -4,7 +4,9 @@ use App\Http\Controllers\Api\Account\AccountController as AccountAccountControll
 use App\Http\Controllers\Api\Auth\AuthController as AuthAuthController;
 use App\Http\Controllers\Api\Dashboard\Admin\DepartmentController as DashboardAdminDepartmentController;
 use App\Http\Controllers\Api\Dashboard\Admin\BranchController as DashboardAdminBranchController;
+use App\Http\Controllers\Api\Dashboard\Admin\StockController as DashboardAdminStockController;
 use App\Http\Controllers\Api\Dashboard\Admin\LabelController as DashboardAdminLabelController;
+use App\Http\Controllers\Api\Dashboard\Admin\BrandController as DashboardAdminBrandController;
 use App\Http\Controllers\Api\Dashboard\Admin\LanguageController as DashboardAdminLanguageController;
 use App\Http\Controllers\Api\Dashboard\Admin\PriorityController as DashboardAdminPriorityController;
 use App\Http\Controllers\Api\Dashboard\Admin\SettingController as DashboardAdminSettingController;
@@ -93,7 +95,13 @@ Route::group(['prefix' => 'dashboard'], static function () {
         Route::get('branches/users', [DashboardAdminBranchController::class, 'users'])->name('dashboard.branches.users');
         Route::apiResource('branches', DashboardAdminBranchController::class);
 
+        Route::apiResource('stocks', DashboardAdminStockController::class);
+        Route::post('/test-insert', [DashboardAdminStockController::class, 'testInsert']);
+
+
         Route::apiResource('labels', DashboardAdminLabelController::class);
+
+        Route::apiResource('brands', DashboardAdminBrandController::class);
 
         Route::apiResource('statuses', DashboardAdminStatusController::class)->except(['store', 'delete']);
 

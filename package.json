@@ -10,6 +10,7 @@
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
     },
     "dependencies": {
+        "@riophae/vue-treeselect": "^0.4.0",
         "@tailwindcss/custom-forms": "^0.2",
         "@tailwindcss/ui": "^0.7.2",
         "@tinymce/tinymce-vue": "^3.2.6",

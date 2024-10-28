@@ -25,7 +25,7 @@
                       <form @submit.prevent="saveOrder">
                         <label class="block text-sm font-medium leading-5 text-gray-700" for="subject">{{ $t('Subject') }}</label>
                         <div class="mt-1 relative rounded-md shadow-sm">
-                          <input
+                           <input
                             id="subject"
                             v-model="order.subject"
                             :placeholder="$t('Subject')"
@@ -39,7 +39,7 @@
                         </div>
                         <label class="block text-sm font-medium leading-5 text-gray-700" for="order_body">{{ $t('Order details') }}</label>
                         <div class="mt-1 relative rounded-md shadow-sm">
-                          <input-wysiwyg id="order_body" v-model="order.body"></input-wysiwyg>
+                          <input-wysiwyg id="order_body" v-model="order.body" value="New Order" disabled></input-wysiwyg>
                         </div>
                         <tr>
                           <th style="width:50%" class="text-left text-sm font-medium text-gray-700">{{ $t('Item Name') }}</th>
@@ -49,12 +49,13 @@
                         </tr>
                         <tr v-for="(item, index) in order.orderItems" :key="index">
                           <td>
-                            <input
-                              class="form-input block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5"
-                              type="text"
-                              v-model="item.item"
-                              required
-                            />
+                            <treeselect
+  :options="options"
+  :disable-branch-nodes="true"
+  :show-count="true"
+   v-model="brandList"
+  placeholder="Where are you from?"
+  />
                           </td>
                           <td>
                             <input
@@ -97,7 +98,13 @@
   </template>
 
   <script>
+  import Treeselect from '@riophae/vue-treeselect'
+  import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+
   export default {
+    components: {
+        Treeselect
+    },
     name: "index",
     metaInfo() {
       return {
@@ -110,6 +117,10 @@
           form: false,
           file: false,
         },
+        options: [],
+            stockList: [],
+
+        brandList: [],
         uploadingFileProgress: 0,
         order: {
           subject: null,
@@ -128,12 +139,42 @@
       };
     },
     mounted() {
+        this.fetchOptions();
+        this.getBrand();
+        this.getStock();
       this.getBranches();
     },
     methods: {
+        fetchOptions() {
+      axios.get('api/dashboard/admin/stocks/')  // Replace with your actual API endpoint
+        .then(response => {
+          // Assuming the API response is an array of items with `id` and `label`
+          this.options = response.data.map(stock => ({
+            id: stock.id,
+            name: stock.name
+          }));
+        })
+        .catch(error => {
+          console.error("Error fetching options:", error);
+        });
+    },
+
+        getStock() {
+            const self = this;
+            axios.get('api/dashboard/admin/stocks/').then(function (response) {
+                self.stockList = response.data;
+            }).catch(function () {
+                self.loading = false;
+            });
+        },
+        getBrand() {
+            const self = this;
+            axios.get('api/dashboard/admin/brands').then(function (response) {
+                self.brandList = response.data;
+            });
+        },
       getBranches() {
         const self = this;
-        self.loading.form = true;
         axios.get('api/orders/branches')
           .then(function (response) {
             self.branchList = response.data;

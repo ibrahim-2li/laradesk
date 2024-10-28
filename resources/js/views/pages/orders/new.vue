@@ -178,7 +178,7 @@
       addInvoiceItem() {
         this.order.orderItems.push({
           item: "",
-          item_count: 0,
+          item_count:1,
           details: "",
         });
       },

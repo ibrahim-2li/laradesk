@@ -42,9 +42,17 @@ import AdminDashboardBranchList from "@/views/pages/dashboard/admin/branches/lis
 import AdminDashboardBranchNew from "@/views/pages/dashboard/admin/branches/new";
 import AdminDashboardBranchEdit from "@/views/pages/dashboard/admin/branches/edit";
 
+import AdminDashboardStockList from "@/views/pages/dashboard/admin/stock/list";
+import AdminDashboardStockNew from "@/views/pages/dashboard/admin/stock/new";
+import AdminDashboardStockEdit from "@/views/pages/dashboard/admin/stock/edit";
+
 import AdminDashboardLabelsList from "@/views/pages/dashboard/admin/labels/list";
 import AdminDashboardLabelsNew from "@/views/pages/dashboard/admin/labels/new";
 import AdminDashboardLabelsEdit from "@/views/pages/dashboard/admin/labels/edit";
+
+import AdminDashboardBrandsList from "@/views/pages/dashboard/admin/stock/brands/list";
+import AdminDashboardBrandsNew from "@/views/pages/dashboard/admin/stock/brands/new";
+import AdminDashboardBrandsEdit from "@/views/pages/dashboard/admin/stock/brands/edit";
 
 import AdminDashboardStatusesList from "@/views/pages/dashboard/admin/statuses/list";
 import AdminDashboardStatusesEdit from "@/views/pages/dashboard/admin/statuses/edit";
@@ -137,9 +145,17 @@ let routes = [
             {path: 'admin/branches/new', component: AdminDashboardBranchNew, meta: {middleware: 'auth', dashboard_access: true, controller: 'App.Http.Controllers.Api.Dashboard.Admin.BranchController'}},
             {path: 'admin/branches/:id/edit', component: AdminDashboardBranchEdit, meta: {middleware: 'auth', dashboard_access: true, controller: 'App.Http.Controllers.Api.Dashboard.Admin.BranchController'}},
 
+            {path: 'admin/stock', component: AdminDashboardStockList, meta: {middleware: 'auth', dashboard_access: true, controller: 'App.Http.Controllers.Api.Dashboard.Admin.StockController'}},
+            {path: 'admin/stock/new', component: AdminDashboardStockNew, meta: {middleware: 'auth', dashboard_access: true, controller: 'App.Http.Controllers.Api.Dashboard.Admin.StockController'}},
+            {path: 'admin/stock/:id/edit', component: AdminDashboardStockEdit, meta: {middleware: 'auth', dashboard_access: true, controller: 'App.Http.Controllers.Api.Dashboard.Admin.StockController'}},
+
             {path: 'admin/labels', component: AdminDashboardLabelsList, meta: {middleware: 'auth', dashboard_access: true, controller: 'App.Http.Controllers.Api.Dashboard.Admin.LabelController'}},
             {path: 'admin/labels/new', component: AdminDashboardLabelsNew, meta: {middleware: 'auth', dashboard_access: true, controller: 'App.Http.Controllers.Api.Dashboard.Admin.LabelController'}},
             {path: 'admin/labels/:id/edit', component: AdminDashboardLabelsEdit, meta: {middleware: 'auth', dashboard_access: true, controller: 'App.Http.Controllers.Api.Dashboard.Admin.LabelController'}},
+
+            {path: 'admin/stock/brands', component: AdminDashboardBrandsList, meta: {middleware: 'auth', dashboard_access: true, controller: 'App.Http.Controllers.Api.Dashboard.Admin.BrandController'}},
+            {path: 'admin/stock/brands/new', component: AdminDashboardBrandsNew, meta: {middleware: 'auth', dashboard_access: true, controller: 'App.Http.Controllers.Api.Dashboard.Admin.BrandController'}},
+            {path: 'admin/stock/brands/:id/edit', component: AdminDashboardBrandsEdit, meta: {middleware: 'auth', dashboard_access: true, controller: 'App.Http.Controllers.Api.Dashboard.Admin.BrandController'}},
 
             {path: 'admin/statuses', component: AdminDashboardStatusesList, meta: {middleware: 'auth', dashboard_access: true, controller: 'App.Http.Controllers.Api.Dashboard.Admin.StatusController'}},
             {path: 'admin/statuses/:id/edit', component: AdminDashboardStatusesEdit, meta: {middleware: 'auth', dashboard_access: true, controller: 'App.Http.Controllers.Api.Dashboard.Admin.StatusController'}},

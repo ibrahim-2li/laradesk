@@ -20,7 +20,7 @@
             v-if="$store.state.permissions && $store.state.permissions['App.Http.Controllers.Api.Dashboard.TicketController']"
             :label="$t('Orders')"
             :mobile="mobile"
-            icon="font-awesome.pennant-regular"
+            icon="font-awesome.stock-out"
             to="/dashboard/orders"
         ></menu-item>
         <menu-item
@@ -52,8 +52,15 @@
             v-if="$store.state.permissions && $store.state.permissions['App.Http.Controllers.Api.Dashboard.Admin.BranchController']"
             :label="$t('Branches')"
             :mobile="mobile"
-            icon="font-awesome.users-class-regular"
+            icon="font-awesome.branch"
             to="/dashboard/admin/branches"
+        ></menu-item>
+        <menu-item
+            v-if="$store.state.permissions && $store.state.permissions['App.Http.Controllers.Api.Dashboard.Admin.BranchController']"
+            :label="$t('Stock')"
+            :mobile="mobile"
+            icon="font-awesome.inbox-out-duotone"
+            to="/dashboard/admin/stock"
         ></menu-item>
         <menu-item
             v-if="$store.state.permissions && $store.state.permissions['App.Http.Controllers.Api.Dashboard.Admin.LabelController']"

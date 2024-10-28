@@ -1,5 +1,5 @@
 <template>
-    <div class="flex">
+    <div  class="flex">
         <div :class="{'': showMenu, 'hidden': !showMenu}" class="md:hidden">
             <div class="fixed inset-0 flex z-40">
                 <transition

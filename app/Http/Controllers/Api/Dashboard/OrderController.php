@@ -58,7 +58,7 @@ class OrderController extends Controller
         /** @var User $user */
         $user = Auth::user();
         $sort = json_decode($request->get('sort', json_encode(['order' => 'asc', 'column' => 'created_at'], JSON_THROW_ON_ERROR)), true, 512, JSON_THROW_ON_ERROR);
-        if ($user->role_id !== 1) {
+        if ($user->role_id === 2 & 3) {
             $items = Order::filter($request->all())
                 ->where(function (Builder $query) use ($user) {
                     $query->where('agent_id', $user->id);
