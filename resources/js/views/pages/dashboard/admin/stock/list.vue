@@ -106,6 +106,9 @@
                                             {{ $t('Name') }}
                                         </th>
                                         <th class="px-6 py-2 text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider whitespace-no-wrap overflow-x-auto">
+                                            {{ $t('Brand') }}
+                                        </th>
+                                        <th class="px-6 py-2 text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider whitespace-no-wrap overflow-x-auto">
                                             {{ $t('Created at') }}
                                         </th>
                                         <th class="px-6 py-2 text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider whitespace-no-wrap overflow-x-auto">
@@ -126,6 +129,11 @@
                                             <td class="px-6 py-4 max-w-0 w-full whitespace-no-wrap">
                                                 <div class="w-full truncate text-sm leading-5 text-gray-900">
                                                     {{ stock.name }}
+                                                </div>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-no-wrap leading-5">
+                                                <div class="text-s text-gray-800">
+                                                    {{ stock.brand_id.name }}
                                                 </div>
                                             </td>
                                             <td class="px-6 py-4 whitespace-no-wrap leading-5">

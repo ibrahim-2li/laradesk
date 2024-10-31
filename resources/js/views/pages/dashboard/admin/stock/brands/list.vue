@@ -34,9 +34,7 @@
                                 >
                                     <div class="flex items-center px-4 py-4 sm:px-6">
                                         <div class="min-w-0 flex-1 flex items-center">
-                                            <div class="flex-shrink-0">
-                                                <svg-vue  class="h-5 w-5" icon="font-awesome.circle-solid"></svg-vue>
-                                            </div>
+
                                             <div class="min-w-0 flex-1 px-4 lg:grid lg:grid-cols-2 lg:gap-4">
                                                 <div class="flex">
                                                     <div class="inline-block align-middle text-sm font-medium leading-5 text-gray-900">{{ brand.name }}</div>

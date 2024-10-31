@@ -26,7 +26,7 @@ class UpdateRequest extends FormRequest
         return [
             'name' => ['required', 'max:255'],
             'details' => ['required', 'max:500'],
-            'brand_id' => ['required', 'exists:stock->brand_id,id'],
+            'brand_id' => ['required'],
             'count' => ['required', 'max:255'],
         ];
     }
