@@ -1,7 +1,6 @@
 <template>
     <div>
-        <div class="my-3 mx-4 uppercase text-gray-300 text-xs">
-            {{ $t('General') }}
+        <div class="my-2 mx-4 uppercase text-gray-300 text-xs">
         </div>
         <menu-item
             :label="$t('Dashboard')"
@@ -13,7 +12,7 @@
             v-if="$store.state.permissions && $store.state.permissions['App.Http.Controllers.Api.Dashboard.TicketController']"
             :label="$t('Tickets')"
             :mobile="mobile"
-            icon="font-awesome.inbox-regular"
+            icon="font-awesome.ticket"
             to="/dashboard/tickets"
         ></menu-item>
         <menu-item

@@ -50,6 +50,11 @@ class StockController extends Controller
          ]);
      }
 
+     public function stocksAll(): JsonResponse
+     {
+        return response()->json(StockResource::collection(Stock::all()));
+     }
+
 
     /**
      * Store a newly created resource in storage.

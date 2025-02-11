@@ -16,6 +16,8 @@ import HelpdeskTicketsNewPage from "@/views/pages/tickets/new";
 import HelpdeskTicketsManagePage from "@/views/pages/tickets/manage";
 
 import HelpdeskOrdersListPage from "@/views/pages/orders/list";
+import HelpdeskOrdersDashPage from "@/views/pages/orders/da";
+
 import HelpdeskOrdersNewPage from "@/views/pages/orders/new";
 import HelpdeskOrdersItemPage from "@/views/pages/orders/items";
 import HelpdeskOrdersManagePage from "@/views/pages/orders/manage";
@@ -107,8 +109,9 @@ let routes = [
         children: [
             {path: 'list', component: HelpdeskOrdersListPage, meta: {middleware: 'auth'}},
             {path: 'new', component: HelpdeskOrdersNewPage, meta: {middleware: 'auth'}},
-            {path: 'items', component: HelpdeskOrdersItemPage, meta: {middleware: 'auth'}},
+            {path: 'items', component: HelpdeskOrdersItemPage},
             {path: ':uuid', component: HelpdeskOrdersManagePage, meta: {middleware: 'auth'}},
+            {path: 'da', component: HelpdeskOrdersDashPage, meta: {middleware: 'auth'}},
         ]
     },
     {
@@ -190,6 +193,9 @@ let routes = [
     },
     {
         path: '/account', component: AccountPage, meta: {middleware: 'auth'},
+    },
+    {
+        path: '/da', component: HelpdeskOrdersItemPage, meta: {middleware: 'auth'},
     },
     {path: '*', component: PageNotFoundPage},
 ];

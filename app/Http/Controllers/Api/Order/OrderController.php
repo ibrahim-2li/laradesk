@@ -9,6 +9,7 @@ use Throwable;
 use Carbon\Carbon;
 use App\Models\Item;
 use App\Models\Order;
+use App\Models\Stock;
 use App\Models\Branch;
 use App\Models\Setting;
 use App\Models\OrderReply;
@@ -92,14 +93,14 @@ class OrderController extends Controller
                 $orderItems->user_id = Auth::id();
                 $orderItems->item = $reply['item'];
                 $orderItems->item_count = $reply['item_count'];
-                $orderItems->details = $reply['details'];
+                //$orderItems->details = $reply['details'];
                 $order->orderItems()->save($orderItems);
 
                 $orderItems = new ItemConfirm(); // or the corresponding model for itemConfirms table
                 $orderItems->order_id = $order->id;
                 $orderItems->item = $reply['item'];
                 $orderItems->item_count = $reply['item_count'];
-                $orderItems->details = $reply['details'];
+                //$orderItems->details = $reply['details'];
                 $orderItems->save();
             }
         }
@@ -146,7 +147,7 @@ class OrderController extends Controller
      * @return JsonResponse
      */
 
-     public function reply(Order $order, ConfirmItemsRequest $request): JsonResponse
+     public function reply(Stock $stock,Order $order, ConfirmItemsRequest $request): JsonResponse
 {
     $user = Auth::user();
     if (!$order->verifyUser($user)) {
@@ -163,7 +164,7 @@ class OrderController extends Controller
                 $orderItem->user_id = $user->id;
                 $orderItem->item = $item['item'];
                 $orderItem->item_count = $item['item_count'];
-                $orderItem->details = $item['details'];
+                //$orderItem->details = $item['details'];
                 $order->orderItems()->save($orderItem);
 
                 // Save to itemConfirms table
@@ -171,9 +172,12 @@ class OrderController extends Controller
                 $itemConfirm->user_id = $user->id;
                 $itemConfirm->item = $item['item'];
                 $itemConfirm->item_count = $item['item_count'];
-                $itemConfirm->details = $item['details'];
+                //$itemConfirm->details = $item['details'];
                 $itemConfirm->order_id = $order->id;
                 $itemConfirm->save();
+            }
+            if($itemConfirm){
+                return $stock->count = $stock->count -  $itemConfirm->item_count;
             }
         }
 

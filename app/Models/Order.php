@@ -77,6 +77,7 @@ class Order extends Model
     {
         return $this->hasMany(Item::class);
     }
+
     public function confirmItems(): HasMany
     {
         return $this->hasMany(ItemConfirm::class);

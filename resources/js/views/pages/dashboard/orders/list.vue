@@ -127,38 +127,7 @@
                                                                     @change="getOrderes"
                                                                 />
                                                             </div>
-                                                            <div class="col-span-3 mb-2">
-                                                                <label class="block text-sm font-medium leading-5 text-gray-700" for="label">
-                                                                    {{ $t('Labels') }}
-                                                                </label>
-                                                                <input-select
-                                                                    id="label"
-                                                                    v-model="filters.labels"
-                                                                    :options="labelList"
-                                                                    multiple
-                                                                    option-label="name"
-                                                                    @change="getOrderes"
-                                                                >
-                                                                    <template v-slot:selectedOption="props">
-                                                                        <template v-if="props && !props.anySelected">
-                                                                            <span class="block truncate">{{ $t('Select an option') }}</span>
-                                                                        </template>
-                                                                        <template v-else>
-                                                                            <span class="block truncate">{{ $t('Selected') }} {{ Object.keys(filters.labels).length }} {{ $t('options') }}</span>
-                                                                        </template>
-                                                                    </template>
-                                                                    <template v-slot:selectOption="props">
-                                                                        <div class="flex items-center space-x-3">
-                                                                            <div class="flex-shrink-0 inline-block">
-                                                                                <svg-vue :style="{color: props.option.color}" class="h-5 w-5" icon="font-awesome.circle-solid"></svg-vue>
-                                                                            </div>
-                                                                            <div :class="Object.values(filters.labels).indexOf(props.option.id) > -1 ? 'font-semibold' : 'font-normal'" class="font-normal block truncate">
-                                                                                {{ props.option.name }}
-                                                                            </div>
-                                                                        </div>
-                                                                    </template>
-                                                                </input-select>
-                                                            </div>
+
                                                             <div class="col-span-3 mb-2">
                                                                 <label class="block text-sm font-medium leading-5 text-gray-700" for="label">
                                                                     {{ $t('Statuses') }}
@@ -305,27 +274,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="relative inline-block text-left">
-                        <button class="btn hover:bg-gray-100 p-4 border-r border-gray-200 rounded-none" type="button" @click="toggleQuickActionDropdown('label')">
-                            <svg-vue class="h-6 w-6 text-gray-700" icon="font-awesome.tags-regular"></svg-vue>
-                        </button>
-                        <div v-show="quickActions.label" class="origin-top-right absolute left-0 mt-1 w-56 rounded-md shadow-lg">
-                            <div class="rounded-md bg-white shadow-xs">
-                                <div class="py-1">
-                                    <template v-for="label in labelList">
-                                        <a
-                                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                                            href="#"
-                                            role="menuitem"
-                                            @click.prevent="quickAction('label', label.id)"
-                                        >
-                                            {{ label.name }}
-                                        </a>
-                                    </template>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
                     <div class="relative inline-block text-left">
                         <button class="btn hover:bg-gray-100 p-4 border-r border-gray-200 rounded-none" type="button" @click="toggleQuickActionDropdown('priority')">
                             <svg-vue class="h-6 w-6 text-gray-700" icon="font-awesome.pennant-regular"></svg-vue>

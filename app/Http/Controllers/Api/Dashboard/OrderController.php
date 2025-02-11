@@ -217,7 +217,7 @@ public function store(StoreRequest $request): JsonResponse
             $confirmItem->order_id = $order->id;
             $confirmItem->item = $item['item'];
             $confirmItem->item_count = $item['item_count'];
-            $confirmItem->details = $item['details'];
+            //$confirmItem->details = $item['details'];
             $confirmItem->save();
         }
 
@@ -253,7 +253,7 @@ public function store(StoreRequest $request): JsonResponse
             $confirmItems->user_id = Auth::id();
             $confirmItems->item = $reply['item'];
             $confirmItems->item_count = $reply['item_count'];
-            $confirmItems->details = $reply['details'];
+            //$confirmItems->details = $reply['details'];
             $order->confirmItems()->save($confirmItems);
         }
     }

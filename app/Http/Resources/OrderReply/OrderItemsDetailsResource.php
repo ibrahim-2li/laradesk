@@ -2,10 +2,11 @@
 
 namespace App\Http\Resources\OrderReply;
 
-use App\Http\Resources\File\FileResource;
-use App\Http\Resources\User\UserDetailsResource;
 use App\Models\Item;
 use Illuminate\Http\Request;
+use App\Http\Resources\File\FileResource;
+use App\Http\Resources\Stock\StockResource;
+use App\Http\Resources\User\UserDetailsResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class OrderItemsDetailsResource extends JsonResource
@@ -25,7 +26,7 @@ class OrderItemsDetailsResource extends JsonResource
             'user' => new UserDetailsResource($orderItems->user),
             'item' => $orderItems->item,
             'item_count' => $orderItems->item_count,
-            'details' => $orderItems->details,
+            //'details' => $orderItems->details,
             'created_at' => $orderItems->created_at->toISOString(),
         ];
     }
