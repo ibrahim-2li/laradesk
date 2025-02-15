@@ -10,10 +10,12 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Label;
 use App\Models\Order;
+use App\Models\Stock;
 use App\Models\Branch;
 use App\Models\Setting;
 use App\Models\Priority;
 use App\Models\UserRole;
+use App\Models\OrderItem;
 use App\Models\OrderReply;
 use App\Models\CannedReply;
 use App\Models\ItemConfirm;
@@ -196,35 +198,32 @@ public function store(StoreRequest $request): JsonResponse
      * @return JsonResponse
      */
 
-     public function update(Order $order, ConfirmItemsRequest $request): JsonResponse
+     public function update(Order $order, Request $request): JsonResponse
 {
     $user = Auth::user();
     if (!$order->verifyUser($user)) {
         return response()->json(['message' => __('You do not have permissions to manage this order')], 403);
     }
 
-    $validated = $request->validated();
-
     DB::beginTransaction();
     try {
-        // Delete old confirmItems related to this order
-        ItemConfirm::where('order_id', $order->id)->delete();
 
-        // Save new confirmItems
-        foreach ($validated['confirmItems'] as $item) {
-            $confirmItem = new ItemConfirm();
-            $confirmItem->user_id = $user->id;
-            $confirmItem->order_id = $order->id;
-            $confirmItem->item = $item['item'];
-            $confirmItem->item_count = $item['item_count'];
-            //$confirmItem->details = $item['details'];
-            $confirmItem->save();
+        if ($request->has('orderItems')) {
+            foreach ($request->get('orderItems') as $item) {
+                // Find the existing order item or create a new one
+                $orderItem = OrderItem::updateOrCreate(
+                    ['order_id' => $order->id, 'stock_id' => $item['stock_id']],
+                    ['quantity' => $item['quantity']]
+                );
+                $stock = Stock::find($item['stock_id']);
+                $stock->quantity -= $item['quantity'];
+                $stock->save();
+            }
         }
-
         $order->orders_status_id = $request->get('orders_status_id');
-        $order->closed_by = $user->id;
-        $order->agent_id = $user->id;
         $order->updated_at = Carbon::now();
+        $order->closed_by = Auth::id();
+        $order->closed_at = Carbon::now();
         $order->save();
 
         $order->user->notify((new NewOrderReplyFromAgentToUser($order))->locale(Setting::getDecoded('app_locale')));

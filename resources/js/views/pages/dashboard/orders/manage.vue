@@ -88,7 +88,8 @@
                             <div v-if="order.status" class="px-3">
                                 <div
                                     class="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-blue-100 text-blue-800">
-                                    {{ order.status.name }}
+                                    <span :id="order.closed_by">{{ order.user.name }}</span>
+                                    |{{ order.status.name }}
                                 </div>
                             </div>
                         </div>
@@ -113,7 +114,6 @@
                             </div>
                             <div class="px-6 sm:pl-3 sm:pr-6 sm:flex-1 sm:w-1/4">
                                 <div class="flex items-center sm:float-right mt-3 sm:mt-0">
-                                    <div class="text-sm sm:pr-2">{{ order.created_at | momentFormatDateTimeAgo }}</div>
                                     <template v-if="order.orders_status_id == 1">
                                         <button class="flex items-center btn btn-green p-2 ml-3 sm:ml-0" type="button"
                                             @click="updateForm = true">
@@ -132,35 +132,35 @@
                                         <tr>
                                             <td style="width:50%" class="text-left text-sm font-medium text-gray-700">{{
                                                 $t('Item Name')
-                                                }}</td>
+                                            }}</td>
                                             <td style="width:30%" class="text-left text-sm font-medium text-gray-700">{{
                                                 $t('Count') }}
                                             </td>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="(items, index) in order.confirmItems" :key="index">
+                                        <tr v-for="(items, index) in order.orderItems" :key="index">
                                             <td>
                                                 <input
                                                     class="form-input block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5"
-                                                    type="text" v-model="items.item" required /><br>
+                                                    type="text" v-model="items.name" required disabled/><br>
                                             </td>
                                             <td>
                                                 <input
                                                     class="form-input block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5"
-                                                    type="number" v-model="items.item_count" /><br>
+                                                    type="number" v-model="items.quantity" /><br>
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
-                                <div class="bg-gray-100 px-4 py-3 sm:px-6">
+                                <div class="bg-gray-100 px-4 py-3 sm:px-2">
                                     <div class="inline-flex">
                                         <button class="btn btn-secondary rounded-none" type="button"
                                             @click="discardReply">
                                             {{ $t('Discard') }}
                                         </button>
                                         <div class="flex">
-                                            <select required id="status" v-model="itemConfirms.orders_status_id"
+                                            <select required id="status" v-model="orderDone.orders_status_id"
                                                 aria-label="Sort by"
                                                 class="block form-select pl-3 pr-9 py-2 border-l border-r-0 border-t-0 border-b-0 border-gray-400 rounded-none bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150">
                                                 <template v-for="status in statusList">
@@ -175,213 +175,66 @@
                                 </div>
                             </form>
                         </div>
-                        <template v-if="order.closed_by == null">
-                            <div class="block">
-                                <template v-for="orderReply in order.orderReplies">
-                                    <div v-if="index === 0" :key="orderReply.id" class="border-t flex p-6">
-                                        <img :alt="$t('Avatar')"
-                                            :src="orderReply.user.avatar !== 'gravatar' ? orderReply.user.avatar : orderReply.user.gravatar"
-                                            class="h-12 w-12 hidden sm:inline" />
-                                        <div class="sm:pl-6 pb-2 w-full">
-                                            <div class="md:flex md:items-center pb-1">
-                                                <div class="md:flex-1 text-lg font-semibold text-gray-800">
-                                                    {{ orderReply.user.name }}
+
+                        <main>
+                            <div class="max-w-max mx-auto px-4 sm:px-6 lg:px-8">
+                                <div class="mt-6 my-6 bg-white shadow overflow-hidden sm:rounded-md">
+                                    <loading :status="loading.form" />
+                                    <div class="sm:flex sm:items-center py-3 max-w-full">
+                                        <div class="px-6 sm:pl-6 sm:pr-3 sm:flex-1 sm:w-3/4">
+                                        </div>
+                                        <div class="px-6 sm:pl-3 sm:pr-6 sm:flex-1 sm:w-1/4">
+                                            <div class="text-sm flex items-center sm:float-right">
+                                                <div class="text-sm sm:pr-2">
+                                                    {{ order.updated_at | momentFormatDateTimeAgo }}
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        class="block cursor-not-allowed focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out">
+                                        <div class="flex items-center px-4 py-4 sm:px-6">
+                                            <div class="min-w-0 flex-1 flex items-center">
+                                                <div class="min-w-0 flex-1 md:grid md:grid-cols-2 md:gap-3">
+                                                    <div>
+                                                        <div class="leading-5 font-medium text-blue-600 truncate">{{
+                                                            $t('Count') }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="md:block">
+                                                        <div class="leading-5 text-gray-900">
+                                                            <span
+                                                                class="leading-5 font-medium text-blue-600 truncate">{{$t('Item Name') }}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div style="width: 20px"></div>
+                                        </div>
+                                    </div>
+
+                                    <div v-for="(orderItem, index) in order.orderItems" :key="index"
+                                        :class="{ 'border-t': index > 0 }" class="flex p-3">
+                                        <div class="sm:pl-6 pb-0 w-full">
+                                            <div class="md:flex md:items-center pb-0">
+                                                <div class="md:flex-1 text-sm font-semibold text-gray-800">
+                                                    {{ orderItem.quantity }}
                                                 </div>
                                                 <div class="md:flex-1">
-                                                    <div class="md:float-right text-sm">
-                                                        {{ orderReply.created_at | momentFormatDateTime }}
+                                                    <div class="md:float-center text-sm">
+                                                        {{ orderItem.name ? orderItem.name : 'N/A' }}
                                                     </div>
                                                 </div>
                                             </div>
-                                            <p class="text-gray-700 order-reply-body" v-html="orderReply.body" />
                                             <!-- Item Table -->
-                                            <div class="text-xl truncate">
-                                                <div class="flex p-1 border-b">
-                                                    <div class="sm:pl-6 pb-2 w-full">
-                                                        <div class="table">
-                                                            <tr>
-                                                                <td style="width:50%">
-                                                                    <div>
-                                                                        <p class="md:text-left">Item</p>
-                                                                    </div>
-                                                                </td>
-                                                                <td style="width:30%">
-                                                                    <div>
-                                                                        <p class="text-center text-gray-700">Count</p>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <template v-for="(Item, index) in order.orderItems">
-                                                    <div class="flex p-1 border-t" :key="index">
-                                                        <div class="sm:pl-6 pb-2 w-full">
-                                                            <div class="table">
-                                                                <tr>
-                                                                    <td style="width:50%">
-                                                                        <p class="md:float-left  text-sm"
-                                                                            v-html="Item.item" />
-                                                                    </td>
-                                                                    <td style="width:30%">
-                                                                        <p class="text-center text-gray-700 text-sm"
-                                                                            v-html="Item.item_count" />
-                                                                    </td>
-                                                                </tr>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </template>
-                                            </div>
                                         </div>
-                                    </div>
-                                </template>
-                            </div>
-                        </template>
-                        <template v-else>
-                            <div class="border-t flex p-6">
-                                <img :alt="$t('Avatar')"
-                                    :src="order.agent.avatar !== 'gravatar' ? order.agent.avatar : order.agent.gravatar"
-                                    class="h-12 w-12 hidden sm:inline" />
-                                <div class="sm:pl-6 pb-2 w-full">
-                                    <div class="md:flex md:items-center pb-1">
-                                        <div class="md:flex-1 text-lg font-semibold text-gray-800">
-                                            {{ order.agent.name }}
-                                        </div>
-                                        <div class="md:flex-1">
-                                            <div class="md:float-right text-sm">
-                                                {{ order.created_at | momentFormatDateTime }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <p class="text-gray-700 order-reply-body"> {{ $t('Order confirmed successfuly') }}
-                                    </p>
-
-
-                                    <!-- Item Table -->
-                                    <div class="text-xl truncate">
-                                        <div
-                                            class="block cursor-not-allowed focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out">
-                                            <div class="flex items-center px-4 py-4 sm:px-6">
-                                                <div class="min-w-0 flex-1 flex items-center">
-                                                    <div class="min-w-0 flex-1 md:grid md:grid-cols-2 md:gap-4">
-                                                        <div>
-                                                            <div
-                                                                class="text-sm leading-5 font-medium text-blue-600 truncate">
-                                                                {{ $t('Count') }}</div>
-                                                        </div>
-                                                        <div class="md:block">
-                                                            <div class="text-sm leading-5 text-gray-900">
-                                                                <span class="text-cool-gray-900 font-medium"></span>
-                                                                {{ $t('Item Name') }}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div style="width: 20px"></div>
-                                            </div>
-                                        </div>
-                                        <template v-for="(Item, index) in order.orderItems">
-                                            <div class="flex p-1 border-t" :key="index"></div>
-                                            <div class="flex items-center px-4 py-4 sm:px-6">
-                                                <div class="min-w-0 flex-1 flex items-center">
-                                                    <div class="min-w-0 flex-1 md:grid md:grid-cols-2 md:gap-4">
-                                                        <div>
-                                                            <div
-                                                                class="text-sm leading-5 font-medium text-blue-600 truncate">
-                                                                {{ Item.item_count }}</div>
-                                                        </div>
-                                                        <div class="hidden md:block">
-                                                            <div class="text-sm leading-5 text-gray-900">
-                                                                <span class="text-cool-gray-900 font-medium">{{
-                                                                    Item.item }}</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <svg-vue class="h-5 w-5 text-gray-400"
-                                                        icon="font-awesome.angle-right-regular"></svg-vue>
-                                                </div>
-                                            </div>
-                                        </template>
                                     </div>
                                 </div>
                             </div>
-                        </template>
-                        <template v-for="(orderReply, index) in order.orderReplies">
-                            <div :class="{ 'border-t': index > 0 }" class="flex p-6">
-                                <img :alt="$t('Avatar')"
-                                    :src="orderReply.user.avatar !== 'gravatar' ? orderReply.user.avatar : orderReply.user.gravatar"
-                                    class="h-12 w-12 hidden sm:inline" />
-                                <div class="sm:pl-6 pb-2 w-full">
-                                    <div class="md:flex md:items-center pb-1">
-                                        <div class="md:flex-1 text-lg font-semibold text-gray-800">
-                                            {{ orderReply.user.name }}
-                                        </div>
-                                        <div class="md:flex-1">
-                                            <div class="md:float-right text-sm">
-                                                {{ orderReply.created_at | momentFormatDateTime }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <p class="text-gray-700 order-reply-body" v-html="orderReply.body" />
-                                    <!-- Item Table -->
-                                    <div class="text-xl truncate">
-                                        <div
-                                            class="block cursor-not-allowed focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out">
-                                            <div class="flex items-center px-4 py-4 sm:px-6">
-                                                <div class="min-w-0 flex-1 flex items-center">
-                                                    <div class="min-w-0 flex-1 md:grid md:grid-cols-2 md:gap-4">
-                                                        <div>
-                                                            <div
-                                                                class="text-sm leading-5 font-medium text-blue-600 truncate">
-                                                                {{ $t('Count') }}</div>
-                                                        </div>
-                                                        <div class="md:block">
-                                                            <div class="text-sm leading-5 text-gray-900">
-                                                                <span class="text-cool-gray-900 font-medium"></span>
-                                                                {{ $t('Item Name') }}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div style="width: 20px"></div>
-                                            </div>
-                                        </div>
-                                        <template v-for="(Item, index) in order.orderItems">
-                                            <div class="flex p-1 border-t" :key="index"></div>
-                                            <div class="flex items-center px-4 py-4 sm:px-6">
-                                                <div class="min-w-0 flex-1 flex items-center">
-                                                    <div class="min-w-0 flex-1 md:grid md:grid-cols-2 md:gap-4">
-                                                        <div>
-                                                            <div
-                                                                class="text-sm leading-5 font-medium text-blue-600 truncate">
-                                                                {{ Item.item_count }}</div>
-                                                        </div>
-                                                        <div class="hidden md:block">
-                                                            <div class="text-sm leading-5 text-gray-900">
-                                                                <span class="text-cool-gray-900 font-medium">{{
-                                                                    Item.item }}</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <svg-vue class="h-5 w-5 text-gray-400"
-                                                        icon="font-awesome.angle-right-regular"></svg-vue>
-                                                </div>
-                                            </div>
-                                        </template>
-                                    </div>
-                                </div>
-                            </div>
+                        </main>
 
-
-
-
-
-                        </template>
                     </div>
                 </div>
             </div>
@@ -488,20 +341,14 @@ export default {
                 subject: null,
                 created_at: null,
                 labels: [],
-                orderReplies: [],
-                itemConfirms: [],
-
+                orderItems: [],
             },
-            itemConfirms: {
+            orderItems: {
                 orders_status_id: 3,
-                item: '',
-                item_count: '',
-                details: ' ,'
+                quantity: '',
             },
-            orderReply: {
+            orderDone: {
                 orders_status_id: 3,
-                body: '',
-                attachments: [],
             },
             actions: {
                 agent: false,
@@ -532,7 +379,7 @@ export default {
             axios.get('api/dashboard/orders/' + self.$route.params.uuid).then(function (response) {
                 self.loading.form = false;
                 self.order = response.data;
-                self.orderReply.orders_status_id = response.data.orders_status_id;
+                self.order.orders_status_id = response.data.orders_status_id;
             }).catch(function () {
                 self.$router.push('/dashboard/orders');
             });
@@ -548,8 +395,7 @@ export default {
             });
         },
         discardReply() {
-            this.orderReply.body = '';
-            this.orderReply.attachments = [];
+            this.orderItems = '';
             this.updateForm = false;
         },
 
@@ -557,8 +403,8 @@ export default {
             const self = this;
             self.loading.update = true;
             axios.post('api/dashboard/orders/' + self.$route.params.uuid + '/update', {
-                confirmItems: self.order.confirmItems,
-                orders_status_id: self.itemConfirms.orders_status_id
+                orderItems: self.order.orderItems,
+                orders_status_id: self.orderItems.orders_status_id
             }).then(function (response) {
                 self.$notify({
                     title: self.$i18n.t('Success').toString(),
@@ -566,7 +412,7 @@ export default {
                     type: 'success'
                 });
                 self.order = response.data.order;
-                self.itemConfirms.orders_status_id = response.data.orders_status_id;
+                self.orderItems.orders_status_id = response.data.orders_status_id;
                 self.discardReply();
                 self.loading.reply = false;
             }).catch(function () {

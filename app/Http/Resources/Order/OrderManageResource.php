@@ -46,9 +46,6 @@ class OrderManageResource extends JsonResource
             'closed_at' => $order->closed_at ? $order->closed_at->toISOString() : null,
             'created_at' => $order->created_at->toISOString(),
             'updated_at' => $order->updated_at->toISOString(),
-            'orderReplies' => OrderReplyDetailsResource::collection($order->orderReplies()->orderByDesc('created_at')->get()),
-            'orderItems' => OrderItemsDetailsResource::collection($order->orderItems()->orderByDesc('created_at')->get()),
-            'confirmItems' => ConfirmItemsDetailsResource::collection($order->confirmItems()->orderByDesc('created_at')->get()),
-        ];
+            'orderItems' => OrderItemsDetailsResource::collection($order->items()->orderByDesc('created_at')->get()),        ];
     }
 }

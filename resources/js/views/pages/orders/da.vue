@@ -49,7 +49,12 @@
                         </tr>
                         <tr v-for="(item, index) in order.orderItems" :key="index">
                           <td>
-                            <input-select id="stocks" v-model="item.item" :placeholder="$t('Select Items')" :options="itemsList" option-label="name" required />
+                            <input
+                              class="form-input block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+                              type="text"
+                              v-model="item.item"
+                              required
+                            />
                           </td>
                           <td>
                             <input
@@ -121,13 +126,10 @@
           ],
         },
         branchList: [],
-        itemsList: [],
       };
     },
     mounted() {
       this.getBranches();
-      this.getItems();
-     // this.fetchOptions();
     },
     methods: {
       getBranches() {
@@ -140,18 +142,6 @@
               self.order.branches_id = self.branchList[0].id;
             }
             self.loading.form = false;
-          })
-          .catch(function (error) {
-            self.loading.form = false;
-            console.error('Error fetching branches:', error);
-          });
-      },
-      getItems() {
-        const self = this;
-        self.loading.form = true;
-        axios.get('api/stocks/all')
-          .then(function (response) {
-            self.itemsList = response.data;
           })
           .catch(function (error) {
             self.loading.form = false;

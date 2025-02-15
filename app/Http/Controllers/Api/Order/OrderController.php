@@ -12,6 +12,7 @@ use App\Models\Order;
 use App\Models\Stock;
 use App\Models\Branch;
 use App\Models\Setting;
+use App\Models\OrderItem;
 use App\Models\OrderReply;
 use App\Models\ItemConfirm;
 use App\Models\OrderStatus;
@@ -71,59 +72,90 @@ class OrderController extends Controller
      * @return JsonResponse
      * @throws Throwable
      */
-    public function store(StoreRequest $request): JsonResponse
-    {
-        $request->validated();
-        $order = new Order();
-        $order->uuid = Str::uuid();
-        $order->subject = $request->get('subject');
-        $order->orders_status_id = 1;
-        if ($request->has('branches_id')) {
-            $order->branches_id = $request->get('branches_id');
-        }
-        $order->user_id = Auth::id();
-        $order->saveOrFail();
-        $orderReply = new OrderReply();
-        $orderReply->user_id = Auth::id();
-        $orderReply->body = $request->get('body');
 
-        if ($request->has('orderItems')) {
-            foreach ($request->get('orderItems') as $reply) {
-                $orderItems = new Item();
-                $orderItems->user_id = Auth::id();
-                $orderItems->item = $reply['item'];
-                $orderItems->item_count = $reply['item_count'];
-                //$orderItems->details = $reply['details'];
-                $order->orderItems()->save($orderItems);
+     public function store(StoreRequest $request): JsonResponse
+     {
+         $request->validated();
+         $order = new Order();
+         $order->uuid = Str::uuid();
+         $order->subject = $request->get('subject');
+         $order->orders_status_id = 1;
+         if ($request->has('branches_id')) {
+             $order->branches_id = $request->get('branches_id');
+         }
+         $order->user_id = Auth::id();
+         $order->saveOrFail();
 
-                $orderItems = new ItemConfirm(); // or the corresponding model for itemConfirms table
-                $orderItems->order_id = $order->id;
-                $orderItems->item = $reply['item'];
-                $orderItems->item_count = $reply['item_count'];
-                //$orderItems->details = $reply['details'];
-                $orderItems->save();
-            }
-        }
-        if ($order->orderReplies()->save($orderReply)) {
-            if ($request->has('attachments')) {
-                $orderReply->orderAttachments()->sync(collect($request->get('attachments'))->map(function ($attachment) {
-                    return $attachment['id'];
-                }));
-            }
-            $order->user->notify((new NewOrderRequest($order))->locale(Setting::getDecoded('app_locale')));
-            if ($order->branches_id !== null && $order->branches) {
-            //    foreach ($order->branches as $branch) {
-            //        if ($branch->agents) {
-            //            foreach ($branch->agents as $agent) {
-            //                $agent->notify(new AssignOrderToBranch($order, $agent));
-            //            }
-            //        }
-            //    }
-            }
-            return response()->json(['message' => __('Data saved correctly'), 'order' => new OrderManageResource($order)]);
-        }
-        return response()->json(['message' => __('An error occurred while saving data')], 500);
-    }
+         foreach ($request->orderItems as $item) {
+             OrderItem::create([
+                 'order_id' => $order->id,
+                 'stock_id' => $item['stock_id'],
+                 'quantity' => $item['quantity'],
+             ]);
+
+             // Deduct stock quantity
+            //  $stock = Stock::find($item['stock_id']);
+            //  $stock->quantity -= $item['quantity'];
+            //  $stock->save();
+         }
+
+         return response()->json(['message' => __('Data saved correctly'), 'order' => new OrderManageResource($order)]);
+     }
+
+
+    // public function store(StoreRequest $request): JsonResponse
+    // {
+    //     $request->validated();
+    //     $order = new Order();
+    //     $order->uuid = Str::uuid();
+    //     $order->subject = $request->get('subject');
+    //     $order->orders_status_id = 1;
+    //     if ($request->has('branches_id')) {
+    //         $order->branches_id = $request->get('branches_id');
+    //     }
+    //     $order->user_id = Auth::id();
+    //     $order->saveOrFail();
+    //     $orderReply = new OrderReply();
+    //     $orderReply->user_id = Auth::id();
+    //     $orderReply->body = $request->get('body');
+
+    //     if ($request->has('orderItems')) {
+    //         foreach ($request->get('orderItems') as $reply) {
+    //             $orderItems = new Item();
+    //             $orderItems->user_id = Auth::id();
+    //             $orderItems->item = $reply['item'];
+    //             $orderItems->item_count = $reply['item_count'];
+    //             //$orderItems->details = $reply['details'];
+    //             $order->orderItems()->save($orderItems);
+
+    //             $orderItems = new ItemConfirm(); // or the corresponding model for itemConfirms table
+    //             $orderItems->order_id = $order->id;
+    //             $orderItems->item = $reply['item'];
+    //             $orderItems->item_count = $reply['item_count'];
+    //             //$orderItems->details = $reply['details'];
+    //             $orderItems->save();
+    //         }
+    //     }
+    //     if ($order->orderReplies()->save($orderReply)) {
+    //         if ($request->has('attachments')) {
+    //             $orderReply->orderAttachments()->sync(collect($request->get('attachments'))->map(function ($attachment) {
+    //                 return $attachment['id'];
+    //             }));
+    //         }
+    //         $order->user->notify((new NewOrderRequest($order))->locale(Setting::getDecoded('app_locale')));
+    //         if ($order->branches_id !== null && $order->branches) {
+    //         //    foreach ($order->branches as $branch) {
+    //         //        if ($branch->agents) {
+    //         //            foreach ($branch->agents as $agent) {
+    //         //                $agent->notify(new AssignOrderToBranch($order, $agent));
+    //         //            }
+    //         //        }
+    //         //    }
+    //         }
+    //         return response()->json(['message' => __('Data saved correctly'), 'order' => new OrderManageResource($order)]);
+    //     }
+    //     return response()->json(['message' => __('An error occurred while saving data')], 500);
+    // }
 
     /**
      * Display the specified resource.
@@ -147,40 +179,23 @@ class OrderController extends Controller
      * @return JsonResponse
      */
 
-     public function reply(Stock $stock,Order $order, ConfirmItemsRequest $request): JsonResponse
+public function reply(Order $order, Request $request): JsonResponse
 {
     $user = Auth::user();
     if (!$order->verifyUser($user)) {
         return response()->json(['message' => __('You do not have permissions to manage this order')], 403);
     }
-    $validated = $request->validated();
-
     DB::beginTransaction();
     try {
         if ($request->has('orderItems')) {
             foreach ($request->get('orderItems') as $item) {
-                // Save to orderItems table
-                $orderItem = new ItemConfirm();
-                $orderItem->user_id = $user->id;
-                $orderItem->item = $item['item'];
-                $orderItem->item_count = $item['item_count'];
-                //$orderItem->details = $item['details'];
-                $order->orderItems()->save($orderItem);
-
-                // Save to itemConfirms table
-                $itemConfirm = new ItemConfirm(); // or the corresponding model for itemConfirms table
-                $itemConfirm->user_id = $user->id;
-                $itemConfirm->item = $item['item'];
-                $itemConfirm->item_count = $item['item_count'];
-                //$itemConfirm->details = $item['details'];
-                $itemConfirm->order_id = $order->id;
-                $itemConfirm->save();
-            }
-            if($itemConfirm){
-                return $stock->count = $stock->count -  $itemConfirm->item_count;
+                // Find the existing order item or create a new one
+                $orderItem = OrderItem::updateOrCreate(
+                    ['order_id' => $order->id, 'stock_id' => $item['stock_id']],
+                    ['quantity' => $item['quantity']]
+                );
             }
         }
-
         $order->orders_status_id = $request->get('orders_status_id');
         $order->updated_at = Carbon::now();
         $order->save();
@@ -194,9 +209,6 @@ class OrderController extends Controller
         return response()->json(['message' => __('An error occurred while saving data')], 500);
     }
 }
-
-
-
 
      /*           public function reply(OrderReplyRequest $request, Order $order): JsonResponse
                 {

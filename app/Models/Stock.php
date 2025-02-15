@@ -5,6 +5,7 @@ namespace App\Models;
 use Eloquent;
 use App\Models\Item;
 use App\Models\Brand;
+use App\Models\OrderItem;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -16,6 +17,8 @@ class Stock extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['name', 'quantity'];
+
     protected $casts = [
         'brand_id' => 'integer',
     ];
@@ -25,8 +28,8 @@ class Stock extends Model
         return $this->belongsTo(Brand::class , 'brand_id');
     }
 
-    public function items()
-    {
-        return $this->hasMany(Item::class, 'item', 'id'); // 'id' is the primary key in Stock, 'item' is the foreign key in Item
+    public function orderItems() {
+        return $this->hasMany(OrderItem::class);
     }
+
 }

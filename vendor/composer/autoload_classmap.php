@@ -143,6 +143,7 @@ return array(
     'App\\Models\\Label' => $baseDir . '/app/Models/Label.php',
     'App\\Models\\Language' => $baseDir . '/app/Models/Language.php',
     'App\\Models\\Order' => $baseDir . '/app/Models/Order.php',
+    'App\\Models\\OrderItem' => $baseDir . '/app/Models/OrderItem.php',
     'App\\Models\\OrderReply' => $baseDir . '/app/Models/OrderReply.php',
     'App\\Models\\OrderStatus' => $baseDir . '/app/Models/OrderStatus.php',
     'App\\Models\\OrderType' => $baseDir . '/app/Models/OrderType.php',

@@ -22,10 +22,10 @@ class OrderItemsDetailsResource extends JsonResource
         /** @var OrderReply $OrderReply */
         $orderItems = $this;
         return [
-            'id' => $orderItems->id,
-            'user' => new UserDetailsResource($orderItems->user),
-            'item' => $orderItems->item,
-            'item_count' => $orderItems->item_count,
+            'order_id' => $orderItems->order_id,
+            'stock_id' => $orderItems->stock->id,
+            'name' => $orderItems->stock->name,
+            'quantity' => $orderItems->quantity,
             //'details' => $orderItems->details,
             'created_at' => $orderItems->created_at->toISOString(),
         ];

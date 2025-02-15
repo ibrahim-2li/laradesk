@@ -689,6 +689,7 @@ class ComposerStaticInit0a33ec4fa29211857fc6176b3830e4cc
         'App\\Models\\Label' => __DIR__ . '/../..' . '/app/Models/Label.php',
         'App\\Models\\Language' => __DIR__ . '/../..' . '/app/Models/Language.php',
         'App\\Models\\Order' => __DIR__ . '/../..' . '/app/Models/Order.php',
+        'App\\Models\\OrderItem' => __DIR__ . '/../..' . '/app/Models/OrderItem.php',
         'App\\Models\\OrderReply' => __DIR__ . '/../..' . '/app/Models/OrderReply.php',
         'App\\Models\\OrderStatus' => __DIR__ . '/../..' . '/app/Models/OrderStatus.php',
         'App\\Models\\OrderType' => __DIR__ . '/../..' . '/app/Models/OrderType.php',
