@@ -9,11 +9,17 @@
             icon="font-awesome.tachometer-alt-regular"
             to="/dashboard/home"
         ></menu-item>
+        <!-- <menu-item
+            :label="$t('Dashboard2')"
+            :mobile="mobile"
+            icon="font-awesome.dash"
+            to="/orders/items"
+        ></menu-item> -->
         <menu-item
             v-if="$store.state.permissions && $store.state.permissions['App.Http.Controllers.Api.Dashboard.TicketController']"
             :label="$t('Tickets')"
             :mobile="mobile"
-            icon="font-awesome.inbox-regular"
+            icon="font-awesome.ticket"
             to="/dashboard/tickets"
         ></menu-item>
         <menu-item

@@ -1,5 +1,5 @@
 <template>
-    <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
+    <div class="grid grid-cols-2 gap-5 sm:grid-cols-2 xl:grid-cols-4">
         <div class="bg-white overflow-hidden shadow rounded-lg">
             <loading :status="stats.open_orders == null"/>
             <div class="px-4 py-5 sm:p-6">
@@ -48,7 +48,10 @@
 </template>
 
 <script>
+import MenuItem from "@/components/layout/dashboard/menu/dash-item";
+import dashItem from '../layout/dashboard/menu/dash-item.vue';
 export default {
+  components: { dashItem },
     name: "stats",
     data() {
         return {
@@ -73,3 +76,4 @@ export default {
     },
 }
 </script>
+
