@@ -21,9 +21,8 @@ class StockResource extends JsonResource
         return [
             'id' => $stock->id,
             'name' => $stock->name,
-            'details' => $stock->details,
             'brand_id' => $stock->brand_id,
-            'count' => $stock->count,
+            'quantity' => $stock->quantity,
             'created_at' => $stock->created_at->toISOString(),
             'updated_at' => $stock->updated_at->toISOString()
         ];

@@ -2,18 +2,22 @@
 
 namespace App\Models;
 
-use App\Models\Brand;
 use Eloquent;
+use App\Models\Item;
+use App\Models\Brand;
+use App\Models\OrderItem;
+use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Support\Carbon;
 
 class Stock extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['name', 'quantity'];
 
     protected $casts = [
         'brand_id' => 'integer',
@@ -23,4 +27,9 @@ class Stock extends Model
     {
         return $this->belongsTo(Brand::class , 'brand_id');
     }
+
+    public function orderItems() {
+        return $this->hasMany(OrderItem::class);
+    }
+
 }

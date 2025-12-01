@@ -50,6 +50,11 @@ class StockController extends Controller
          ]);
      }
 
+     public function stocksAll(): JsonResponse
+     {
+        return response()->json(StockResource::collection(Stock::all()));
+     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -62,9 +67,8 @@ class StockController extends Controller
         $request->validated();
         $stock = new Stock();
         $stock->name = $request->get('name');
-        $stock->details = $request->get('details');
         $stock->brand_id = $request->get('brand_id');
-        $stock->count = $request->get('count');
+        $stock->quantity = $request->get('quantity');
         if ($stock->save()) {
             return response()->json(['message' => __('Data saved correctly'), 'stock' => new StockResource($stock)]);
         }

@@ -1,7 +1,6 @@
 <template>
     <div>
-        <div class="my-3 mx-4 uppercase text-gray-300 text-xs">
-            {{ $t('General') }}
+        <div class="my-2 mx-4 uppercase text-gray-300 text-xs">
         </div>
         <menu-item
             :label="$t('Dashboard')"

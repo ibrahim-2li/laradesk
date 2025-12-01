@@ -25,7 +25,7 @@ class ConfirmItemsDetailsResource extends JsonResource
             'user' => new UserDetailsResource($confirmItems->user),
             'item' => $confirmItems->item,
             'item_count' => $confirmItems->item_count,
-            'details' => $confirmItems->details,
+            //'details' => $confirmItems->details,
             'created_at' => $confirmItems->created_at->toISOString(),
         ];
     }

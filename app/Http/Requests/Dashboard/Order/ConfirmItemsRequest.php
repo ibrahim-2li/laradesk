@@ -24,10 +24,10 @@ class ConfirmItemsRequest extends FormRequest
     public function rules()
     {
         return [
-            'confirmItems' => 'required|array',
+        'confirmItems' => 'required|array',
         'confirmItems.*.item' => 'required|string',
         'confirmItems.*.item_count' => 'required|integer',
-        'confirmItems.*.details' => 'nullable|string',
+        //'confirmItems.*.details' => 'nullable|string',
         'orders_status_id' => 'required|integer|exists:order_statuses,id',
         ];
     }

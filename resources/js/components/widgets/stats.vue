@@ -11,8 +11,8 @@
                 </dd>
             </div>
         </div>
-        <div class="bg-white overflow-hidden shadow rounded-lg">
-            <loading :status="stats.pending_orders == null"/>
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+            <loading :status="stats.sended_orders == null"/>
             <div class="px-4 py-5 sm:p-6">
                 <dt class="text-sm font-medium text-gray-500 truncate">
                     {{ $t('Pending orders') }}

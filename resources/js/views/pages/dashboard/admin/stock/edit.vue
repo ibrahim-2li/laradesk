@@ -43,13 +43,13 @@
                         <div class="mt-5 md:mt-0 md:col-span-2">
                             <div class="grid grid-cols-3 gap-6">
                                 <div class="col-span-3">
-                                    <label class="block text-sm font-medium leading-5 text-gray-700" for="name">{{ $t('Item Count') }}</label>
+                                    <label class="block text-sm font-medium leading-5 text-gray-700" for="name">{{ $t('Item Quantity') }}</label>
                                     <div class="mt-1 relative rounded-md shadow-sm">
                                         <input integer
-                                            id="count"
-                                            v-model="stock.count"
+                                            id="quantity"
+                                            v-model="stock.quantity"
                                             type="number"
-                                            :placeholder="$t('The count')"
+                                            :placeholder="$t('The Quantity')"
                                             class="form-input block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5"
                                             required
                                         >
@@ -63,23 +63,6 @@
                             <p class="mt-1 text-sm leading-5 text-gray-500">
 
                             </p>
-                        </div>
-                        <div class="mt-5 md:mt-0 md:col-span-2">
-                            <div class="grid grid-cols-3 gap-6">
-                                <div class="col-span-3">
-                                    <label class="block text-sm font-medium leading-5 text-gray-700" for="name">{{ $t('Item details') }}</label>
-                                    <div class="mt-1 relative rounded-md shadow-sm">
-                                        <textarea
-                                            id="details"
-                                            v-model="stock.details"
-                                            :placeholder="$t('The Product Details')"
-                                            class="form-input block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5"
-                                            required
-                                        ></textarea>
-                                    </div>
-                                </div>
-
-                            </div>
                         </div>
                         <div class="md:col-span-3">
                             <div class="py-3">
@@ -152,9 +135,8 @@ export default {
             brands: [],
             stock: {
                 name: null,
-                details: null,
                 brand_id: null,
-                count:null,
+                quantity:null,
             },
         }
     },

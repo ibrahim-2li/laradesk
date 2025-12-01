@@ -17,9 +17,8 @@ class CreateStocksTable extends Migration
         Schema::create('stocks', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->longText('details');
             $table->foreignId('brand_id')->nullable()->constrained('brands')->nullOnDelete();
-            $table->integer('count');
+            $table->integer('quantity');
             $table->timestamps();
         });
 

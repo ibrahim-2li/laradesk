@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use Eloquent;
+use App\Models\Stock;
+use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Support\Carbon;
 
 class Item extends Model
 {
@@ -28,5 +29,10 @@ class Item extends Model
     public function orderAttachments(): BelongsToMany
     {
         return $this->belongsToMany(File::class);
+    }
+
+    public function stock()
+    {
+        return $this->belongsTo(Stock::class, 'item', 'id'); // 'item' is the foreign key, 'id' is the primary key in Stock
     }
 }

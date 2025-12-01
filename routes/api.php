@@ -54,7 +54,8 @@ Route::apiResource('tickets', UserTicketController::class)->except(['update', 'd
 Route::get('orders/statuses', [UserOrderController::class, 'statuses'])->name('orders.statuses');
 Route::get('orders/branches', [UserOrderController::class, 'branches'])->name('orders.branches');
 Route::post('orders/attachments', [FileFileController::class, 'uploadAttachment'])->name('orders.upload-attachment');
-Route::post('orders/{order}/reply', [UserOrderController::class, 'reply'])->name('orders.reply');
+Route::post('orders/{order}/reply', [DashboardAdminStockController::class, 'reply'])->name('orders.reply');
+Route::get('stocks/all', [DashboardAdminStockController::class, 'stocksAll'])->name('stocks.all');
 Route::apiResource('orders', UserOrderController::class)->except(['update', 'destroy']);
 
 

@@ -41,6 +41,11 @@ class OrderFilter extends ModelFilter
         return $this->whereIn('branches_id', $branches);
     }
 
+    public function items($item): OrderFilter
+    {
+        return $this->whereIn('id', $item);
+    }
+
 
     public function status($status): OrderFilter
     {

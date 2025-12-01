@@ -26,7 +26,8 @@ class StoreRequest extends FormRequest
         return [
             'subject' => ['required', 'max:255'],
             'branches_id' => ['required','exclude_if:branches_id,null', 'exists:branches,id'],
-            'body' => ['required'],
+            'items.*.stock_id' => 'required|exists:stocks,id',
+            'items.*.quantity' => 'required|integer|min:1',
         ];
     }
 
@@ -43,7 +44,8 @@ class StoreRequest extends FormRequest
 
             'branches_id.exists' => __('The selected :attribute is invalid', ['attribute' => __('branches')]),
 
-            'body.required' => __('The :attribute field is required', ['attribute' => __('body')]),
+            'items.*.stock_id.required' => __('The :attribute field is required', ['attribute' => __('items.*.stock_id')]),
+            'items.*.quantity.required' => __('The :attribute field is required', ['attribute' => __('items.*.quantity')]),
         ];
     }
 }

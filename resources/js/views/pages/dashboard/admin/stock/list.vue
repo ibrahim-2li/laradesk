@@ -115,7 +115,7 @@
                                             {{ $t('Updated at') }}
                                         </th>
                                         <th class="px-6 py-2 text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider whitespace-no-wrap overflow-x-auto">
-                                            {{ $t('count') }}
+                                            {{ $t('Quantity') }}
                                         </th>
                                     </tr>
                                     </thead>
@@ -148,7 +148,7 @@
                                             </td>
                                             <td class="px-6 py-4 whitespace-no-wrap leading-5">
                                                 <div class="text-sm text-gray-800">
-                                                    {{ stock.count }}
+                                                    {{ stock.quantity }}
                                                 </div>
                                             </td>
                                         </router-link>

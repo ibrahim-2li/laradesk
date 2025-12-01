@@ -5,6 +5,7 @@ namespace App\Models;
 use Eloquent;
 use App\Models\Item;
 use App\Models\Branch;
+use App\Models\OrderItem;
 use App\Models\ItemConfirm;
 use EloquentFilter\Filterable;
 use Illuminate\Support\Carbon;
@@ -73,10 +74,15 @@ class Order extends Model
         return $this->hasMany(OrderReply::class);
     }
 
-    public function orderItems(): HasMany
-    {
-        return $this->hasMany(Item::class);
+    public function items() {
+        return $this->hasMany(OrderItem::class);
     }
+
+    // public function orderItems(): HasMany
+    // {
+    //     return $this->hasMany(Item::class);
+    // }
+
     public function confirmItems(): HasMany
     {
         return $this->hasMany(ItemConfirm::class);
