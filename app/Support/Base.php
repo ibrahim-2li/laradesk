@@ -2,7 +2,7 @@
 
 namespace App\Support;
 
-use Setting;
+use App\Support\Setting;
 use Storage;
 
 /**

@@ -95,11 +95,11 @@ class User extends Authenticatable
 
     public function getAvatar(): string
     {
-        if (Storage::disk('public')->exists($this->avatar)) {
+        if ($this->avatar && Storage::disk('public')->exists($this->avatar)) {
             return Storage::disk('public')->url($this->avatar);
         }
 
-        return 'gravatar';
+        return $this->getGravatar();
     }
 
     public function departments(): BelongsToMany

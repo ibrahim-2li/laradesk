@@ -65,6 +65,18 @@ class Ticket extends Model
 {
     use Filterable, HasFactory;
 
+    protected $fillable = [
+        'uuid',
+        'subject',
+        'status_id',
+        'priority_id',
+        'department_id',
+        'user_id',
+        'agent_id',
+        'closed_by',
+        'closed_at',
+    ];
+
     protected $casts = [
         'status_id' => 'integer',
         'priority_id' => 'integer',

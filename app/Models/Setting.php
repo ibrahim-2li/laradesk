@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Base;
+use App\Support\Base;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -110,6 +110,12 @@ class Setting extends Model
             default:
                 return $this->value;
         }
+    }
+
+    public static function get($key, $default = null)
+    {
+        $setting = self::find($key);
+        return $setting ? $setting->value : $default;
     }
 
     public static function getDecoded($key)

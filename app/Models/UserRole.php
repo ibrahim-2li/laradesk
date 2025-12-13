@@ -56,6 +56,13 @@ class UserRole extends Model
         'permissions' => 'json',
     ];
 
+    protected $fillable = [
+        'name',
+        'type',
+        'dashboard_access',
+        'permissions',
+    ];
+
     /**
      * Get the users for the user role
      *
@@ -79,7 +86,9 @@ class UserRole extends Model
         if (!$this->checkDashboardAccess()) {
             return false;
         }
-        return in_array($route, json_decode((string) $this->permissions, true, 512, JSON_THROW_ON_ERROR), true);
+
+        $permissions = $this->permissions ?? [];
+        return in_array($route, $permissions, true);
     }
 
     /**
@@ -101,10 +110,15 @@ class UserRole extends Model
     public function getPermissions(): array
     {
         $controllers = [];
-        $permissions = json_decode((string) $this->permissions, true, 512, JSON_THROW_ON_ERROR);
+        $permissions = $this->permissions ?? [];
+        
         foreach (Route::getRoutes()->getIterator() as $route) {
             if (strpos($route->uri, 'api/dashboard') !== false) {
-                $path = str_replace('\\', '.', explode('@', str_replace($route->action['controller'].'\\', '', $route->action['controller']))[0]);
+                // Safely handle action controller array/string
+                $action = $route->action['controller'] ?? '';
+                if (!$action) continue;
+
+                $path = str_replace('\\', '.', explode('@', str_replace($action.'\\', '', $action))[0]);
                 $controllers[$path] = $this->id === 1 ? true : in_array($path, $permissions, true);
             }
         }
