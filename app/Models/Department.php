@@ -34,6 +34,12 @@ use Illuminate\Support\Carbon;
  */
 class Department extends Model
 {
+    protected $fillable = [
+        'name',
+        'all_agents',
+        'public',
+    ];
+    
     use HasFactory;
 
     public function agent(): BelongsToMany

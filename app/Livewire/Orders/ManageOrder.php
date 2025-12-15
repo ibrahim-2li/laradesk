@@ -21,7 +21,7 @@ class ManageOrder extends Component
             abort(403, 'Unauthorized access to this order.');
         }
 
-        $this->order = $order;
+        $this->order = $order->load(['orderStatus', 'priority', 'branches']);
     }
 
     public function render()
@@ -41,6 +41,6 @@ class ManageOrder extends Component
         ]);
 
         $this->replyMessage = '';
-        session()->flash('success', 'Reply posted successfully.');
+        session()->flash('success', __('Reply posted successfully.'));
     }
 }

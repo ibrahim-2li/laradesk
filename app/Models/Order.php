@@ -21,6 +21,17 @@ class Order extends Model
 {
     use Filterable, HasFactory;
 
+    protected $fillable = [
+        'uuid',
+        'subject',
+        'orders_status_id',
+        'priority_id',
+        'branches_id',
+        'user_id',
+        'agent_id',
+        'closed_at',
+    ];
+
     protected $casts = [
 
         'orders_status_id' => 'integer',
@@ -39,7 +50,7 @@ class Order extends Model
 
 
 
-    public function Status(): BelongsTo
+    public function orderStatus(): BelongsTo
     {
         return $this->belongsTo(OrderStatus::class , 'orders_status_id');
     }

@@ -18,6 +18,7 @@ class LocaleController extends Controller
     {
         if (in_array($locale, ['en', 'es', 'fr', 'de', 'ar'])) { // Add your supported locales here
             Session::put('locale', $locale);
+            Session::save();
             App::setLocale($locale);
         }
 

@@ -18,9 +18,8 @@
             </div>
         </div>
         <div class="flex items-center gap-3">
-            <span
-                class="px-3 py-1 rounded-full text-sm font-semibold {{ $ticket->status->name == 'Open' ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-gray-100 text-gray-800 border border-gray-200' }}">
-                {{ $ticket->status->name }}
+                class="px-3 py-1 rounded-full text-sm font-semibold {{ optional($ticket->status)->name == 'Open' ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-gray-100 text-gray-800 border border-gray-200' }}">
+                {{ $ticket->status->name ?? __('Unknown Status') }}
             </span>
             <a href="{{ route('dashboard.tickets.list') }}"
                 class="text-sm font-medium text-gray-500 hover:text-gray-700 transition">
@@ -102,14 +101,18 @@
                     <div>
                         <dt class="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">
                             {{ __('Department') }}</dt>
-                        <dd class="text-sm font-medium text-gray-900">{{ $ticket->department->name }}</dd>
+                        <dd class="text-sm font-medium text-gray-900">{{ $ticket->department->name ?? __('No Department') }}</dd>
                     </div>
                     <div>
                         <dt class="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">
                             {{ __('Priority') }}</dt>
                         <dd class="text-sm font-medium text-gray-900 flex items-center gap-2">
-                            <span class="w-2 h-2 rounded-full bg-yellow-500"></span>
-                            {{ $ticket->priority->name }}
+                            @if($ticket->priority)
+                                <span class="w-2 h-2 rounded-full bg-yellow-500"></span>
+                                {{ $ticket->priority->name }}
+                            @else
+                                <span class="text-gray-400 italic">{{ __('No Priority') }}</span>
+                            @endif
                         </dd>
                     </div>
                     <div>

@@ -30,6 +30,7 @@ class ManageOrder extends Component
     public function mount(Order $order)
     {
         $this->order = $order;
+        $this->order->load(['items.stock.brands', 'orderStatus', 'priority', 'branches', 'agent', 'user']);
         $this->authorizeAccess();
         
         $this->orders_status_id = $order->orders_status_id;

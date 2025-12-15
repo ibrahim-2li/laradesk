@@ -26,7 +26,32 @@
                         placeholder="{{ __('Search tickets...') }}"
                         class="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg leading-5 bg-gray-50 placeholder-gray-400 focus:outline-none focus:bg-white focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out" />
                 </div>
-                <!-- Filter Slot if needed -->
+                <!-- Filter Slot -->
+                <div class="flex gap-2 w-full sm:w-auto overflow-x-auto pb-2 sm:pb-0">
+                    <select wire:model.live="status_id"
+                        class="border-gray-200 rounded-lg text-sm focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">{{ __('Status (All)') }}</option>
+                        @foreach ($statuses as $status)
+                            <option value="{{ $status->id }}">{{ $status->name }}</option>
+                        @endforeach
+                    </select>
+
+                    <select wire:model.live="priority_id"
+                        class="border-gray-200 rounded-lg text-sm focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">{{ __('Priority (All)') }}</option>
+                        @foreach ($priorities as $priority)
+                            <option value="{{ $priority->id }}">{{ $priority->name }}</option>
+                        @endforeach
+                    </select>
+
+                    <select wire:model.live="department_id"
+                        class="border-gray-200 rounded-lg text-sm focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">{{ __('Department (All)') }}</option>
+                        @foreach ($departments as $department)
+                            <option value="{{ $department->id }}">{{ $department->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
         </div>
 

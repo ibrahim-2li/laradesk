@@ -11,10 +11,12 @@ use Livewire\Component;
 class Home extends Component
 {
     public $stats = [];
+    public $chartData = [];
 
     public function mount()
     {
         $this->loadStats();
+        $this->loadChartData();
     }
 
     public function loadStats()
@@ -51,6 +53,44 @@ class Home extends Component
             'pending_orders' => (clone $query)->where('orders_status_id', 2)->count(),
             'sended_orders' => (clone $query)->where('orders_status_id', 3)->count(), // "sended" preserved from original
             'all_orders' => (clone $query)->count(),
+        ];
+    }
+
+    public function loadChartData()
+    {
+        // Users Chart (Last 12 Months)
+        $usersData = User::select(
+            DB::raw('count(id) as count'), 
+            DB::raw("DATE_FORMAT(created_at, '%Y-%m') as date")
+        )
+        ->where('created_at', '>=', now()->subMonths(11)->startOfMonth())
+        ->groupBy('date')
+        ->orderBy('date')
+        ->pluck('count', 'date')
+        ->toArray();
+
+        // Orders Chart (Last 12 Months)
+        $ordersData = Order::select(
+            DB::raw('count(id) as count'), 
+            DB::raw("DATE_FORMAT(created_at, '%Y-%m') as date")
+        )
+        ->where('created_at', '>=', now()->subMonths(11)->startOfMonth())
+        ->groupBy('date')
+        ->orderBy('date')
+        ->pluck('count', 'date')
+        ->toArray();
+
+        // Fill in missing months
+        $months = [];
+        for ($i = 11; $i >= 0; $i--) {
+            $month = now()->subMonths($i)->format('Y-m');
+            $months[] = $month;
+        }
+
+        $this->chartData = [
+            'labels' => $months,
+            'users' => array_values(array_replace(array_fill_keys($months, 0), $usersData)),
+            'orders' => array_values(array_replace(array_fill_keys($months, 0), $ordersData)),
         ];
     }
 

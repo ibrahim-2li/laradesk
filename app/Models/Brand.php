@@ -14,6 +14,11 @@ class Brand extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'details',
+    ];
+
     public function stocks(): BelongsToMany
     {
         return $this->belongsToMany(Stock::class, 'brand_id');

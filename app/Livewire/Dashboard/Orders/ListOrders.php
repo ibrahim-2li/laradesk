@@ -55,7 +55,7 @@ class ListOrders extends Component
                 $q->orWhere('closed_by', $user->id);
                 
                 // Using 'branch' relationship as defined in User model (not 'branchese')
-                $branchIds = $user->branch()->pluck('id')->toArray();
+                $branchIds = $user->branch()->pluck('branches.id')->toArray();
                 $q->orWhereIn('branches_id', $branchIds);
                 
                 $q->orWhere(function (Builder $q2) use ($user, $branchIds) {

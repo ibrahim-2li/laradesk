@@ -19,6 +19,7 @@ class CreateStocksTable extends Migration
             $table->string('name');
             $table->foreignId('brand_id')->nullable()->constrained('brands')->nullOnDelete();
             $table->integer('quantity');
+            $table->string('details')->nullable();
             $table->timestamps();
         });
 

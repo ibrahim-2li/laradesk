@@ -131,6 +131,31 @@
                                     class="text-xs text-gray-500">({{ __('If unchecked, you can assign specific agents later') }})</span></label>
                         </div>
 
+                        <!-- Assigned Agents -->
+                        @if (!$all_agents)
+                            <div class="mt-4">
+                                <label
+                                    class="block text-sm font-medium text-gray-700 mb-2">{{ __('Select Agents') }}</label>
+                                <div class="max-h-48 overflow-y-auto border border-gray-200 rounded-md p-2">
+                                    <div class="space-y-2">
+                                        @foreach ($availableAgents as $agent)
+                                            <div class="flex items-center">
+                                                <input wire:model="selectedAgents" value="{{ $agent->id }}"
+                                                    type="checkbox"
+                                                    class="form-checkbox h-4 w-4 text-blue-600 transition duration-150 ease-in-out">
+                                                <label class="ml-2 block text-sm text-gray-900">
+                                                    {{ $agent->name }} <span
+                                                        class="text-xs text-gray-500">({{ $agent->email }})</span>
+                                                </label>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-1">
+                                    {{ __('Only agents with dashboard access are listed.') }}</p>
+                            </div>
+                        @endif
+
                     </div>
                     <div class="px-6 py-4 bg-gray-50 flex justify-end rounded-b-lg">
                         <button type="button" wire:click="closeModal"

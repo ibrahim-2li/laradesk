@@ -6,6 +6,8 @@ use App\Models\Branch;
 use App\Models\OrderStatus;
 use App\Models\Priority;
 use App\Models\Order;
+use App\Models\Stock; // Import Stock
+use App\Models\OrderItem; // Import OrderItem
 use App\Models\OrderReply;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -26,8 +28,12 @@ class CreateOrder extends Component
     public $agent_id;
     public $attachments = [];
 
+    // Order Items
+    public $items = []; // [['stock_id' => '', 'quantity' => 1]]
+    
     // Dropdown options
     public $customers;
+    public $availableStocks;
     public $branches;
     public $statuses;
     public $priorities;
@@ -49,9 +55,22 @@ class CreateOrder extends Component
         $this->statuses = OrderStatus::all();
         $this->priorities = Priority::orderBy('value')->get();
         
-        $this->agents = User::whereHas('role', function($q) {
+        $this->agents = User::whereHas('userRole', function($q) {
             $q->where('dashboard_access', true);
         })->get();
+
+        $this->availableStocks = Stock::with('brands')->get();
+    }
+
+    public function addItem()
+    {
+        $this->items[] = ['stock_id' => '', 'quantity' => 1];
+    }
+
+    public function removeItem($index)
+    {
+        unset($this->items[$index]);
+        $this->items = array_values($this->items);
     }
 
     public function save()
@@ -64,7 +83,9 @@ class CreateOrder extends Component
             'orders_status_id' => 'required|exists:order_statuses,id',
             'priority_id' => 'required|exists:priorities,id',
             'agent_id' => 'nullable|exists:users,id',
-            'attachments.*' => 'image|max:10240', 
+            'attachments.*' => 'image|max:10240',
+            'items.*.stock_id' => 'required|exists:stocks,id',
+            'items.*.quantity' => 'required|integer|min:1',
         ]);
 
         $order = new Order();
@@ -89,6 +110,15 @@ class CreateOrder extends Component
             // Store attachments
         }
         */
+
+        // Save Items
+        foreach ($this->items as $item) {
+            $orderItem = new OrderItem();
+            $orderItem->order_id = $order->id;
+            $orderItem->stock_id = $item['stock_id'];
+            $orderItem->quantity = $item['quantity'];
+            $orderItem->save();
+        }
 
         session()->flash('success', __('Order created successfully.'));
         return redirect()->route('orders.list');

@@ -4,6 +4,8 @@ namespace App\Livewire\Dashboard\Tickets;
 
 use App\Models\Department;
 use App\Models\Ticket;
+use App\Models\Status;
+use App\Models\Priority;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -17,10 +19,18 @@ class ListTickets extends Component
     public $sortColumn = 'created_at';
     public $sortDirection = 'desc';
 
+    public $status_id = '';
+    public $priority_id = '';
+    public $department_id = '';
+
     protected $queryString = [
         'search' => ['except' => ''],
         'sortColumn' => ['except' => 'created_at'],
+        'sortColumn' => ['except' => 'created_at'],
         'sortDirection' => ['except' => 'desc'],
+        'status_id' => ['except' => ''],
+        'priority_id' => ['except' => ''],
+        'department_id' => ['except' => ''],
     ];
 
     public function sortBy($column)
@@ -47,8 +57,19 @@ class ListTickets extends Component
             });
         }
 
+        // Filters
+        if ($this->status_id) {
+            $query->where('status_id', $this->status_id);
+        }
+        if ($this->priority_id) {
+            $query->where('priority_id', $this->priority_id);
+        }
+        if ($this->department_id) {
+            $query->where('department_id', $this->department_id);
+        }
+
         // Access Control (migrated from TicketController::index)
-        if ($user->role_id !== 1) { // 1 = Admin
+        if ($user->role_id != 1) { // 1 = Admin
             $query->where(function (Builder $q) use ($user) {
                 $q->where('agent_id', $user->id);
                 $q->orWhere('closed_by', $user->id);
@@ -68,7 +89,10 @@ class ListTickets extends Component
             ->paginate(10);
 
         return view('livewire.dashboard.tickets.list-tickets', [
-            'tickets' => $tickets
+            'tickets' => $tickets,
+            'statuses' => Status::all(),
+            'priorities' => Priority::all(),
+            'departments' => Department::all(),
         ])->layout('layouts.dashboard');
     }
 }

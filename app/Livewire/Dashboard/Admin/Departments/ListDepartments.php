@@ -22,6 +22,8 @@ class ListDepartments extends Component
     public $name = '';
     public $all_agents = true; // Default to true
     public $public = true;     // Default to true
+    public $selectedAgents = [];
+    public $availableAgents = [];
 
     protected function rules() 
     {
@@ -29,6 +31,8 @@ class ListDepartments extends Component
             'name' => 'required|min:2|unique:departments,name,' . $this->editingId,
             'all_agents' => 'boolean',
             'public' => 'boolean',
+            'selectedAgents' => 'array',
+            'selectedAgents.*' => 'exists:users,id',
         ];
     }
 
@@ -37,6 +41,10 @@ class ListDepartments extends Component
         if (Auth::user()->role_id !== 1) {
             abort(403, __('Unauthorized'));
         }
+
+        $this->availableAgents = \App\Models\User::whereHas('userRole', function($q) {
+            $q->where('dashboard_access', true);
+        })->get();
     }
 
     public function render()
@@ -69,6 +77,9 @@ class ListDepartments extends Component
         $this->all_agents = (bool) $department->all_agents;
         $this->public = (bool) $department->public;
         
+        // Load assigned agents into selectedAgents array
+        $this->selectedAgents = $department->agent()->pluck('users.id')->toArray();
+        
         $this->isModalOpen = true;
     }
 
@@ -82,7 +93,16 @@ class ListDepartments extends Component
             'public' => $this->public,
         ];
 
-        Department::updateOrCreate(['id' => $this->editingId], $data);
+        $department = Department::updateOrCreate(['id' => $this->editingId], $data);
+
+        // Sync agents if not all_agents
+        if (!$this->all_agents) {
+            $department->agent()->sync($this->selectedAgents);
+        } else {
+            // If all_agents is true, we might want to detach all specific assignments
+            // or keep them? Usually "all agents" implies dynamic access, but cleaning up is safer.
+            $department->agent()->detach();
+        }
 
         session()->flash('success', $this->editingId ? 'Department updated successfully.' : 'Department created successfully.');
         
@@ -112,5 +132,6 @@ class ListDepartments extends Component
         $this->all_agents = true;
         $this->public = true;
         $this->editingId = null;
+        $this->selectedAgents = [];
     }
 }

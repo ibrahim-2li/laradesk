@@ -9,8 +9,8 @@
             <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500">
                 <span class="flex items-center gap-1">
                     <span
-                        class="w-2 h-2 rounded-full {{ $order->status->name == 'Open' ? 'bg-green-500' : 'bg-gray-400' }}"></span>
-                    {{ $order->status->name ?? '-' }}
+                        class="w-2 h-2 rounded-full {{ optional($order->orderStatus)->name == 'Open' ? 'bg-green-500' : 'bg-gray-400' }}"></span>
+                    {{ $order->orderStatus->name ?? '-' }}
                 </span>
                 <span class="flex items-center gap-1 border-l border-gray-300 pl-4">
                     {{ __('Priority:') }} <span

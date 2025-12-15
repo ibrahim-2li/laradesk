@@ -516,5 +516,11 @@
     "Your account details have been updated": "Your account details have been updated",
     "Your current password": "Your current password",
     "Your name": "Your name",
-    "Your new password": "Your new password"
+    "Your new password": "Your new password",
+    "Remember me": "Remember me",
+    "Reply posted successfully.": "Reply posted successfully.",
+    "Order created successfully.": "Order created successfully.",
+    "Select Agents": "Select Agents",
+    "Only agents with dashboard access are listed.": "Only agents with dashboard access are listed.",
+    "System Attributes": "System Attributes"
 }

@@ -32,6 +32,7 @@
     <div class="flex h-screen overflow-hidden bg-gray-50">
 
         <!-- Sidebar -->
+
         <aside
             class="flex-shrink-0 w-72 bg-white border-r border-gray-100 hidden md:flex flex-col transition-all duration-300">
             <!-- Logo area -->
@@ -126,35 +127,84 @@
 
                         <a href="{{ route('admin.users.list') }}"
                             class="group flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 {{ request()->routeIs('admin.users.list') ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' }}">
+                            <svg class="mr-3 h-5 w-5 flex-shrink-0 {{ request()->routeIs('admin.users.list') ? 'text-blue-500' : 'text-gray-400 group-hover:text-gray-500' }}"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
                             <span class="truncate">{{ __('Users') }}</span>
                         </a>
 
                         <a href="{{ route('admin.user-roles.list') }}"
                             class="group flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 {{ request()->routeIs('admin.user-roles.list') ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' }}">
+                            <svg class="mr-3 h-5 w-5 flex-shrink-0 {{ request()->routeIs('admin.user-roles.list') ? 'text-blue-500' : 'text-gray-400 group-hover:text-gray-500' }}"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11.536 19.464a4.919 4.919 0 01-1.414.949l-.01.01a5.006 5.006 0 01-2.484.606 5.003 5.003 0 01-3.665-8.337l1.066-1.066a2 2 0 012.828 0L9.414 13.07a2 2 0 010 2.829 2 2 0 01-2.829 0l-1.066-1.067a5.006 5.006 0 015.753-7.513 5.003 5.003 0 016.326 2.083z" />
+                            </svg>
                             <span class="truncate">{{ __('User Roles') }}</span>
                         </a>
 
                         <a href="{{ route('admin.departments.list') }}"
                             class="group flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 {{ request()->routeIs('admin.departments.list') ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' }}">
+                            <svg class="mr-3 h-5 w-5 flex-shrink-0 {{ request()->routeIs('admin.departments.list') ? 'text-blue-500' : 'text-gray-400 group-hover:text-gray-500' }}"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                            </svg>
                             <span class="truncate">{{ __('Departments') }}</span>
                         </a>
 
                         <a href="{{ route('admin.branches.list') }}"
                             class="group flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 {{ request()->routeIs('admin.branches.list') ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' }}">
+                            <svg class="mr-3 h-5 w-5 flex-shrink-0 {{ request()->routeIs('admin.branches.list') ? 'text-blue-500' : 'text-gray-400 group-hover:text-gray-500' }}"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
                             <span class="truncate">{{ __('Branches') }}</span>
+                        </a>
+                        <a href="{{ route('admin.stocks.list') }}"
+                            class="group flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 {{ request()->routeIs('admin.stocks.list') ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' }}">
+                            <svg class="mr-3 h-5 w-5 flex-shrink-0 {{ request()->routeIs('admin.stocks.list') ? 'text-blue-500' : 'text-gray-400 group-hover:text-gray-500' }}"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                            </svg>
+                            <span class="truncate">{{ __('Stock') }}</span>
                         </a>
 
                         <a href="{{ route('admin.settings') }}"
                             class="group flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 {{ request()->routeIs('admin.settings') ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' }}">
+                            <svg class="mr-3 h-5 w-5 flex-shrink-0 {{ request()->routeIs('admin.settings') ? 'text-blue-500' : 'text-gray-400 group-hover:text-gray-500' }}"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
                             <span class="truncate">{{ __('Settings') }}</span>
                         </a>
 
                         <div x-data="{ expanded: false }" class="mt-2">
                             <button @click="expanded = !expanded"
-                                class="flex items-center justify-between w-full px-3 py-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-50 focus:outline-none">
-                                <span>{{ __('More...') }}</span>
-                                <svg class="w-4 h-4 transition-transform transform" :class="{ 'rotate-180': expanded }"
-                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                class="flex items-center w-full px-3 py-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-50 focus:outline-none transition-colors duration-200">
+                                <svg class="mr-3 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
+                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                                </svg>
+                                <span class="flex-1 text-left">{{ __('System Attributes') }}</span>
+                                <svg class="w-4 h-4 text-gray-400 transition-transform transform"
+                                    :class="{ 'rotate-180': expanded }" xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd"
                                         d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
                                         clip-rule="evenodd" />
@@ -162,17 +212,56 @@
                             </button>
                             <div x-show="expanded" x-collapse class="pl-4 mt-1 space-y-1">
                                 <a href="{{ route('admin.labels.list') }}"
-                                    class="block px-3 py-2 text-sm text-gray-600 rounded-lg hover:bg-gray-50 hover:text-gray-900">{{ __('Labels') }}</a>
+                                    class="group flex items-center px-3 py-2 text-sm text-gray-600 rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-colors duration-200">
+                                    <svg class="mr-3 h-4 w-4 text-gray-400 group-hover:text-gray-500"
+                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                                    </svg>
+                                    {{ __('Labels') }}
+                                </a>
                                 <a href="{{ route('admin.statuses.list') }}"
-                                    class="block px-3 py-2 text-sm text-gray-600 rounded-lg hover:bg-gray-50 hover:text-gray-900">{{ __('Statuses') }}</a>
+                                    class="group flex items-center px-3 py-2 text-sm text-gray-600 rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-colors duration-200">
+                                    <svg class="mr-3 h-4 w-4 text-gray-400 group-hover:text-gray-500"
+                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    {{ __('Statuses') }}
+                                </a>
                                 <a href="{{ route('admin.priorities.list') }}"
-                                    class="block px-3 py-2 text-sm text-gray-600 rounded-lg hover:bg-gray-50 hover:text-gray-900">{{ __('Priorities') }}</a>
+                                    class="group flex items-center px-3 py-2 text-sm text-gray-600 rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-colors duration-200">
+                                    <svg class="mr-3 h-4 w-4 text-gray-400 group-hover:text-gray-500"
+                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
+                                    </svg>
+                                    {{ __('Priorities') }}
+                                </a>
                                 <a href="{{ route('admin.languages.list') }}"
-                                    class="block px-3 py-2 text-sm text-gray-600 rounded-lg hover:bg-gray-50 hover:text-gray-900">{{ __('Languages') }}</a>
-                                <a href="{{ route('admin.stocks.list') }}"
-                                    class="block px-3 py-2 text-sm text-gray-600 rounded-lg hover:bg-gray-50 hover:text-gray-900">{{ __('Stock') }}</a>
+                                    class="group flex items-center px-3 py-2 text-sm text-gray-600 rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-colors duration-200">
+                                    <svg class="mr-3 h-4 w-4 text-gray-400 group-hover:text-gray-500"
+                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+                                    </svg>
+                                    {{ __('Languages') }}
+                                </a>
+
                                 <a href="{{ route('admin.brands.list') }}"
-                                    class="block px-3 py-2 text-sm text-gray-600 rounded-lg hover:bg-gray-50 hover:text-gray-900">{{ __('Brands') }}</a>
+                                    class="group flex items-center px-3 py-2 text-sm text-gray-600 rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-colors duration-200">
+                                    <svg class="mr-3 h-4 w-4 text-gray-400 group-hover:text-gray-500"
+                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                                    </svg>
+                                    {{ __('Brands') }}
+                                </a>
                             </div>
                         </div>
 
@@ -296,6 +385,7 @@
         </div>
     </div>
 
+    @stack('scripts')
     @livewireScripts
 </body>
 

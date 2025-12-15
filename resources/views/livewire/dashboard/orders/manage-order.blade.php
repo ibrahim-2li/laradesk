@@ -18,9 +18,8 @@
             </div>
         </div>
         <div class="flex items-center gap-3">
-            <span
-                class="px-3 py-1 rounded-full text-sm font-semibold {{ $order->orderStatus->name == 'Open' ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-gray-100 text-gray-800 border border-gray-200' }}">
-                {{ $order->orderStatus->name ?? $order->orders_status_id }}
+            class="px-3 py-1 rounded-full text-sm font-semibold {{ optional($order->orderStatus)->name == 'Open' ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-gray-100 text-gray-800 border border-gray-200' }}">
+            {{ $order->orderStatus->name ?? $order->orders_status_id }}
             </span>
             <a href="{{ route('dashboard.orders.list') }}"
                 class="text-sm font-medium text-gray-500 hover:text-gray-700 transition">
@@ -32,6 +31,48 @@
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
         <!-- Conversation Area -->
         <div class="lg:col-span-3 space-y-8">
+            <!-- Order Items -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="p-4 border-b border-gray-100 bg-gray-50/50">
+                    <h3 class="text-sm font-bold text-gray-900">{{ __('Order Items') }}</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    {{ __('Item') }}</th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    {{ __('Brand') }}</th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    {{ __('Quantity') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            @forelse($order->items as $item)
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        {{ $item->stock?->name ?? __('Unknown Item') }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {{ $item->stock?->brands?->name ?? '-' }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $item->quantity }}
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="3"
+                                        class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                                        {{ __('No items found in this order.') }}</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
             <div class="space-y-6">
                 @foreach ($replies as $reply)
                     <div class="flex {{ $reply->user_id === $order->user_id ? 'justify-start' : 'justify-end' }}">

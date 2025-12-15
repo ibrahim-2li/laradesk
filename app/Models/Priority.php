@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
-/**
+    /**
  * App\Models\Priority
  *
  * @property int $id
@@ -29,4 +29,9 @@ use Illuminate\Support\Carbon;
 class Priority extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'value',
+    ];
 }

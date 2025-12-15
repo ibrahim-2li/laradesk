@@ -12,7 +12,7 @@
                     </svg>
                 </div>
                 <div class="ml-4">
-                    <p class="mb-2 text-sm font-medium text-gray-600">{{ __('Open Orders') }}</p>
+                    <p class="mb-2 text-sm font-medium text-gray-600">{{ __('Opened Orders') }}</p>
                     <p class="text-3xl font-semibold text-gray-700">{{ $stats['open_orders'] ?? 0 }}</p>
                 </div>
             </div>
@@ -67,18 +67,104 @@
     </div>
 
     <!-- Charts Section (To be implemented using a charting library, placeholder for now) -->
+    <!-- Charts Section -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div class="bg-white rounded-lg shadow p-6">
             <h3 class="text-lg font-semibold text-gray-700 mb-4">{{ __('Registered Users (Last 12 Months)') }}</h3>
-            <div class="h-64 flex items-center justify-center bg-gray-50 text-gray-400">
-                [Chart Placeholder]
+            <div class="relative h-64 w-full">
+                <canvas id="usersChart"></canvas>
             </div>
         </div>
         <div class="bg-white rounded-lg shadow p-6">
             <h3 class="text-lg font-semibold text-gray-700 mb-4">{{ __('Orders (Last 12 Months)') }}</h3>
-            <div class="h-64 flex items-center justify-center bg-gray-50 text-gray-400">
-                [Chart Placeholder]
+            <div class="relative h-64 w-full">
+                <canvas id="ordersChart"></canvas>
             </div>
         </div>
     </div>
 </div>
+
+@push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('livewire:init', () => {
+            initCharts();
+        });
+
+        // Also run on simple DOM Content Loaded for the first visit
+        document.addEventListener('DOMContentLoaded', () => {
+            initCharts();
+        });
+
+        function initCharts() {
+            const chartData = @json($chartData);
+
+            // Users Chart
+            const usersCtx = document.getElementById('usersChart');
+            if (usersCtx) {
+                // Destroy existing chart if any (to prevent duplicates on re-render)
+                const existingChart = Chart.getChart(usersCtx);
+                if (existingChart) existingChart.destroy();
+
+                new Chart(usersCtx, {
+                    type: 'line',
+                    data: {
+                        labels: chartData.labels,
+                        datasets: [{
+                            label: '{{ __('Users') }}',
+                            data: chartData.users,
+                            borderColor: 'rgb(59, 130, 246)',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    precision: 0
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Orders Chart
+            const ordersCtx = document.getElementById('ordersChart');
+            if (ordersCtx) {
+                const existingChart = Chart.getChart(ordersCtx);
+                if (existingChart) existingChart.destroy();
+
+                new Chart(ordersCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: chartData.labels,
+                        datasets: [{
+                            label: '{{ __('Orders') }}',
+                            data: chartData.orders,
+                            backgroundColor: 'rgb(16, 185, 129)',
+                            borderRadius: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    precision: 0
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+    </script>
+@endpush

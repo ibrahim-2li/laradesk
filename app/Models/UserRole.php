@@ -113,13 +113,32 @@ class UserRole extends Model
         $permissions = $this->permissions ?? [];
         
         foreach (Route::getRoutes()->getIterator() as $route) {
-            if (strpos($route->uri, 'api/dashboard') !== false) {
-                // Safely handle action controller array/string
+            $routeName = $route->getName();
+            
+            // Check for Dashboard or Admin routes
+            if ($routeName && (str_starts_with($routeName, 'dashboard.') || str_starts_with($routeName, 'admin.'))) {
+                
                 $action = $route->action['controller'] ?? '';
                 if (!$action) continue;
 
-                $path = str_replace('\\', '.', explode('@', str_replace($action.'\\', '', $action))[0]);
+                // Handle Livewire components or standard controllers
+                $controllerClass = explode('@', $action)[0];
+                
+                // Exclude generic closures if any (though usually they don't have controller key set like classes)
+                if ($controllerClass === 'Closure') continue;
+
+                $path = str_replace('\\', '.', $controllerClass);
                 $controllers[$path] = $this->id === 1 ? true : in_array($path, $permissions, true);
+            }
+            // Keep legacy support for API routes if needed, or remove it. 
+            // Including it for safety if hybrid.
+            elseif (strpos($route->uri, 'api/dashboard') !== false) {
+                 $action = $route->action['controller'] ?? '';
+                 if (!$action) continue;
+                 
+                 $controllerClass = explode('@', $action)[0];
+                 $path = str_replace('\\', '.', $controllerClass);
+                 $controllers[$path] = $this->id === 1 ? true : in_array($path, $permissions, true);
             }
         }
         return $controllers;

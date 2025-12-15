@@ -37,6 +37,12 @@ class Branch extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'all_agents',
+        'public',
+    ];
+
     public function agent(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'user_branches', 'branches_id', 'user_id');

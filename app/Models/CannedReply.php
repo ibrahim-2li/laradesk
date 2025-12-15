@@ -43,6 +43,13 @@ class CannedReply extends Model
 {
     use Filterable, HasFactory;
 
+    protected $fillable = [
+        'user_id',
+        'name',
+        'body',
+        'shared',
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

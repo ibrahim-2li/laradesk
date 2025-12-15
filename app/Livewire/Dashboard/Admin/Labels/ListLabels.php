@@ -6,6 +6,7 @@ use App\Models\Label;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Validation\Rule;
 
 class ListLabels extends Component
 {
@@ -24,8 +25,8 @@ class ListLabels extends Component
     protected function rules() 
     {
         return [
-            'name' => 'required|min:2|unique:labels,name,' . $this->editingId,
-            'color' => 'required|regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/',
+            'name' => ['required', 'min:2', Rule::unique('labels', 'name')->ignore($this->editingId)],
+            'color' => ['required', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
         ];
     }
 
