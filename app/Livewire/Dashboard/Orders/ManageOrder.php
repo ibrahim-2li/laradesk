@@ -50,6 +50,7 @@ class ManageOrder extends Component
         $this->validate([
             'body' => 'required',
             'orders_status_id' => 'required|exists:order_statuses,id',
+            'attachments.*' => 'image|max:10240',
         ]);
 
         $orderReply = new OrderReply();
@@ -58,6 +59,26 @@ class ManageOrder extends Component
         $orderReply->body = $this->body;
         $orderReply->save();
         
+        foreach ($this->attachments as $attachment) {
+             $disk = 'public';
+             $directory = 'order-attachments';
+             $savedPath = $attachment->store($directory, $disk);
+
+             $file = new \App\Models\File();
+             $file->uuid = \Illuminate\Support\Str::uuid();
+             $file->name = $attachment->getClientOriginalName();
+             $file->server_name = basename($savedPath);
+             $file->size = $attachment->getSize();
+             $file->mime = $attachment->getMimeType();
+             $file->extension = $attachment->getClientOriginalExtension();
+             $file->disk = $disk;
+             $file->path = $directory;
+             $file->user_id = Auth::id();
+             $file->save();
+
+             $orderReply->orderAttachments()->attach($file->id);
+        }
+        
         // Update Order
         $this->order->orders_status_id = $this->orders_status_id;
         $this->order->updated_at = Carbon::now();
@@ -65,11 +86,15 @@ class ManageOrder extends Component
         // $this->order->closed_by = ...
         $this->order->save();
 
-        if (Auth::user()->role_id !== 1 && Auth::id() === $this->order->user_id) {
-             // User replying
-        } else {
-             // Agent/Admin replying
-             $this->order->user->notify((new NewOrderReplyFromAgentToUser($this->order))->locale('en')); 
+        try {
+            if (Auth::user()->role_id !== 1 && Auth::id() === $this->order->user_id) {
+                 // User replying
+            } else {
+                 // Agent/Admin replying
+                 $this->order->user->notify((new NewOrderReplyFromAgentToUser($this->order))->locale('en')); 
+            }
+        } catch (\Exception $e) {
+            \Log::error('Failed to send order reply notification: ' . $e->getMessage());
         }
 
         $this->body = ''; 
@@ -81,7 +106,7 @@ class ManageOrder extends Component
     public function render()
     {
         return view('livewire.dashboard.orders.manage-order', [
-            'replies' => $this->order->orderReplies()->with('user')->oldest()->get()
+            'replies' => $this->order->orderReplies()->with(['user', 'orderAttachments'])->oldest()->get()
         ])->layout('layouts.dashboard');
     }
 }

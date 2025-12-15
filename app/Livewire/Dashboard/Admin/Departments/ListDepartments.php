@@ -49,7 +49,9 @@ class ListDepartments extends Component
 
     public function render()
     {
-        $query = Department::query()->withCount('agent');
+        $query = Department::query()->with(['agent' => function($q) {
+            $q->limit(5);
+        }])->withCount('agent');
 
         if ($this->search) {
             $query->where('name', 'like', '%' . $this->search . '%');

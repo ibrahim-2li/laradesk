@@ -40,7 +40,9 @@ class ListBranches extends Component
 
     public function render()
     {
-        $query = Branch::query()->withCount('users');
+        $query = Branch::query()->with(['users' => function($q) {
+            $q->limit(5);
+        }])->withCount('users');
 
         if ($this->search) {
             $query->where('name', 'like', '%' . $this->search . '%');

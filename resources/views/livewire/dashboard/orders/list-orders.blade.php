@@ -1,106 +1,112 @@
 <div>
-    <div class="mb-8 flex flex-col md:flex-row md:justify-between md:items-center gap-4">
-        <div>
-            <h1 class="text-3xl font-bold tracking-tight text-gray-900">{{ __('Orders') }}</h1>
-            <p class="text-sm text-gray-500 mt-1">{{ __('Manage and fulfill customer orders.') }}</p>
-        </div>
-        <a href="{{ route('dashboard.orders.create') }}"
-            class="inline-flex items-center justify-center px-4 py-2 bg-blue-600 border border-transparent rounded-lg font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-500 active:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150 shadow-sm">
-            {{ __('New Order') }}
-        </a>
-    </div>
+    <div class="bg-white rounded-[4px] shadow-sm border border-gray-100 mt-20">
+        <div class="px-6 py-5 border-b border-gray-100 flex justify-between items-center">
+            <h2 class="text-xl font-semibold text-gray-700">{{ __('Orders') }}</h2>
 
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-        <div class="p-5 border-b border-gray-100 bg-white/50 backdrop-blur-sm">
-            <div class="w-full sm:w-96 relative">
-                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                        fill="currentColor">
-                        <path fill-rule="evenodd"
-                            d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                            clip-rule="evenodd" />
+            <div class="flex gap-4">
+                <div class="relative">
+                    <input wire:model.live.debounce.300ms="search" type="text" placeholder="{{ __('Search...') }}"
+                        class="pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300 w-64 transition-all" />
+                    <svg class="w-5 h-5 text-gray-400 absolute left-3 top-2.5" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                 </div>
-                <input wire:model.live.debounce.300ms="search" type="text" placeholder="{{ __('Search orders...') }}"
-                    class="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg leading-5 bg-gray-50 placeholder-gray-400 focus:outline-none focus:bg-white focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out" />
+                <a href="{{ route('dashboard.orders.create') }}"
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg text-sm transition-colors shadow-sm flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                    {{ __('New') }}
+                </a>
             </div>
         </div>
 
         <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-100">
-                <thead class="bg-gray-50/50">
-                    <tr>
-                        <th scope="col"
-                            class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700 transition"
+            <table class="min-w-full">
+                <thead>
+                    <tr class="border-b border-gray-100">
+                        <th class="px-6 py-4 text-right text-xs font-bold text-gray-400 uppercase tracking-wider cursor-pointer hover:text-gray-600 group"
                             wire:click="sortBy('subject')">
                             {{ __('Subject') }}
+                            <span
+                                class="inline-block ml-1 opacity-0 group-hover:opacity-100 transition-opacity">↓</span>
                         </th>
-                        <th scope="col"
-                            class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700 transition"
+                        <th class="px-6 py-4 text-right text-xs font-bold text-gray-400 uppercase tracking-wider cursor-pointer hover:text-gray-600 group"
                             wire:click="sortBy('id')">
                             {{ __('ID') }}
+                            <span
+                                class="inline-block ml-1 opacity-0 group-hover:opacity-100 transition-opacity">↓</span>
                         </th>
-                        <th scope="col"
-                            class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                            {{ __('Status') }}
-                        </th>
-                        <th scope="col"
-                            class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                            {{ __('Priority') }}
-                        </th>
-                        <th scope="col"
-                            class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700 transition"
+                        <th class="px-6 py-4 text-right text-xs font-bold text-gray-400 uppercase tracking-wider">
+                            {{ __('Status') }}</th>
+                        <th class="px-6 py-4 text-right text-xs font-bold text-gray-400 uppercase tracking-wider">
+                            {{ __('Priority') }}</th>
+                        <th class="px-6 py-4 text-right text-xs font-bold text-gray-400 uppercase tracking-wider cursor-pointer hover:text-gray-600 group"
                             wire:click="sortBy('created_at')">
                             {{ __('Created') }}
+                            <span
+                                class="inline-block ml-1 opacity-0 group-hover:opacity-100 transition-opacity">↓</span>
                         </th>
-                        <th scope="col" class="relative px-6 py-4">
-                            <span class="sr-only">Actions</span>
-                        </th>
+                        <th class="px-6 py-4 text-right text-xs font-bold text-gray-400 uppercase tracking-wider">
+                            {{ __('Actions') }}</th>
                     </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-100">
+                <tbody class="divide-y divide-gray-50">
                     @forelse($orders as $order)
-                        <tr class="hover:bg-gray-50 transition duration-150 ease-in-out">
+                        <tr class="hover:bg-gray-50/50 transition-colors group">
                             <td class="px-6 py-4">
-                                <div class="flex items-center">
-                                    <div>
-                                        <div class="text-sm font-medium text-gray-900 line-clamp-1">
-                                            {{ $order->subject }}</div>
-                                        <div class="text-sm text-gray-500">{{ $order->user->name ?? 'Unknown User' }}
-                                        </div>
-                                    </div>
+                                <div class="flex flex-col">
+                                    <span
+                                        class="text-sm font-semibold text-gray-700 line-clamp-1 group-hover:text-blue-600 transition-colors">{{ $order->subject }}</span>
+                                    <span
+                                        class="text-xs text-gray-500">{{ $order->user->name ?? __('Unknown User') }}</span>
                                 </div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-mono">
-                                #{{ $order->id }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span
-                                    class="px-2.5 py-0.5 inline-flex text-xs leading-4 font-semibold rounded-full bg-blue-50 text-blue-700 border border-blue-100">
+                                    class="text-xs font-mono text-gray-500 bg-gray-100 px-2 py-1 rounded">#{{ $order->id }}</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span
+                                    class="bg-blue-50 text-blue-700 py-1 px-3 rounded-[4px] text-xs font-medium border border-blue-100">
                                     {{ $order->orderStatus->name ?? '-' }}
                                 </span>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {{ $order->priority->name ?? '-' }}
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center space-x-2">
+                                    @if (isset($order->priority->color))
+                                        <div class="h-2 w-2 rounded-full"
+                                            style="background-color: {{ $order->priority->color }}"></div>
+                                    @endif
+                                    <span class="text-sm text-gray-600">{{ $order->priority->name ?? '-' }}</span>
+                                </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 {{ $order->created_at->format('M d, Y') }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <td class="px-6 py-4 whitespace-nowrap text-right">
                                 <a href="{{ route('dashboard.orders.manage', $order) }}"
-                                    class="text-blue-600 hover:text-blue-900 font-medium transition duration-150">{{ __('Manage') }}</a>
+                                    class="inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors">
+                                    {{ __('Manage') }}
+                                    <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </a>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="px-6 py-12 text-center">
-                                <div class="flex flex-col items-center">
-                                    <svg class="h-12 w-12 text-gray-300 mb-2" fill="none" viewBox="0 0 24 24"
-                                        stroke="currentColor">
+                            <td colspan="6" class="px-6 py-8 text-center text-gray-500">
+                                <div class="flex flex-col items-center justify-center">
+                                    <svg class="h-12 w-12 text-gray-300 mb-3" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                            d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
                                     </svg>
-                                    <h3 class="mt-2 text-sm font-medium text-gray-900">{{ __('No orders found') }}</h3>
+                                    <p>{{ __('No orders found') }}</p>
                                 </div>
                             </td>
                         </tr>
@@ -109,7 +115,7 @@
             </table>
         </div>
 
-        <div class="px-6 py-4 border-t border-gray-100 bg-gray-50/50">
+        <div class="px-6 py-4 border-t border-gray-100">
             {{ $orders->links() }}
         </div>
     </div>

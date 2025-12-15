@@ -57,7 +57,9 @@ class ListUserRoles extends Component
 
     public function render()
     {
-        $query = UserRole::query()->withCount('users');
+        $query = UserRole::query()->with(['users' => function($q) {
+            $q->limit(5);
+        }])->withCount('users');
 
         if ($this->search) {
             $query->where('name', 'like', '%' . $this->search . '%');

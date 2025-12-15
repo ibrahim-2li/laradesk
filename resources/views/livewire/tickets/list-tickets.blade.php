@@ -31,16 +31,16 @@
             <table class="min-w-full divide-y divide-gray-100">
                 <thead class="bg-gray-50/50">
                     <tr>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                        <th class="px-6 py-4 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">
                             {{ __('Subject') }}
                         </th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                        <th class="px-6 py-4 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">
                             {{ __('Status') }}
                         </th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                        <th class="px-6 py-4 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">
                             {{ __('Department') }}
                         </th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                        <th class="px-6 py-4 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">
                             {{ __('Last Update') }}
                         </th>
                         <th class="relative px-6 py-4">

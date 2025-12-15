@@ -45,6 +45,7 @@ class ManageTicket extends Component
         $this->validate([
             'body' => 'required',
             'status_id' => 'required|exists:statuses,id',
+            'attachments.*' => 'image|max:10240', // 10MB max
         ]);
 
         $ticketReply = new TicketReply();
@@ -53,30 +54,43 @@ class ManageTicket extends Component
         $ticketReply->body = $this->body;
         $ticketReply->save();
         
-        // Attachments logic here (placeholder)
+        foreach ($this->attachments as $attachment) {
+             $disk = 'public';
+             $directory = 'ticket-attachments';
+             $savedPath = $attachment->store($directory, $disk);
+
+             $file = new \App\Models\File();
+             $file->uuid = \Illuminate\Support\Str::uuid();
+             $file->name = $attachment->getClientOriginalName();
+             $file->server_name = basename($savedPath);
+             $file->size = $attachment->getSize();
+             $file->mime = $attachment->getMimeType();
+             $file->extension = $attachment->getClientOriginalExtension();
+             $file->disk = $disk;
+             $file->path = $directory;
+             $file->user_id = Auth::id();
+             $file->save();
+
+             $ticketReply->ticketAttachments()->attach($file->id);
+        }
 
         // Update Ticket
         $this->ticket->status_id = $this->status_id;
         $this->ticket->updated_at = Carbon::now();
         $this->ticket->save();
 
-        // Notify
-        // Logic to determine if we are sending TO user or FROM user
-        // If Auth user is the ticket owner, notify agents? 
-        // If Auth user is agent, notify ticket owner.
-        // The original logic `NewTicketReplyFromAgentToUser` assumes agent is replying.
-        // We should check roles.
-        
-        if (Auth::user()->role_id !== 1 && Auth::id() === $this->ticket->user_id) {
-             // User replying
-             // $this->ticket->agent->notify(...) if agent exists
-             // NewTicketReplyFromUserToUser?
-        } else {
-             // Agent/Admin replying
-             $this->ticket->user->notify((new NewTicketReplyFromAgentToUser($this->ticket))->locale('en')); // TODO: Locale
+        // Notify logic (simplified for brevity, keeping existing structure)
+        try {
+            if (Auth::user()->role_id !== 1 && Auth::id() === $this->ticket->user_id) {
+                 // User replying
+            } else {
+                 $this->ticket->user->notify((new NewTicketReplyFromAgentToUser($this->ticket))->locale('en'));
+            }
+        } catch (\Exception $e) {
+            \Log::error('Failed to send ticket reply notification: ' . $e->getMessage());
         }
 
-        $this->body = ''; // Reset input
+        $this->body = ''; 
         $this->attachments = [];
         
         session()->flash('success', __('Reply posted successfully.'));
@@ -85,7 +99,7 @@ class ManageTicket extends Component
     public function render()
     {
         return view('livewire.dashboard.tickets.manage-ticket', [
-            'replies' => $this->ticket->ticketReplies()->with('user')->oldest()->get()
+            'replies' => $this->ticket->ticketReplies()->with(['user', 'ticketAttachments'])->oldest()->get()
         ])->layout('layouts.dashboard');
     }
 }
