@@ -610,5 +610,12 @@
     "Protect your forms from spam.": "حماية نماذجك من الرسائل غير المرغوب فيها.",
     "Configure logging settings for your application.": "تكوين إعدادات تسجيل لتطبيقك",
     "Only agents with dashboard access are listed.": "يتم عرض الوكلاء الذين لديهم حق الوصول إلى لوحة المعلومات فقط.",
-    "System Attributes": "خصائص النظام"
+    "System Attributes": "خصائص النظام",
+    "My Profile": "ملفي الشخصي",
+    "Basic Information": "المعلومات الأساسية",
+    "Change Password": "تغيير كلمة المرور",
+    "New Password": "كلمة المرور الجديدة",
+    "Confirm New Password": "تأكيد كلمة المرور الجديدة",
+    "Click camera icon to change": "اضغط على أيقونة الكاميرا للتغيير",
+    "Profile updated successfully.": "تم تحديث الملف الشخصي بنجاح."
 }

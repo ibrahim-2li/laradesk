@@ -8,7 +8,7 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Cairo', 'sans-serif'],
+                sans: ['Almarai', 'sans-serif'],
             },
             colors: {
                 brand: {

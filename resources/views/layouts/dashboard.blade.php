@@ -9,10 +9,10 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Google Fonts -->
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet">
 
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     @livewireStyles
@@ -23,7 +23,7 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Almarai', sans-serif;
         }
     </style>
 </head>
@@ -47,8 +47,8 @@
                 <div class="mb-6">
                     <p class="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Main</p>
                     <a href="{{ route('dashboard.home') }}"
-                        class="group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 {{ request()->routeIs('dashboard.home') ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' }}">
-                        <svg class="mr-3 h-5 w-5 flex-shrink-0 {{ request()->routeIs('dashboard.home') ? 'text-blue-500' : 'text-gray-400 group-hover:text-gray-500' }}"
+                        class="group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 {{ request()->routeIs('dashboard.home') ? 'bg-brand-50 text-brand-700' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' }}">
+                        <svg class="mr-3 h-5 w-5 flex-shrink-0 {{ request()->routeIs('dashboard.home') ? 'text-brand-500' : 'text-gray-400 group-hover:text-gray-500' }}"
                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
@@ -62,8 +62,8 @@
                         <p class="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Management</p>
 
                         <a href="{{ route('dashboard.tickets.list') }}"
-                            class="group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 {{ request()->routeIs('dashboard.tickets.list') ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' }}">
-                            <svg class="mr-3 h-5 w-5 flex-shrink-0 {{ request()->routeIs('dashboard.tickets.list') ? 'text-blue-500' : 'text-gray-400 group-hover:text-gray-500' }}"
+                            class="group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 {{ request()->routeIs('dashboard.tickets.list') ? 'bg-brand-50 text-brand-700' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' }}">
+                            <svg class="mr-3 h-5 w-5 flex-shrink-0 {{ request()->routeIs('dashboard.tickets.list') ? 'text-brand-500' : 'text-gray-400 group-hover:text-gray-500' }}"
                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -73,8 +73,8 @@
                         </a>
 
                         <a href="{{ route('dashboard.orders.list') }}"
-                            class="group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 {{ request()->routeIs('dashboard.orders.list') ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' }}">
-                            <svg class="mr-3 h-5 w-5 flex-shrink-0 {{ request()->routeIs('dashboard.orders.list') ? 'text-blue-500' : 'text-gray-400 group-hover:text-gray-500' }}"
+                            class="group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 {{ request()->routeIs('dashboard.orders.list') ? 'bg-brand-50 text-brand-700' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' }}">
+                            <svg class="mr-3 h-5 w-5 flex-shrink-0 {{ request()->routeIs('dashboard.orders.list') ? 'text-brand-500' : 'text-gray-400 group-hover:text-gray-500' }}"
                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -84,8 +84,8 @@
                         </a>
 
                         <a href="{{ route('dashboard.canned-replies.list') }}"
-                            class="group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 {{ request()->routeIs('dashboard.canned-replies.list') ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' }}">
-                            <svg class="mr-3 h-5 w-5 flex-shrink-0 {{ request()->routeIs('dashboard.canned-replies.list') ? 'text-blue-500' : 'text-gray-400 group-hover:text-gray-500' }}"
+                            class="group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 {{ request()->routeIs('dashboard.canned-replies.list') ? 'bg-brand-50 text-brand-700' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' }}">
+                            <svg class="mr-3 h-5 w-5 flex-shrink-0 {{ request()->routeIs('dashboard.canned-replies.list') ? 'text-brand-500' : 'text-gray-400 group-hover:text-gray-500' }}"
                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -98,8 +98,8 @@
                     <div class="mb-6">
                         <p class="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">My Desk</p>
                         <a href="{{ route('tickets.list') }}"
-                            class="group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 {{ request()->routeIs('tickets.list') ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' }}">
-                            <svg class="mr-3 h-5 w-5 flex-shrink-0 {{ request()->routeIs('tickets.list') ? 'text-blue-500' : 'text-gray-400 group-hover:text-gray-500' }}"
+                            class="group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 {{ request()->routeIs('tickets.list') ? 'bg-brand-50 text-brand-700' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' }}">
+                            <svg class="mr-3 h-5 w-5 flex-shrink-0 {{ request()->routeIs('tickets.list') ? 'text-brand-500' : 'text-gray-400 group-hover:text-gray-500' }}"
                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -108,8 +108,8 @@
                             {{ __('My Tickets') }}
                         </a>
                         <a href="{{ route('orders.list') }}"
-                            class="group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 {{ request()->routeIs('orders.list') ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' }}">
-                            <svg class="mr-3 h-5 w-5 flex-shrink-0 {{ request()->routeIs('orders.list') ? 'text-blue-500' : 'text-gray-400 group-hover:text-gray-500' }}"
+                            class="group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 {{ request()->routeIs('orders.list') ? 'bg-brand-50 text-brand-700' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' }}">
+                            <svg class="mr-3 h-5 w-5 flex-shrink-0 {{ request()->routeIs('orders.list') ? 'text-brand-500' : 'text-gray-400 group-hover:text-gray-500' }}"
                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -126,8 +126,8 @@
                             {{ __('Admin') }}</p>
 
                         <a href="{{ route('admin.users.list') }}"
-                            class="group flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 {{ request()->routeIs('admin.users.list') ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' }}">
-                            <svg class="mr-3 h-5 w-5 flex-shrink-0 {{ request()->routeIs('admin.users.list') ? 'text-blue-500' : 'text-gray-400 group-hover:text-gray-500' }}"
+                            class="group flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 {{ request()->routeIs('admin.users.list') ? 'bg-brand-50 text-brand-700' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' }}">
+                            <svg class="mr-3 h-5 w-5 flex-shrink-0 {{ request()->routeIs('admin.users.list') ? 'text-brand-500' : 'text-gray-400 group-hover:text-gray-500' }}"
                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -137,8 +137,8 @@
                         </a>
 
                         <a href="{{ route('admin.user-roles.list') }}"
-                            class="group flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 {{ request()->routeIs('admin.user-roles.list') ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' }}">
-                            <svg class="mr-3 h-5 w-5 flex-shrink-0 {{ request()->routeIs('admin.user-roles.list') ? 'text-blue-500' : 'text-gray-400 group-hover:text-gray-500' }}"
+                            class="group flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 {{ request()->routeIs('admin.user-roles.list') ? 'bg-brand-50 text-brand-700' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' }}">
+                            <svg class="mr-3 h-5 w-5 flex-shrink-0 {{ request()->routeIs('admin.user-roles.list') ? 'text-brand-500' : 'text-gray-400 group-hover:text-gray-500' }}"
                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -148,8 +148,8 @@
                         </a>
 
                         <a href="{{ route('admin.departments.list') }}"
-                            class="group flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 {{ request()->routeIs('admin.departments.list') ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' }}">
-                            <svg class="mr-3 h-5 w-5 flex-shrink-0 {{ request()->routeIs('admin.departments.list') ? 'text-blue-500' : 'text-gray-400 group-hover:text-gray-500' }}"
+                            class="group flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 {{ request()->routeIs('admin.departments.list') ? 'bg-brand-50 text-brand-700' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' }}">
+                            <svg class="mr-3 h-5 w-5 flex-shrink-0 {{ request()->routeIs('admin.departments.list') ? 'text-brand-500' : 'text-gray-400 group-hover:text-gray-500' }}"
                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -159,8 +159,8 @@
                         </a>
 
                         <a href="{{ route('admin.branches.list') }}"
-                            class="group flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 {{ request()->routeIs('admin.branches.list') ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' }}">
-                            <svg class="mr-3 h-5 w-5 flex-shrink-0 {{ request()->routeIs('admin.branches.list') ? 'text-blue-500' : 'text-gray-400 group-hover:text-gray-500' }}"
+                            class="group flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 {{ request()->routeIs('admin.branches.list') ? 'bg-brand-50 text-brand-700' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' }}">
+                            <svg class="mr-3 h-5 w-5 flex-shrink-0 {{ request()->routeIs('admin.branches.list') ? 'text-brand-500' : 'text-gray-400 group-hover:text-gray-500' }}"
                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -169,8 +169,8 @@
                             <span class="truncate">{{ __('Branches') }}</span>
                         </a>
                         <a href="{{ route('admin.stocks.list') }}"
-                            class="group flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 {{ request()->routeIs('admin.stocks.list') ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' }}">
-                            <svg class="mr-3 h-5 w-5 flex-shrink-0 {{ request()->routeIs('admin.stocks.list') ? 'text-blue-500' : 'text-gray-400 group-hover:text-gray-500' }}"
+                            class="group flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 {{ request()->routeIs('admin.stocks.list') ? 'bg-brand-50 text-brand-700' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' }}">
+                            <svg class="mr-3 h-5 w-5 flex-shrink-0 {{ request()->routeIs('admin.stocks.list') ? 'text-brand-500' : 'text-gray-400 group-hover:text-gray-500' }}"
                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -180,8 +180,8 @@
                         </a>
 
                         <a href="{{ route('admin.settings') }}"
-                            class="group flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 {{ request()->routeIs('admin.settings') ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' }}">
-                            <svg class="mr-3 h-5 w-5 flex-shrink-0 {{ request()->routeIs('admin.settings') ? 'text-blue-500' : 'text-gray-400 group-hover:text-gray-500' }}"
+                            class="group flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 {{ request()->routeIs('admin.settings') ? 'bg-brand-50 text-brand-700' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' }}">
+                            <svg class="mr-3 h-5 w-5 flex-shrink-0 {{ request()->routeIs('admin.settings') ? 'text-brand-500' : 'text-gray-400 group-hover:text-gray-500' }}"
                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -272,19 +272,19 @@
             <!-- Language Switcher -->
             <div class="px-6 py-4 border-t border-gray-100 flex gap-2">
                 <a href="{{ route('locale.change', 'en') }}"
-                    class="text-xs font-semibold {{ app()->getLocale() == 'en' ? 'text-blue-600' : 'text-gray-400 hover:text-gray-600' }}">EN</a>
+                    class="text-xs font-semibold {{ app()->getLocale() == 'en' ? 'text-brand-600' : 'text-gray-400 hover:text-gray-600' }}">EN</a>
                 <span class="text-gray-200">|</span>
                 <a href="{{ route('locale.change', 'es') }}"
-                    class="text-xs font-semibold {{ app()->getLocale() == 'es' ? 'text-blue-600' : 'text-gray-400 hover:text-gray-600' }}">ES</a>
+                    class="text-xs font-semibold {{ app()->getLocale() == 'es' ? 'text-brand-600' : 'text-gray-400 hover:text-gray-600' }}">ES</a>
                 <span class="text-gray-200">|</span>
                 <a href="{{ route('locale.change', 'fr') }}"
-                    class="text-xs font-semibold {{ app()->getLocale() == 'fr' ? 'text-blue-600' : 'text-gray-400 hover:text-gray-600' }}">FR</a>
+                    class="text-xs font-semibold {{ app()->getLocale() == 'fr' ? 'text-brand-600' : 'text-gray-400 hover:text-gray-600' }}">FR</a>
                 <span class="text-gray-200">|</span>
                 <a href="{{ route('locale.change', 'de') }}"
-                    class="text-xs font-semibold {{ app()->getLocale() == 'de' ? 'text-blue-600' : 'text-gray-400 hover:text-gray-600' }}">DE</a>
+                    class="text-xs font-semibold {{ app()->getLocale() == 'de' ? 'text-brand-600' : 'text-gray-400 hover:text-gray-600' }}">DE</a>
                 <span class="text-gray-200">|</span>
                 <a href="{{ route('locale.change', 'ar') }}"
-                    class="text-xs font-semibold {{ app()->getLocale() == 'ar' ? 'text-blue-600' : 'text-gray-400 hover:text-gray-600' }}">AR</a>
+                    class="text-xs font-semibold {{ app()->getLocale() == 'ar' ? 'text-brand-600' : 'text-gray-400 hover:text-gray-600' }}">AR</a>
             </div>
 
             <!-- User Menu -->
@@ -296,6 +296,17 @@
                     </div>
                     <div class="ml-3">
                         <p class="text-sm font-medium text-gray-700">{{ auth()->user()->name }}</p>
+                        <div class="mb-3">
+                            <a href="{{ route('profile') }}"
+                                class="text-sm font-medium text-gray-700 hover:text-brand-600 transition flex items-center gap-2 mb-2">
+                                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                </svg>
+                                {{ __('My Profile') }}
+                            </a>
+                        </div>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <button type="submit"

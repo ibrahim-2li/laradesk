@@ -50,6 +50,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', Home::class)->name('dashboard.home');
     Route::get('/dashboard/home', function() { return redirect()->route('dashboard.home'); });
 
+    // Profile
+    Route::get('/profile', \App\Livewire\Profile::class)->name('profile');
+    
     // Dashboard Routes
     Route::prefix('dashboard')->name('dashboard.')->group(function() {
         // Tickets
