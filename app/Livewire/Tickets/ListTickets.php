@@ -17,7 +17,7 @@ class ListTickets extends Component
     {
         $query = Ticket::query()
             ->where('user_id', Auth::id())
-            ->with(['status', 'priority', 'department']);
+            ->with(['status', 'priority', 'department', 'agent']);
 
         if ($this->search) {
             $query->where('subject', 'like', '%' . $this->search . '%')

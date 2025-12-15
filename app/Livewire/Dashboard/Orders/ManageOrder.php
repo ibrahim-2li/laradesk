@@ -26,6 +26,7 @@ class ManageOrder extends Component
     // We can add a simple interface to add stocks if needed
     
     public $statuses;
+    public $itemQuantities = [];
 
     public function mount(Order $order)
     {
@@ -35,6 +36,10 @@ class ManageOrder extends Component
         
         $this->orders_status_id = $order->orders_status_id;
         $this->statuses = OrderStatus::all();
+
+        foreach ($order->items as $item) {
+            $this->itemQuantities[$item->id] = $item->quantity;
+        }
     }
 
     public function authorizeAccess()
@@ -45,6 +50,24 @@ class ManageOrder extends Component
         }
     }
 
+    public function updateQuantity($itemId)
+    {
+        $qty = $this->itemQuantities[$itemId] ?? 0;
+        
+        if ($qty < 1) {
+            // Revert or show error
+            return;
+        }
+
+        $item = OrderItem::where('id', $itemId)->where('order_id', $this->order->id)->first();
+        if ($item) {
+            $item->quantity = $qty;
+            $item->save();
+            // Refresh order items in memory if needed, but not strictly required if we just use $itemQuantities in view or only for computation
+            $this->order->refresh(); 
+        }
+    }
+
     public function reply()
     {
         $this->validate([
@@ -52,6 +75,16 @@ class ManageOrder extends Component
             'orders_status_id' => 'required|exists:order_statuses,id',
             'attachments.*' => 'image|max:10240',
         ]);
+
+        // Stock Reduction Logic (Transition to Completed/Closed ID 3)
+        if ($this->orders_status_id == 3 && $this->order->orders_status_id != 3) {
+            foreach ($this->order->items as $item) {
+                $stock = $item->stock;
+                if ($stock) {
+                    $stock->decrement('quantity', $item->quantity);
+                }
+            }
+        }
 
         $orderReply = new OrderReply();
         $orderReply->user_id = Auth::id();
@@ -82,8 +115,6 @@ class ManageOrder extends Component
         // Update Order
         $this->order->orders_status_id = $this->orders_status_id;
         $this->order->updated_at = Carbon::now();
-        // If closing?
-        // $this->order->closed_by = ...
         $this->order->save();
 
         try {

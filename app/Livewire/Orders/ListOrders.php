@@ -17,7 +17,7 @@ class ListOrders extends Component
     {
         $query = Order::query()
             ->where('user_id', Auth::id())
-            ->with(['orderStatus', 'priority', 'branches']); // Note: relation is 'branches' in Model
+            ->with(['orderStatus', 'priority', 'branches', 'agent']); // Note: relation is 'branches' in Model
 
         if ($this->search) {
             $query->where('subject', 'like', '%' . $this->search . '%')

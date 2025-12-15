@@ -52,10 +52,10 @@
                         <thead>
                             <tr class="bg-white">
                                 <th scope="col"
-                                    class="px-6 py-3 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">
+                                    class="px-6 py-3 text-right text-xs font-bold text-gray-400 uppercase tracking-wider">
                                     {{ __('Item') }}</th>
                                 <th scope="col"
-                                    class="px-6 py-3 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">
+                                    class="px-6 py-3 text-right text-xs font-bold text-gray-400 uppercase tracking-wider">
                                     {{ __('Brand') }}</th>
                                 <th scope="col"
                                     class="px-6 py-3 text-right text-xs font-bold text-gray-400 uppercase tracking-wider">
@@ -72,7 +72,9 @@
                                         {{ $item->stock?->brands?->name ?? '-' }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right font-mono">
-                                        {{ $item->quantity }}
+                                        <input type="number" wire:model.blur="itemQuantities.{{ $item->id }}"
+                                            wire:change="updateQuantity({{ $item->id }})" min="1"
+                                            class="w-24 text-right rounded-md border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm bg-gray-50 focus:bg-white transition-colors">
                                     </td>
                                 </tr>
                             @empty
